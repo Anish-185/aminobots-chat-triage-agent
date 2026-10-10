@@ -37,6 +37,10 @@ human about the conflict instead of choosing silently.
    logic never uses wall-clock time.
 9. **No real personal data.** All names, numbers and outlets are synthetic. Every synthetic phone
    number must fail `phonenumbers.is_valid_number()`.
+10. Zero spend. Only OpenRouter models whose ID ends in ':free' may be called. Before any task that
+    would use more than 10 LLM requests, state the request count and wait for approval. CI and unit
+    tests never call any LLM API. Free models have a daily request cap (50/day on an unfunded
+    account), so treat every request as scarce: no retry loops, no exploratory calls.
 
 ## Architecture (one line per stage)
 
@@ -56,11 +60,11 @@ Every route ends in the append-only action log. Every stage writes a span to the
 CLAUDE.md  README.md  APPROACH.md  ARTEFACT.md
 config/          models.yaml, pricing.yaml, thresholds.yaml
 policy/          policy_vN.yaml, action_catalogue.yaml, CHANGELOG.md
-prompts/         RUNTIME prompt pack: extract/, baseline/, generator/, CHANGELOG.md
+prompts/         RUNTIME prompt pack: extract/, baseline/, CHANGELOG.md
 triage/          schemas.py ingest.py extract.py ground.py identity.py policy.py
                  pipeline.py trace.py storage.py approvals.py cli.py executor/
 app/ui/          Streamlit multipage app
-datagen/         world.py planner.py render.py noise.py fidelity.py split.py
+datagen/         world.py planner.py render.py noise.py split.py phrasebanks/
 data/            world/  dev/  test/ (frozen)  challenge/ (human-written, frozen)  MANIFEST.json
 eval/            matcher.py metrics.py run_eval.py slices.py baselines/ results/<tag>/
 scripts/         one-off utilities (validate_gold.py, check_leakage.py, ...)
@@ -86,7 +90,7 @@ project's record of how it was built. This log is **not** the runtime prompt pac
 - **Policy** lives at `policy/policy_v<N>.yaml`, with history in `policy/CHANGELOG.md`. Rule IDs
   are never reused or renumbered.
 - **Config:** thresholds, model IDs and prices live in `config/*.yaml`. No magic numbers in code.
-- **LLM tests** are marked `@pytest.mark.llm` and skipped when `ANTHROPIC_API_KEY` is unset. CI
+- **LLM tests** are marked `@pytest.mark.llm` and skipped when `OPENROUTER_API_KEY` is unset. CI
   never calls the API; unit tests use recorded fixtures.
 - **Commits** use Conventional Commits (`feat:` `fix:` `test:` `docs:` `eval:` `chore:`), one
   logical change per commit.
@@ -126,4 +130,5 @@ uv run streamlit run app/ui/Home.py
   "wait for approval", stop after the plan.
 - Work in small steps and run tests often. Do not refactor outside the task's scope.
 - If SPEC seems wrong, ambiguous or incomplete, stop and ask. Never invent behaviour silently.
-- Do not create git tags or push. The human tags prototypes after reviewing eval results.
+- Do not create git tags. Push only when the human explicitly says 'push'. The human tags
+  prototypes after reviewing eval results.

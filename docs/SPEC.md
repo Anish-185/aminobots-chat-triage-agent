@@ -1,4 +1,4 @@
-# SPEC — Aminobots Request Triage (v1)
+# SPEC — Aminobots Request Triage (v1.1 — 2026-10-10: zero-cost amendment, OpenRouter free models only)
 
 This is the single source of truth for behaviour, contracts and evaluation. Section numbers are
 stable; phase prompts refer to them as §N. If a section changes, bump the version line above and
@@ -25,6 +25,13 @@ groups.
 - memory across transcripts
 - real authentication
 - Hindi (optional stretch goal)
+
+**Live demo (zero cost, ADR-0014):**
+- The deployed app serves cached results for the bundled samples.
+- Live runs require the visitor to paste their own OpenRouter key into a session-only field. The
+  key is never stored or logged.
+- An optional server key from Streamlit secrets is used only up to `thresholds.demo_server_key_rpd`
+  requests per day; if that is unset, the server key is disabled.
 
 ---
 
@@ -446,13 +453,27 @@ One line per message:
 
 | Failure | Behaviour |
 |---|---|
-| API error / timeout | Retry twice with exponential backoff (config). Then the run is `UNPROCESSED` and the whole transcript goes to one hand-off item, route ops. |
-| Schema or semantic validation fails twice | Same as above, with the error stored in the span. |
+| API error / timeout | Retry at most `thresholds.llm_max_transport_retries` (1) time after waiting `api_backoff_base_s`, on the next fallback model. Then the run is `UNPROCESSED` and the whole transcript goes to one hand-off item, route ops. |
+| Schema or semantic validation fails after `thresholds.llm_max_repair_retries` (1) repair | Same as above, with the error stored in the span. |
+| Rate limit / quota | Handled by the LLM limiter below. |
 | Candidate with zero valid evidence IDs | Dropped; added to `rejected_candidates` with a reason. |
 | Unsupported entity | Nulled and flagged `entity_unsupported` (→ R11). |
 | Policy load error | Process refuses to start (fail loudly at boot). |
 | DB unavailable at route time | The run result is still returned and marked `persisted: false`. The UI shows a red banner. No action is logged as done. |
 | Transcript > `thresholds.max_messages_per_call` | Chunk with overlap `thresholds.chunk_overlap`; dedupe candidates by (intent, Jaccard(evidence) ≥ 0.5). |
+
+**LLM limiter.** Every LLM call goes through one limiter:
+- It enforces `thresholds.openrouter_rpm` (20) and `thresholds.openrouter_rpd` (50).
+- It counts **every** request, including repair and transport retries, in a persistent daily
+  counter at `.cache/llm/quota.json` (UTC day). Cache hits (§15.1) do not count.
+- On HTTP 429 it waits once (`api_backoff_base_s`) and then tries the next model in the role's
+  `fallbacks`. It never loops; when the fallbacks are exhausted the run fails closed as above.
+- When the daily quota runs out mid-run, the run pauses at a resumable checkpoint: completed
+  transcripts are saved and skipped on re-run. Work is never silently dropped.
+- Before starting, a run whose projected request count exceeds the remaining quota stops with a
+  clear message stating both numbers.
+- OpenRouter's `GET /api/v1/key` (`free_model_daily_requests`) may be used to reconcile the local
+  counter; the stricter of the two wins.
 
 ---
 
@@ -535,15 +556,16 @@ rule per policy v0. They are never produced by asking a model.
 18. complaint
 19. order cancel near cutoff
 
-### §13.3 Renderer (`datagen/render.py`, LLM, `prompts/generator/render_vN.md`)
+### §13.3 Renderer (`datagen/render.py`, code, template-based)
 
-- Turns each event into a message in its persona's style:
-  - script: roman_te / te_script / en
-  - code-mix ratio (0–1)
-  - formality
-  - typo rate
-- Output is JSON per event: `{event_id, text}`.
-- Temperature comes from config (higher than extraction).
+- Turns each event into a message from hand-written phrase banks in `datagen/phrasebanks/*.yaml`,
+  keyed by intent (or noise/identity event type), script (roman_te / te_script / en) and
+  formality.
+- The chosen phrase is filled with the event's entities, then noised by code (§13.4) according to
+  the persona's code-mix ratio (0–1) and typo rate.
+- Output per event: `{event_id, text}`. Rendering is seeded and deterministic.
+- No LLM is used: data generation consumes zero requests, and the extraction model is never also
+  the data author (ADR-0014).
 
 ### §13.4 Noise (`datagen/noise.py`, code)
 
@@ -551,11 +573,10 @@ rule per policy v0. They are never produced by asking a model.
   entries; optionally extend by mining Aksharantar/Dakshina, recording provenance and licence.
 - Also: typos, emoji, elongation ("pleaseee"), and timestamp jitter.
 
-### §13.5 Fidelity (`datagen/fidelity.py`, LLM)
+### §13.5 Fidelity
 
-- A checker confirms each rendered request still expresses the planned intent and entities.
-- Failures are re-rendered, up to 2 attempts; the event is then dropped and logged.
-- Report the fidelity pass rate in the dataset card.
+Removed in v1.1. With template rendering, each message's intent and entities come from the plan
+by construction, so no LLM fidelity checker exists (ADR-0014).
 
 ### §13.6 Splits
 
@@ -565,8 +586,8 @@ rule per policy v0. They are never produced by asking a model.
 | test | 5000–5999 | pool B (disjoint) | all, including held-out 3 (`photo_caption_request`, `two_requests_one_message`, `vouching`) | 40 transcripts | generator, **run by the human** |
 | challenge | — | — | — | 20–30 transcripts | **humans only**, with a native Telugu speaker; includes both mandated scenarios verbatim |
 
-- `data/MANIFEST.json` records the sha256 of every file, the generator version, prompt versions,
-  model IDs and the date.
+- `data/MANIFEST.json` records the sha256 of every file, the generator version, phrase-bank
+  versions and the date.
 - The test and challenge sets are frozen once committed.
 
 ---
@@ -602,7 +623,9 @@ maximising Jaccard.
 | Rule-citation accuracy | over matched with correct grade: `rule_id` equal |
 | Evidence precision / recall | micro, over matched |
 | Latency | p50 / p95 per transcript (ms) |
-| Cost | USD per transcript and per request (prices from `config/pricing.yaml`, dated) |
+| Tokens | input and output tokens per transcript and per request (original counts, also for cache hits) |
+| Cost | per transcript and per request: `cost_usd_billed` (always 0 on free models) and `cost_usd_notional` = tokens × list price of the same model's paid OpenRouter variant (`config/pricing.yaml`, with `checked_on` and `source_url`); null when no paid variant exists |
+| Model ID | the model that actually answered, per transcript (free models rotate; a fallback may answer) |
 
 **Slices:** script (te_script / roman_te / en / mixed), code-mix density bucket, template,
 intent, sender state.
@@ -638,26 +661,42 @@ The pass rule is evaluated on test **and** challenge. Dev is for development onl
 - `report.md`
 
 For the test and challenge splits, `per_case.jsonl` stores **IDs and labels only, never message
-text**.
+text**. Every `per_case.jsonl` row records the model ID that answered.
+
+### §14.6 Evaluation budget
+
+Free models allow 50 requests/day on an unfunded account (§10.3 limiter), so runs are budgeted:
+
+| Run type | Scope | Approx. requests |
+|---|---|---|
+| Iteration | pipeline on the 10 dev hand seeds | 10 |
+| Milestone | pipeline on a fixed, seeded 30-transcript dev sample + all test + all challenge; B1 on test + challenge only | 30 + 2 × (40 + 20–30) |
+
+- The response cache (§15.1) is always on for eval runs, so reruns of unchanged inputs are free.
+- The eval CLI prints the projected request count (excluding expected cache hits) before
+  starting, and asks for confirmation if it exceeds the remaining daily quota. A milestone run
+  therefore spans several days through resumable checkpoints.
 
 ---
 
 ## §15 Models and config
 
-`config/models.yaml`:
+`config/models.yaml`: OpenRouter models whose ID ends in `:free`, and nothing else (CLAUDE.md
+invariant 10; ADR-0014). The loader rejects any other ID.
 
-| Role | Model ID | Temperature | Notes |
-|---|---|---|---|
-| extractor | `claude-sonnet-5-5` | 0 | |
-| baseline_b1 | `claude-sonnet-5-5` | 0 | same model as the pipeline, so the comparison isolates architecture |
-| renderer | `claude-sonnet-5-5` | 0.9 | |
-| fidelity | `claude-haiku-5-5` | 0 | |
+| Role | Fields | Notes |
+|---|---|---|
+| extractor | `provider: openrouter`, `model`, `fallbacks` (ordered `:free` IDs), `temperature: 0`, `verified_on` | the pipeline's only LLM stage |
+| baseline_b1 | same fields | same model as the extractor, so the comparison isolates architecture |
 
-- Verify the IDs and structured-output support against the current Anthropic docs before first
-  use, and record the check date in the file.
-- `config/pricing.yaml` records USD per million input and output tokens per model, with a
-  `checked_on` date and source URL.
-- Use prompt caching for the static extractor system prompt if the docs confirm it is supported.
+- Candidate models and their capabilities are recorded in ADR-0014. The final choice is a
+  phase-4 bake-off on the dev seeds. Re-check the OpenRouter models API (`supported_parameters`:
+  `structured_outputs`, `response_format`) before use, and update `verified_on`.
+- Client: `instructor.from_provider("openrouter/<model>")`, key from `OPENROUTER_API_KEY`;
+  Instructor mode per ADR-0004.
+- `config/pricing.yaml` records, for each configured free model, the list price (USD per million
+  input and output tokens) of its paid OpenRouter variant, or null if none exists, with a
+  `checked_on` date and source URL. It feeds `cost_usd_notional` only (§14.2).
 - `config/thresholds.yaml` keys and defaults:
 
   | Key | Default | Used in |
@@ -668,11 +707,23 @@ text**.
   | `max_messages_per_call` | 400 | chunking |
   | `chunk_overlap` | 60 | chunking |
   | `max_reference_distance` | 50 | chunking, must be ≤ `chunk_overlap` |
-  | `api_max_retries` | 2 | §10.3 |
-  | `api_backoff_base_s` | 2 | §10.3 |
+  | `api_backoff_base_s` | 2 | §10.3, the single wait after a 429 / transport error |
   | `public_max_messages` | 300 | UI |
   | `public_runs_per_session` | 5 | UI |
-  | `daily_usd_cap` | 3.00 | UI |
+  | `demo_server_key_rpd` | null (TODO: human sets) | §1 live demo; null disables the server key |
+  | `openrouter_rpm` | 20 | §10.3 limiter |
+  | `openrouter_rpd` | 50 | §10.3 limiter |
+  | `llm_max_repair_retries` | 1 | §4.1, §10.3 |
+  | `llm_max_transport_retries` | 1 | §10.3 |
+
+### §15.1 Response cache (`triage/llm_cache.py`)
+
+- A disk cache under `.cache/llm/` (gitignored).
+- Key = sha256(model ID + prompt_id + prompt_version + rendered input + temperature).
+- Always on for eval runs.
+- Spans record `cache_hit: true|false` and the model ID that actually answered (a fallback may
+  answer). A cache hit consumes no quota and bills nothing; it keeps the original token counts for
+  notional cost.
 
 ---
 
@@ -693,8 +744,8 @@ text**.
 | ADR-0001 | Bounded workflow with one LLM stage; rejected a ReAct tool-agent and a single-prompt design |
 | ADR-0002 | Policy as YAML with an own evaluator, most-restrictive-wins; ZEN decision tables are the migration path |
 | ADR-0003 | Identity by roster lookup only; a self-claim never confirms |
-| ADR-0004 | Anthropic native structured outputs + Instructor for semantic-validation retries |
-| ADR-0005 | Gold by construction from planner scripts; LLM renders surface text only |
+| ADR-0004 | Structured outputs via Instructor with OpenRouter (JSON schema where supported, else JSON mode + Pydantic validation), one semantic-validation repair retry |
+| ADR-0005 | Gold by construction from planner scripts; surface text from template phrase banks (no LLM) |
 | ADR-0006 | Disjoint test pools, held-out templates, human-written challenge set, leakage check |
 | ADR-0007 | Own trace store with OTel GenAI attribute names; Langfuse export optional |
 | ADR-0008 | Streamlit on Community Cloud + Neon Postgres (HF Spaces needs a paid plan; free hosts have ephemeral disks) |
@@ -702,3 +753,5 @@ text**.
 | ADR-0010 | Synthetic phones in a provably invalid +91 range |
 | ADR-0011 | Plain Python orchestration and a DB approval queue; LangGraph interrupt pattern rejected for a non-agent workflow |
 | ADR-0012 | Eval sliced by script and code-mix density, motivated by the published romanisation gap |
+| ADR-0013 | Claude Code guardrails: path and Bash hooks, git pre-commit backstop |
+| ADR-0014 | Zero-cost operation with OpenRouter `:free` models; template renderer; notional cost |
