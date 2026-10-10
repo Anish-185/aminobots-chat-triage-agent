@@ -1,0 +1,61 @@
+[project]
+name = "aminobots-triage"
+version = "0.1.0"
+description = "Bounded-autonomy triage of code-mixed Telugu–English partner group chats (simulated actions only)"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Anish G", email = "217944321+Anish-185@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "faker>=40.43.0",
+    "instructor>=1.17.0",
+    "openai>=3.3.0",
+    "pandas>=3.0.6",
+    "phonenumbers>=9.0.41",
+    "pydantic>=2",
+    "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
+    "rapidfuzz>=3.14.6",
+    "scipy>=1.17.1",
+    "sqlalchemy>=2.1.4",
+    "streamlit>=1.65.0",
+    "typer>=0.27.3",
+]
+
+[project.scripts]
+triage = "triage.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "triage"
+module-root = ""
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = '-m "not llm"'
+markers = [
+    "llm: calls the real API; skipped when OPENROUTER_API_KEY is unset",
+]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.168.5",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
