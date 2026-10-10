@@ -1,0 +1,18 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+  - repo: local
+    hooks:
+      - id: guard-eval-data
+        name: guard frozen eval data (data/test, data/challenge)
+        entry: python3 scripts/guard_eval_data.py
+        language: system
+        pass_filenames: false
+        always_run: true
