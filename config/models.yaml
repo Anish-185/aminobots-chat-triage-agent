@@ -1,0 +1,21 @@
+# LLM roles (SPEC §15). OpenRouter ':free' models only (CLAUDE.md invariant 10).
+# Candidates were read from https://openrouter.ai/api/v1/models metadata on verified_on;
+# the final choice is a phase-4 bake-off on the dev seeds (ADR-0014).
+# Client: instructor.from_provider("openrouter/<model>"), key from OPENROUTER_API_KEY.
+roles:
+  extractor:
+    provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    fallbacks:
+      - google/gemma-4-31b-it:free
+      - dots-studio/dots-3-note-preview:free
+    temperature: 0
+    verified_on: 2026-10-10
+  baseline_b1:
+    provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    fallbacks:
+      - google/gemma-4-31b-it:free
+      - dots-studio/dots-3-note-preview:free
+    temperature: 0
+    verified_on: 2026-10-10

@@ -1,0 +1,18 @@
+# Thresholds and defaults (SPEC §15).
+name_match: 90
+entity_match: 85
+slot_cutoff_hours: 12
+max_messages_per_call: 400
+chunk_overlap: 60
+max_reference_distance: 50  # must be <= chunk_overlap
+api_backoff_base_s: 2       # the single wait after a 429 / transport error (SPEC §10.3)
+public_max_messages: 300
+public_runs_per_session: 5
+# TODO(human): daily request cap for the optional demo server key. null = server key disabled.
+demo_server_key_rpd: null
+
+# OpenRouter free-tier limits and retry budget (SPEC §10.3).
+openrouter_rpm: 20
+openrouter_rpd: 50
+llm_max_repair_retries: 1
+llm_max_transport_retries: 1
