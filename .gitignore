@@ -1,0 +1,24 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+
+# Environment
+.venv/
+.env
+.env.*
+!.env.example
+
+# Local data
+*.db
+*.sqlite
+eval/tmp/
+
+# Secrets
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
