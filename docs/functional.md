@@ -1,5 +1,6 @@
 # Functional Overview — Aminobots Chat Triage Agent
 
+
 | | |
 |---|---|
 | **Document** | `docs/functional.md` |
