@@ -1,1 +1,1 @@
-Synthetic world: partners, outlets, contacts and rosters (SPEC §13.1).
+Synthetic world: `roster.yaml` (partners, outlets, contacts, roles) and optional `contacts.yaml` (SPEC §8).

@@ -85,7 +85,7 @@ class Thresholds(_Strict):
     @model_validator(mode="after")
     def _reference_fits_overlap(self) -> Self:
         if self.max_reference_distance > self.chunk_overlap:
-            raise ValueError("max_reference_distance must be <= chunk_overlap (SPEC §15)")
+            raise ValueError("max_reference_distance must be <= chunk_overlap (SPEC §14)")
         return self
 
 
