@@ -1,0 +1,40 @@
+# Synthetic roster: the ONLY source of identity (assumption A5, SPEC §7). All names, outlets and
+# phones are fictional. Phones are +91 numbers that fail phonenumbers.is_valid_number()
+# (tests/test_synthetic_phones.py). Licence: CC BY 4.0 (data/LICENSE).
+partners:
+  - id: P1
+    name: Sunrise Foods
+    outlets:
+      - {id: O1, name: Sunrise Ameerpet, area: Ameerpet}
+      - {id: O2, name: Sunrise Kukatpally, area: Kukatpally}
+  - id: P2
+    name: Annapurna Tiffins
+    outlets:
+      - {id: O3, name: Annapurna Dilsukhnagar, area: Dilsukhnagar}
+      - {id: O4, name: Annapurna Kondapur, area: Kondapur}
+      - {id: O5, name: Annapurna Secunderabad, area: Secunderabad}
+  - id: P3
+    name: Green Bowl Cafe
+    outlets:
+      - {id: O6, name: Green Bowl Gachibowli, area: Gachibowli}
+
+contacts:
+  # Sunrise Foods
+  - {id: c01, name: Ravi Kumar, phone: "+91 55550 10001", role: owner, partner: P1, outlets: [O1, O2]}  # owner with 2 outlets
+  - {id: c02, name: Suresh Reddy, phone: "+91 55550 10002", role: manager, partner: P1, outlets: [O1]}
+  - {id: c03, name: Lakshmi Devi, phone: "+91 55550 10003", role: staff, partner: P1, outlets: [O2]}
+  - {id: c04, name: Padma Rao, phone: "+91 55550 10004", role: accounts, partner: P1, outlets: [O1, O2]}
+  # Annapurna Tiffins
+  - {id: c05, name: Srinivas Goud, phone: "+91 55550 10005", role: owner, partner: P2, outlets: [O3, O4, O5]}
+  - {id: c06, name: Suresh Babu, phone: "+91 55550 10006", role: manager, partner: P2, outlets: [O4]}  # same first name as c02
+  - {id: c07, name: Kiran Kumar, phone: "+91 55550 10007", role: staff, partner: P2, outlets: [O3]}
+  - {id: c08, name: Anil Yadav, phone: "+91 55550 10008", role: staff, partner: P2, outlets: [O5], shared: true}  # counter phone
+  - {id: c09, name: Mahesh Naidu, phone: "+91 55550 10008", role: staff, partner: P2, outlets: [O5], shared: true}  # same phone
+  - {id: c10, name: Rajesh Varma, phone: "+91 55550 10010", role: accounts, partner: P2, outlets: [O3, O4, O5]}
+  # Green Bowl Cafe
+  - {id: c11, name: Vani Prasad, phone: "+91 55550 10011", role: owner, partner: P3, outlets: [O6]}
+  - {id: c12, name: Ramesh Prasad, phone: "+91 55550 10012", role: manager, partner: P3, outlets: [O6], delegate_for: [c11]}  # delegate
+  - {id: c13, name: Swathi Rani, phone: "+91 55550 10013", role: staff, partner: P3, outlets: [O6]}
+  # Aminobots (internal, A6)
+  - {id: c14, name: Divya Aminobots, phone: "+91 55550 10014", role: aminobots_staff}
+  - {id: c15, name: Arjun Aminobots, phone: "+91 55550 10015", role: aminobots_staff}
