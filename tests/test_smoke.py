@@ -12,7 +12,8 @@ def test_import():
 def test_configs_load():
     assert load_models().roles.extractor.provider == "openrouter"
     assert load_pricing().models
-    assert load_thresholds().openrouter_rpd == 50
+    assert load_thresholds().requests_per_day == 50
+    assert load_thresholds().demo_server_key_rpd == 10
 
 
 def test_version_command():

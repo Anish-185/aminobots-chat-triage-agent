@@ -48,15 +48,15 @@ def test_rejects_extra_key(cfg: Path):
 
 
 def test_rejects_missing_key(cfg: Path):
-    _edit(cfg / "thresholds.yaml", lambda d: d.pop("openrouter_rpd"))
-    with pytest.raises(ValidationError, match="openrouter_rpd"):
+    _edit(cfg / "thresholds.yaml", lambda d: d.pop("requests_per_day"))
+    with pytest.raises(ValidationError, match="requests_per_day"):
         load_thresholds(cfg)
 
 
-def test_reference_distance_must_fit_overlap(cfg: Path):
-    _edit(cfg / "thresholds.yaml", lambda d: d.update(max_reference_distance=61))
-    with pytest.raises(ValidationError, match="chunk_overlap"):
-        load_thresholds(cfg)
+def test_rejects_non_free_candidate(cfg: Path):
+    _edit(cfg / "models.yaml", lambda d: d["candidates"][0].update(id="google/gemma-4-31b-it"))
+    with pytest.raises(ValidationError, match=":free"):
+        load_models(cfg)
 
 
 def test_every_configured_model_is_priced(cfg: Path):
