@@ -1,0 +1,20 @@
+# Names saved on the Aminobots support phone that exported the chats: saved name → phone.
+# An export shows the saved name instead of the number for these authors (SPEC §3.1).
+# A saved name is NOT identity: identity comes from roster.yaml only (A5).
+"Ravi Sunrise": "+91 55550 10001"
+"Suresh Reddy Sunrise": "+91 55550 10002"
+"Lakshmi Sunrise": "+91 55550 10003"
+"Padma Accounts": "+91 55550 10004"
+"Srinivas Annapurna": "+91 55550 10005"
+"Suresh Babu Annapurna": "+91 55550 10006"
+"Kiran Annapurna": "+91 55550 10007"
+"Secunderabad Counter": "+91 55550 10008"
+"Rajesh Accounts": "+91 55550 10010"
+"Vani Green Bowl": "+91 55550 10011"
+"Ramesh Green Bowl": "+91 55550 10012"
+"Swathi Green Bowl": "+91 55550 10013"
+"Divya Aminobots": "+91 55550 10014"
+"Arjun Aminobots": "+91 55550 10015"
+# Saved names whose numbers are NOT in the roster:
+"Suresh": "+91 55550 10021"  # name matches two roster contacts → AMBIGUOUS
+"Kiran K": "+91 55550 10022"  # name matches one roster contact → UNCONFIRMED

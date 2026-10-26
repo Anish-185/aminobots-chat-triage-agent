@@ -27,6 +27,7 @@ TAG = re.compile(GIT + r"tag\b")
 FROZEN_REF = re.compile(r"data/+(test|challenge)\b")
 DATA_GLOB = re.compile(r"data/+[^\s/'\"]*[*?\[{]")
 GLOB_CHARS = re.compile(r"[*?\[{]")
+HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1([^\n]*\n).*?\n[ \t]*\2[ \t]*(?=\n|$)", re.DOTALL)
 
 ALWAYS_RECURSIVE = {"find", "tree", "du", "tar", "zip", "rsync"}
 RECURSIVE_FLAG = {
@@ -48,8 +49,15 @@ FROZEN_MSG = (
 )
 
 
+def _strip_heredocs(cmd: str) -> str:
+    """Drop heredoc bodies: they are stdin data, not commands (literal checks already ran)."""
+    return HEREDOC.sub(lambda m: m.group(3), cmd)
+
+
 def _segments(cmd: str) -> list[list[str]]:
-    lex = shlex.shlex(cmd, posix=True, punctuation_chars=";&|()")
+    # A newline separates commands like `;` (inside quotes it only changes the quoted text).
+    text = _strip_heredocs(cmd).replace("\n", " ; ")
+    lex = shlex.shlex(text, posix=True, punctuation_chars=";&|()")
     lex.whitespace_split = True
     segs: list[list[str]] = [[]]
     for tok in lex:

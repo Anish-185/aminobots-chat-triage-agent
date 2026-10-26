@@ -1,0 +1,79 @@
+{
+  "chat_id": "d13",
+  "partner": "P2",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "complaint",
+      "gloss": "Oil tins delivered to Dilsukhnagar are leaking",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m005",
+        "m006"
+      ],
+      "requester_phone": "+915555010005",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    },
+    {
+      "id": "r2",
+      "intent": "status_query",
+      "gloss": "Unknown number asks for Dilsukhnagar order status and bill amount",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m008"
+      ],
+      "requester_phone": "+915555010032",
+      "identity_state": "UNCONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "refuse",
+      "rule_id": "R2"
+    }
+  ],
+  "internal_requests": [
+    {
+      "id": "i1",
+      "intent": "delivery_slot_change",
+      "gloss": "Internal: move Kondapur's slot tomorrow to 9 am",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003"
+      ],
+      "requester_phone": "+915555010014",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R5"
+    }
+  ],
+  "notes": "Telugu-script complaint; internal Aminobots request is logged, not scored (A6)."
+}

@@ -1,0 +1,59 @@
+{
+  "chat_id": "d11",
+  "partner": "P3",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move deliveries to the 6 am slot from Monday, based on a forwarded message",
+      "primary_msg_id": "m004",
+      "evidence_msg_ids": [
+        "m003",
+        "m004"
+      ],
+      "requester_phone": "+915555010011",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [
+        "possible_forward"
+      ],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 45.0
+      },
+      "grade": "seek_approval",
+      "rule_id": "R6"
+    },
+    {
+      "id": "r2",
+      "intent": "status_query",
+      "gloss": "Has today's order truck left, and when will it arrive?",
+      "primary_msg_id": "m007",
+      "evidence_msg_ids": [
+        "m007"
+      ],
+      "requester_phone": "+915555010012",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    }
+  ],
+  "internal_requests": [],
+  "notes": ""
+}
