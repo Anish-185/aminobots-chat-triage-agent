@@ -32,7 +32,7 @@ def test_kinds(messages):
 
 def test_special_characters_and_multiline(messages):
     m6 = messages[5]
-    assert m6.phone == "+911234567801"  # leading U+200E and U+202F handled
+    assert m6.phone == "+915555010099"  # leading U+200E and U+202F handled
     assert "Ameerpet outlet ki" in m6.text and "Thanks" in m6.text
     assert messages[9].ts.hour == 22  # 10:05 pm with U+202F
     assert messages[4].author_raw == "Lakshmi 🌸"
@@ -44,9 +44,9 @@ def test_security_code_subject_resolves_to_sender(messages):
 
 def test_contacts_yaml_resolves_saved_names(tmp_path):
     contacts = tmp_path / "contacts.yaml"
-    contacts.write_text('"Ravi Kumar": "+91 12345 67802"\n')
+    contacts.write_text('"Ravi Kumar": "+91 55550 10098"\n')
     ravi = parse_chat(FIXTURE, contacts)[3]
-    assert ravi.phone == "+911234567802" and ravi.display_name == "Ravi Kumar"
+    assert ravi.phone == "+915555010098" and ravi.display_name == "Ravi Kumar"
 
 
 def test_render_never_contains_a_phone(messages):
