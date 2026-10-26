@@ -68,7 +68,7 @@ data/        world/ (roster.yaml)  dev/  test/ (frozen)  challenge/ (frozen, hum
 eval/        run_eval.py, results/<tag>/
 scripts/     guard_eval_data.py, small utilities
 tests/
-docs/        SPEC.md functional.md context/ build-prompts/ decisions/ *.drawio.svg build-plan.md
+docs/        SPEC.md functional.md context/ build-prompts/ adr/ *.drawio.svg build-plan.md
 .claude/     settings.json, hooks/
 ```
 
@@ -92,7 +92,7 @@ service before using it; never rely on memory for APIs, versions or prices.
   are `null` with a TODO, never guessed.
 - LLM tests are marked `@pytest.mark.llm` and skipped without `OPENROUTER_API_KEY`.
 - Conventional Commits (`feat:` `fix:` `test:` `docs:` `eval:` `chore:`), one logical change each.
-- New dependency → short ADR (≤ 25 lines) in `docs/decisions/`.
+- New dependency → short ADR (≤ 25 lines) in `docs/adr/`.
 
 ## Commands
 
@@ -120,5 +120,6 @@ uv run python -m triage.serve      # site + API on localhost, from Phase 7
 
 ## Git
 
-- Commit and push only when the phase prompt or the human says so. Never create git tags (the
-  human tags prototypes). Never force-push. Never merge PRs.
+- Commit and push to the current phase branch on your own, with clear messages, and open a PR to
+  main at the end of the phase. Never push to main, never merge, never force-push, never create
+  tags.
