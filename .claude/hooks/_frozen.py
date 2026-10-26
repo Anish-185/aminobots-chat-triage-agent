@@ -21,6 +21,17 @@ def rel_frozen(path: str, cwd: str | None = None) -> str | None:
     return rel if any(rel == d or rel.startswith(d + "/") for d in FROZEN) else None
 
 
+def _abs(path: str, cwd: str | None = None) -> Path:
+    p = Path(path)
+    return (p if p.is_absolute() else Path(cwd or ROOT) / p).resolve()
+
+
+def is_frozen_ancestor(path: str, cwd: str | None = None) -> bool:
+    """True if `path` is a directory that contains a frozen set (e.g. data/, the repo root, /)."""
+    p = _abs(path, cwd)
+    return any(p in (ROOT / d).parents for d in FROZEN)
+
+
 def block(msg: str) -> None:
     print(msg, file=sys.stderr)
     sys.exit(2)
