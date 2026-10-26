@@ -6,8 +6,8 @@ hand off / refuse), the numbered rule behind the grade, and the messages it reli
 
 > Simulation only — no action is executed. Synthetic data only. Free LLMs only ($0).
 
-**Status:** Phase 0: reset to simplified design. No runnable pipeline yet. The first attempt is
-preserved on the `archive/first-attempt` branch.
+**Status:** Phase 1: bootstrap (dependencies, config, guards, CI). No runnable pipeline yet. The
+first attempt is preserved on the `archive/first-attempt` branch.
 
 ## Docs
 
@@ -16,6 +16,7 @@ preserved on the `archive/first-attempt` branch.
 - [SPEC v2](docs/SPEC.md): contracts, policy, evaluation
 - [Project context](docs/context/PROJECT_CONTEXT.md): decisions and the original brief
 - [CLAUDE.md](CLAUDE.md): rules for the coding agent
+- [ADRs](docs/adr/): build-vs-reuse decisions
 - [Build prompts](docs/build-prompts/): how the project was built, phase by phase
 
 ## Setup (so far)

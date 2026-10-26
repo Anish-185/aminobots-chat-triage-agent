@@ -1,6 +1,6 @@
-# Free-tier calls are never billed (cost_usd_billed: 0). These are list prices of each free
-# model's paid OpenRouter variant, USD per million tokens, used for cost_usd_notional
-# (SPEC §12). null = no paid variant listed, so notional cost is null.
+# Free-tier calls are never billed (billed cost = $0). These are list prices of each free
+# model's paid OpenRouter variant, USD per million tokens, used for notional cost (SPEC §12).
+# null = no paid variant listed. TODO(phase-4): re-verify (openrouter.ai unreachable in Phase 1).
 checked_on: 2026-10-10
 source_url: https://openrouter.ai/api/v1/models
 models:

@@ -50,8 +50,22 @@ class Roles(_Strict):
     baseline_b1: RoleConfig
 
 
+class Candidate(_Strict):
+    id: str
+    context_length: int | None
+    structured_outputs: bool | None
+    response_format: bool | None
+    verified_on: date
+
+    @field_validator("id")
+    @classmethod
+    def _id_free(cls, v: str) -> str:
+        return _require_free(v)
+
+
 class ModelsConfig(_Strict):
     roles: Roles
+    candidates: list[Candidate]
 
 
 class ModelPrice(_Strict):
@@ -68,25 +82,11 @@ class PricingConfig(_Strict):
 
 class Thresholds(_Strict):
     name_match: int
-    entity_match: int
     slot_cutoff_hours: float
-    max_messages_per_call: int
-    chunk_overlap: int
-    max_reference_distance: int
-    api_backoff_base_s: float
-    public_max_messages: int
-    public_runs_per_session: int
-    demo_server_key_rpd: int | None
-    openrouter_rpm: int
-    openrouter_rpd: int
+    requests_per_minute: int
+    requests_per_day: int
     llm_max_repair_retries: int
-    llm_max_transport_retries: int
-
-    @model_validator(mode="after")
-    def _reference_fits_overlap(self) -> Self:
-        if self.max_reference_distance > self.chunk_overlap:
-            raise ValueError("max_reference_distance must be <= chunk_overlap (SPEC §14)")
-        return self
+    demo_server_key_rpd: int | None
 
 
 def _load(name: str, config_dir: Path | None) -> dict:
