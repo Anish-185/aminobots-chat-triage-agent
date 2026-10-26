@@ -22,4 +22,4 @@ SQLAlchemy (JSONL is enough) · LLM data generator (hand-written chats) · Strea
 injection risk) · LLM Guard (archived) · whatstk (GPL-3.0) · IndicLID/IndicXlit/promptfoo/chunking
 (deferred).
 
-**Cost:** chat-miner pulls matplotlib, polars, pyarrow, wordcloud (`.venv` ≈ 800 MB); no GPL.
+**Cost:** chat-miner adds matplotlib/polars/pyarrow/wordcloud (≈ 800 MB, no GPL); accepted for a local demo.

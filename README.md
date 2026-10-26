@@ -6,11 +6,15 @@ hand off / refuse), the numbered rule behind the grade, and the messages it reli
 
 > Simulation only — no action is executed. Synthetic data only. Free LLMs only ($0).
 
-**Status:** Phase 1: bootstrap (dependencies, config, guards, CI). No runnable pipeline yet. The
-first attempt is preserved on the `archive/first-attempt` branch.
+**Status:** Phase 2: submission docs (approach, diagrams, build plan). No runnable pipeline yet.
+The first attempt is preserved on the `archive/first-attempt` branch.
 
 ## Docs
 
+- [APPROACH.md](APPROACH.md): problem scoping, system design, data, evaluation, risks
+- Diagrams: [architecture](docs/architecture.drawio.svg) · [workflow](docs/workflow.drawio.svg)
+  (editable in diagrams.net; regenerate with `uv run python scripts/make_diagrams.py`)
+- [Build plan](docs/build-plan.md): phases, request budget, risks
 - [Functional document](docs/functional.md): problem, current process, interventions, user
   journey, tech construct
 - [SPEC v2](docs/SPEC.md): contracts, policy, evaluation

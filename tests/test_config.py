@@ -63,3 +63,19 @@ def test_every_configured_model_is_priced(cfg: Path):
     _edit(cfg / "pricing.yaml", lambda d: d["models"].pop("google/gemma-4-31b-it:free"))
     with pytest.raises(ValueError, match="gemma"):
         load_pricing(cfg)
+
+
+def test_rejects_unknown_instructor_mode(cfg: Path):
+    _edit(cfg / "models.yaml", lambda d: d["candidates"][0].update(instructor_mode="MAGIC"))
+    with pytest.raises(ValidationError, match="instructor_mode"):
+        load_models(cfg)
+
+
+def test_phase2_model_decisions():
+    models = load_models()
+    assert models.roles.extractor.model == "nvidia/nemotron-3-super-120b-a12b:free"
+    modes = {c.id: c.instructor_mode for c in models.candidates}
+    assert modes == {
+        "nvidia/nemotron-3-super-120b-a12b:free": "JSON_SCHEMA",
+        "google/gemma-4-31b-it:free": "JSON",
+    }
