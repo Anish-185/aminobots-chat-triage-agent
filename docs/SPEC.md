@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.2 (Phase 2; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.3 (Phase 3; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -27,7 +27,7 @@ romanised, noisy).
 
 **Not in scope (deferred):** real execution of anything, Hindi, voice notes and image content,
 replying to the group, chunking long chats, script detection beyond a simple heuristic,
-deployment.
+deployment, **iOS exports** (only the Android format `dd/mm/yy, h:mm am - Name: text` parses).
 
 ## 2. Invariants
 
@@ -58,22 +58,22 @@ WhatsApp .txt
 ```
 
 ### 3.1 Parse
-- chat-miner parses the export into rows (timestamp, author, text). Its API and columns are
-  verified in Phase 3 before use.
-- Message IDs `m001`, `m002`, … are assigned in parse order.
+- chat-miner parses ordinary messages (`timestamp`, `author`, `message`; multi-line joined). It
+  **drops system lines**, so a pre-pass (`triage/parse.py`) marks every message start in file
+  order, keeps system lines, and owns timestamps (fixed `dd/mm`); misalignment raises.
+- Message IDs `m001`, `m002`, … are assigned in file order, system lines included.
 - Author is a phone number or a saved name; a name maps to a phone via optional
-  `data/world/contacts.yaml`.
-- System lines are kept as messages with `kind = system` ("security code changed", added/left,
-  "This message was deleted"). Phase 3 checks whether chat-miner keeps them; if not, a ≤ 30-line
-  pre-pass recovers them before IDs are assigned.
-- Media placeholders become `kind = media`, rendered `[image]`.
+  `data/world/contacts.yaml`. System lines carry the person they are about (`subject_phone`).
+- `kind`: `system` for "security code changed", added/left/joined, "This message was deleted";
+  `media` for `<Media omitted>` (rendered `[image]`); else `text`.
 
 ### 3.2 Rendering for the model
 One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
-- Sender handles `S1…Sn` are stable within a chat.
+- Sender handles `S1…Sn` in order of first appearance (as author or system-line subject).
 - A date divider line (`--- 2026-10-25 ---`) precedes the first message of each new day, so
   relative dates ("repu" = tomorrow) resolve.
-- **Phone numbers are never sent to the model.**
+- **Phone numbers are never sent to the model:** a number-only author shows as
+  `"(number hidden)"`, and any number in text becomes `[phone]`. System lines: `| system | …`.
 
 ### 3.3 Extract
 - One prompt, `prompts/extract/v1.md`, one call per chat, output validated against the
@@ -120,18 +120,18 @@ whatstk (GPL-3.0), IndicLID/IndicXlit/promptfoo/chunking (deferred).
 
 ## 5. Data contracts (`triage/schemas.py`)
 
-Pydantic v2 models are the only contracts between stages. Field lists are binding; exact types
-are fixed in Phase 3.
+Pydantic v2 models are the only contracts between stages; the code is the exact definition.
 
 | Model | Key fields |
 |---|---|
-| `Message` | `id` (`m001`), `ts`, `author_raw`, `handle` (`S1`), `display_name`, `text`, `kind` (`text`/`media`/`system`) |
-| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, slot time, amount…), `status` (`open`/`cancelled`/`handled`), `flags[]` |
-| `Extraction` (LLM) | `candidates[]` |
-| `Identity` | `state` (`CONFIRMED`/`AMBIGUOUS`/`UNCONFIRMED`), `contact_id?`, `role?`, `outlets[]`, `reason` |
-| `PolicyResult` | `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]` (rule, matched yes/no) |
-| `Request` | candidate + identity + policy result + `route` |
-| `RunResult` | `run_id`, `status` (`OK`/`UNPROCESSED`), `requests[]`, `rejected[]`, `trace_url?` |
+| `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
+| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
+| `ExtractionResult` (LLM) | `candidates[]` |
+| `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `reason` |
+| `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
+| `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id`, `evidence_msg_ids[]`, `now`, `action`, `simulated: true` |
+| `RunResult` (Phase 5) | `run_id`, `status` (`OK`/`UNPROCESSED`), `requests[]`, `rejected[]`, `trace_url?` |
+| `GoldChat` | `chat_id`, `source`, `requests[]` / `internal_requests[]` (intent, evidence, requester, state, status, flags, `facts`, grade, rule) |
 
 Uncertainty flags (from the LLM or code): `referent_unresolved`, `outlet_ambiguous`,
 `time_unspecified`, `intent_unclear`, `possible_forward`, `injection_attempt`.
@@ -176,7 +176,8 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 
 ## 8. Data
 
-- Format: WhatsApp `.txt` exports only, with gold JSON alongside (`<id>.txt` + `<id>.gold.json`).
+- Format: Android WhatsApp `.txt` exports, gold alongside (`<id>.gold.json`); checked by
+  `scripts/validate_gold.py` (pytest + pre-commit). Dev coverage: `data/dev/README.md`.
 - `data/world/roster.yaml`: partners, outlets, contacts (phone, name, role, outlets, `shared`,
   `delegate_for`). Must include a shared phone, two contacts with the same first name, an owner
   with 2 outlets, an `accounts` role, a delegate, and Aminobots-staff contacts.
@@ -345,3 +346,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.0 | Phase 0: simplified design, condensed from context v2 §4. |
 | v2.1 | Phase 1: one-process serving under `/api` (§11); phone generation rule (§8); R3 adds critical, R9 needs status open, three new worked checks (§9); `AMBIGUOUS` authority and A6 internal senders (§7, §15); system-line check and date dividers (§3.1, §3.2); observability retention (§12); risks (§16). |
 | v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13); approval-load metric (§12). |
+| v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
