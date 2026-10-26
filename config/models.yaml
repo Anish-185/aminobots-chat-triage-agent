@@ -1,39 +1,33 @@
 # LLM roles and candidates (SPEC §14). OpenRouter ':free' models only (CLAUDE.md invariant 10).
 # Client: Instructor over the openai SDK pointed at OpenRouter; key from OPENROUTER_API_KEY.
-# The final extractor choice is the Phase 4 bake-off on dev chats.
+# The final extractor choice is the Phase 4 bake-off (2 models × ~10 dev chats ≈ 20 requests).
 roles:
   extractor:
     provider: openrouter
     model: nvidia/nemotron-3-super-120b-a12b:free
     fallbacks:
       - google/gemma-4-31b-it:free
-      - dots-studio/dots-3-note-preview:free
     temperature: 0
-    verified_on: 2026-10-10
+    verified_on: 2026-10-26
   baseline_b1:
     provider: openrouter
     model: nvidia/nemotron-3-super-120b-a12b:free
     fallbacks:
       - google/gemma-4-31b-it:free
-      - dots-studio/dots-3-note-preview:free
     temperature: 0
-    verified_on: 2026-10-10
+    verified_on: 2026-10-26
 
-# Metadata from https://openrouter.ai/api/v1/models as recorded on verified_on (context §5).
-# TODO(phase-4): re-verify; openrouter.ai was not reachable from the Phase 1 session.
+# Verified by the planner on openrouter.ai, 2026-10-26. dots-3-note-preview removed (deprecating).
 candidates:
   - id: nvidia/nemotron-3-super-120b-a12b:free
-    context_length: 262144  # context §5 records "262k"; exact value to re-verify
-    structured_outputs: true
-    response_format: true
-    verified_on: 2026-10-10
+    context_length: 262144
+    structured_outputs: true      # tools + JSON-schema structured outputs
+    instructor_mode: JSON_SCHEMA
+    logs_prompts: true            # free endpoint logs prompts; fine, synthetic data only
+    verified_on: 2026-10-26
   - id: google/gemma-4-31b-it:free
-    context_length: 262144  # context §5 records "262k"; exact value to re-verify
-    structured_outputs: false
-    response_format: true
-    verified_on: 2026-10-10
-  - id: dots-studio/dots-3-note-preview:free
-    context_length: 524288  # context §5 records "512k"; exact value to re-verify
-    structured_outputs: true
-    response_format: null  # TODO(phase-4): not recorded in context §5
-    verified_on: 2026-10-10
+    context_length: 262144        # planner recorded "262K"
+    structured_outputs: null      # TODO(phase-4): unverified, so Instructor JSON mode
+    instructor_mode: JSON         # MD_JSON if JSON fails in the bake-off
+    logs_prompts: null            # TODO(phase-4): unverified
+    verified_on: 2026-10-26
