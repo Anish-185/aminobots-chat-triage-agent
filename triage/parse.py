@@ -19,7 +19,8 @@ from chatminer.chatparsers import WhatsAppParser  # noqa: E402
 
 from triage.schemas import Message  # noqa: E402
 
-logging.getLogger("chatminer.chatparsers").setLevel(logging.WARNING)
+# Date order is fixed by the pre-pass, so chat-miner's date-format guess warnings are noise.
+logging.getLogger("chatminer.chatparsers").setLevel(logging.ERROR)
 
 START = re.compile(r"^(\d{1,2}/\d{1,2}/\d{2,4}), (\d{1,2}:\d{2}) ?([ap]m) - (.*)$", re.IGNORECASE)
 PHONE_AUTHOR = re.compile(r"^\+?[\d ()-]{10,}$")
@@ -101,13 +102,15 @@ def parse_chat(path: Path, contacts_path: Path | None = None) -> list[Message]:
             )
             continue
         row = next(it)
+        if row["timestamp"].time() != ts.time():  # slots and rows must line up
+            raise ValueError(f"{path}: {mid} misaligned between pre-pass and chat-miner")
         author, text = row["author"], row["message"]
         phone, name = _resolve(author, contacts)
         kind = "media" if text in MEDIA else "system" if text in DELETED else "text"
         messages.append(
             Message(
                 id=mid,
-                ts=row["timestamp"],
+                ts=ts,  # pre-pass time: fixed dd/mm order (chat-miner guesses it per file)
                 author_raw=author,
                 phone=phone,
                 display_name=name,
