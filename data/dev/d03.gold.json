@@ -1,0 +1,81 @@
+{
+  "chat_id": "d03",
+  "partner": "P1",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move today's 2 pm slot to 4 pm (later cancelled)",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003",
+        "m015"
+      ],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "cancelled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 6.0
+      },
+      "grade": "seek_approval",
+      "rule_id": "R7"
+    },
+    {
+      "id": "r2",
+      "intent": "complaint",
+      "gloss": "Tomato boxes and packets arrived damaged; register a complaint",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m007",
+        "m008",
+        "m009"
+      ],
+      "requester_phone": "+915555010001",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    },
+    {
+      "id": "r3",
+      "intent": "delivery_slot_change",
+      "gloss": "Move tomorrow's Kukatpally slot from 8 to 11 (later cancelled)",
+      "primary_msg_id": "m012",
+      "evidence_msg_ids": [
+        "m012",
+        "m015"
+      ],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "cancelled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 22.3
+      },
+      "grade": "act",
+      "rule_id": "R8"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Cancellation: r3 is record-only (R8); r1 stays seek_approval because R7 is more cautious."
+}

@@ -1,0 +1,56 @@
+{
+  "chat_id": "d09",
+  "partner": "P3",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "On the owner's behalf: move tomorrow's 7 am delivery to 10 am",
+      "primary_msg_id": "m006",
+      "evidence_msg_ids": [
+        "m006"
+      ],
+      "requester_phone": "+915555010012",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": true,
+        "on_behalf_verified": true,
+        "slot_hours_ahead": 22.0
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "On the owner's behalf: move Friday's delivery to 6 pm",
+      "primary_msg_id": "m013",
+      "evidence_msg_ids": [
+        "m013"
+      ],
+      "requester_phone": "+915555010013",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": true,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R5"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Ramesh is a roster delegate for Vani (verified); Swathi is not (unverified)."
+}

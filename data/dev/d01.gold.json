@@ -1,0 +1,81 @@
+{
+  "chat_id": "d01",
+  "partner": "P1",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move Kukatpally's 7 am delivery tomorrow to 9 am",
+      "primary_msg_id": "m011",
+      "evidence_msg_ids": [
+        "m010",
+        "m011"
+      ],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 21.2
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Same slot change for the owner's outlet (which of his two is unclear)",
+      "primary_msg_id": "m016",
+      "evidence_msg_ids": [
+        "m011",
+        "m016"
+      ],
+      "requester_phone": "+915555010001",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [
+        "outlet_ambiguous"
+      ],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 20.7
+      },
+      "grade": "seek_approval",
+      "rule_id": "R6"
+    },
+    {
+      "id": "r3",
+      "intent": "invoice_request",
+      "gloss": "Send the September invoice copy for GST filing",
+      "primary_msg_id": "m019",
+      "evidence_msg_ids": [
+        "m019"
+      ],
+      "requester_phone": "+915555010004",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Like mandated scenario 1 (not its wording): staff slot change, then an owner with two outlets says 'maa shop ki kuda'."
+}

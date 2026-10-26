@@ -1,0 +1,56 @@
+{
+  "chat_id": "d06",
+  "partner": "P2",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "refund_request",
+      "gloss": "Refund Rs 2,000 for spoiled paneer at Kondapur",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003"
+      ],
+      "requester_phone": "+915555010021",
+      "identity_state": "AMBIGUOUS",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    },
+    {
+      "id": "r2",
+      "intent": "order_change",
+      "gloss": "Add 5 dozen extra eggs to the Dilsukhnagar order",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m008"
+      ],
+      "requester_phone": "+915555010022",
+      "identity_state": "UNCONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R4"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Saved name 'Suresh' (unknown number) matches two roster Sureshes; 'Kiran K' matches one."
+}

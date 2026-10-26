@@ -1,0 +1,77 @@
+{
+  "chat_id": "d08",
+  "partner": "P2",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "payout_details_change",
+      "gloss": "Change the payout account to a new Kotak current account",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003"
+      ],
+      "requester_phone": "+915555010005",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R1"
+    },
+    {
+      "id": "r2",
+      "intent": "invoice_request",
+      "gloss": "Send October 1-15 invoices as one PDF",
+      "primary_msg_id": "m006",
+      "evidence_msg_ids": [
+        "m006"
+      ],
+      "requester_phone": "+915555010010",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r3",
+      "intent": "invoice_request",
+      "gloss": "Send last month's Dilsukhnagar invoice (says the owner asked)",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m008"
+      ],
+      "requester_phone": "+915555010007",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": true,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R5"
+    }
+  ],
+  "internal_requests": [],
+  "notes": ""
+}
