@@ -76,9 +76,20 @@ docs/        SPEC.md functional.md context/ build-prompts/ adr/ *.drawio.svg bui
 
 The human gives one phase prompt at a time. **First step of every phase:** save the prompt
 verbatim to `docs/build-prompts/phase-NN-<short-name>.md`. Never edit an earlier phase file. Do
-only the current phase, then stop. For a phase touching more than one file, plan first; when the
-prompt says "wait for approval", stop after the plan. Check current docs for any library or
-service before using it; never rely on memory for APIs, versions or prices.
+only the current phase, then stop. Check current docs for any library or service before using
+it; never rely on memory for APIs, versions or prices.
+
+## Standing rules (autonomy)
+
+- **Work autonomously.** For each phase, write a short plan into that phase's build-log file,
+  then proceed without waiting. Fix CI failures, lint errors and broken tests yourself.
+- When a prompt says "PR #N approved", merge that PR yourself once CI is green (merge commit,
+  delete the branch).
+- **STOP and ask only** if a step would: cost money or need a paid plan; make more than 10 LLM
+  requests; deploy or publish anything; read or change frozen eval data (other than through
+  `eval/run_eval.py`); touch secrets; force-push, tag, or push directly to main; or break an
+  invariant.
+- If network access blocks you, record it as a blocker and carry on with the rest.
 
 ## Conventions
 
@@ -121,5 +132,5 @@ uv run python -m triage.serve      # site + API on localhost, from Phase 7
 ## Git
 
 - Commit and push to the current phase branch on your own, with clear messages, and open a PR to
-  main at the end of the phase. Never push to main, never merge, never force-push, never create
-  tags.
+  main at the end of the phase. Never push to main, never force-push, never create tags. Merge
+  only a PR the human has approved, once CI is green (see Standing rules).
