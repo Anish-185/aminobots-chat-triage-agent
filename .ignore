@@ -1,0 +1,3 @@
+# Frozen eval sets: ripgrep (and Claude Code's Grep/Glob) skip these. CLAUDE.md invariant 6.
+data/test/
+data/challenge/
