@@ -1,0 +1,101 @@
+{
+  "chat_id": "d02",
+  "partner": "P1",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move tomorrow's Kukatpally delivery from 10 am to 2 pm (split over 3 messages)",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m003",
+        "m004",
+        "m005"
+      ],
+      "requester_phone": "+915555010001",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 25.0
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Same 2 pm slot for the manager's only outlet (Ameerpet)",
+      "primary_msg_id": "m007",
+      "evidence_msg_ids": [
+        "m005",
+        "m007"
+      ],
+      "requester_phone": "+915555010002",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r3",
+      "intent": "order_change",
+      "gloss": "Add 20 kg basmati rice and cut sugar by 10 kg in tomorrow's order",
+      "primary_msg_id": "m011",
+      "evidence_msg_ids": [
+        "m011"
+      ],
+      "requester_phone": "+915555010002",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R7"
+    },
+    {
+      "id": "r4",
+      "intent": "status_query",
+      "gloss": "Has today's Kukatpally order been dispatched?",
+      "primary_msg_id": "m013",
+      "evidence_msg_ids": [
+        "m013"
+      ],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "m021 is the owner asking his own staff, not Aminobots: not a request."
+}
