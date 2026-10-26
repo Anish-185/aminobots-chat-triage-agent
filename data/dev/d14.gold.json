@@ -1,0 +1,82 @@
+{
+  "chat_id": "d14",
+  "partner": "P3",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "refund_request",
+      "gloss": "Refund Rs 1,200 for 12 sour milk packets",
+      "primary_msg_id": "m004",
+      "evidence_msg_ids": [
+        "m004",
+        "m005"
+      ],
+      "requester_phone": "+915555010012",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Make one delivery this week a bit later (day and time not given)",
+      "primary_msg_id": "m007",
+      "evidence_msg_ids": [
+        "m007",
+        "m009"
+      ],
+      "requester_phone": "+915555010013",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [
+        "time_unspecified"
+      ],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R6"
+    },
+    {
+      "id": "r3",
+      "intent": "other",
+      "gloss": "Put the new menu photos on the Aminobots app",
+      "primary_msg_id": "m010",
+      "evidence_msg_ids": [
+        "m010",
+        "m011"
+      ],
+      "requester_phone": "+915555010011",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Telugu-script-heavy chat."
+}

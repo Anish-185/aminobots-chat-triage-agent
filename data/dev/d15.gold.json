@@ -1,0 +1,102 @@
+{
+  "chat_id": "d15",
+  "partner": "P1",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "order_change",
+      "gloss": "Add 30 burger buns to tomorrow's Ameerpet order (later cancelled)",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003",
+        "m011"
+      ],
+      "requester_phone": "+915555010001",
+      "identity_state": "CONFIRMED",
+      "status": "cancelled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R7"
+    },
+    {
+      "id": "r2",
+      "intent": "status_query",
+      "gloss": "Has today's Kukatpally order left the warehouse?",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m005"
+      ],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r3",
+      "intent": "delivery_slot_change",
+      "gloss": "Move 'it' to 11 am for Ameerpet (what 'it' is, is unclear)",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m008"
+      ],
+      "requester_phone": "+915555010002",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [
+        "referent_unresolved"
+      ],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R6"
+    },
+    {
+      "id": "r4",
+      "intent": "refund_request",
+      "gloss": "Refund a Rs 3,200 double charge for the 25th delivery",
+      "primary_msg_id": "m015",
+      "evidence_msg_ids": [
+        "m015",
+        "m016"
+      ],
+      "requester_phone": "+915555010004",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Plain English chat. m022 is the owner asking his own team: not a request."
+}

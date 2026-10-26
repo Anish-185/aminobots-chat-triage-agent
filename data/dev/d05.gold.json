@@ -1,0 +1,56 @@
+{
+  "chat_id": "d05",
+  "partner": "P2",
+  "source": {
+    "author": "Claude Code",
+    "method": "hand-written from phase-03 prompt",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move tomorrow's Secunderabad delivery from 6 am to 8 am",
+      "primary_msg_id": "m006",
+      "evidence_msg_ids": [
+        "m006"
+      ],
+      "requester_phone": "+915555010008",
+      "identity_state": "AMBIGUOUS",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": 20.7
+      },
+      "grade": "seek_approval",
+      "rule_id": "R4"
+    },
+    {
+      "id": "r2",
+      "intent": "status_query",
+      "gloss": "Status of yesterday's order; bill not received",
+      "primary_msg_id": "m012",
+      "evidence_msg_ids": [
+        "m012"
+      ],
+      "requester_phone": "+915555010008",
+      "identity_state": "AMBIGUOUS",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_hours_ahead": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R4"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Shared counter phone (Anil and Mahesh, both staff): AMBIGUOUS, authorised because both are."
+}
