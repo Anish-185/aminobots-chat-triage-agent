@@ -285,8 +285,8 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
   Hungarian algorithm.
 - **Metrics:** detection precision / recall / F1 · attribution accuracy · unconfirmed-sender
   recall · grade accuracy + confusion matrix · over-autonomy rate (overall and high-risk) ·
-  rule-citation accuracy · evidence validity · latency p50 / p95 · tokens + notional cost
-  (tokens × paid-variant list price; billed = $0).
+  rule-citation accuracy · evidence validity · approval load (gold-`act` requests graded
+  `seek_approval`) · latency p50 / p95 · tokens + notional cost (paid-variant price; billed $0).
 - **Baseline B1:** one prompt that does everything incl. grading, same model — shows with numbers
   why code must decide.
 - **Strict-model mode** for milestones: no fallbacks; paired comparisons only on transcripts
@@ -344,4 +344,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 |---|---|
 | v2.0 | Phase 0: simplified design, condensed from context v2 §4. |
 | v2.1 | Phase 1: one-process serving under `/api` (§11); phone generation rule (§8); R3 adds critical, R9 needs status open, three new worked checks (§9); `AMBIGUOUS` authority and A6 internal senders (§7, §15); system-line check and date dividers (§3.1, §3.2); observability retention (§12); risks (§16). |
-| v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13). |
+| v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13); approval-load metric (§12). |
