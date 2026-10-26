@@ -1,7 +1,6 @@
-# LLM roles (SPEC §14). OpenRouter ':free' models only (CLAUDE.md invariant 10).
-# Candidates were read from https://openrouter.ai/api/v1/models metadata on verified_on;
-# the final choice is a phase-4 bake-off on the dev chats (Phase 4).
-# Client: instructor.from_provider("openrouter/<model>"), key from OPENROUTER_API_KEY.
+# LLM roles and candidates (SPEC §14). OpenRouter ':free' models only (CLAUDE.md invariant 10).
+# Client: Instructor over the openai SDK pointed at OpenRouter; key from OPENROUTER_API_KEY.
+# The final extractor choice is the Phase 4 bake-off on dev chats.
 roles:
   extractor:
     provider: openrouter
@@ -18,4 +17,23 @@ roles:
       - google/gemma-4-31b-it:free
       - dots-studio/dots-3-note-preview:free
     temperature: 0
+    verified_on: 2026-10-10
+
+# Metadata from https://openrouter.ai/api/v1/models as recorded on verified_on (context §5).
+# TODO(phase-4): re-verify; openrouter.ai was not reachable from the Phase 1 session.
+candidates:
+  - id: nvidia/nemotron-3-super-120b-a12b:free
+    context_length: 262144  # context §5 records "262k"; exact value to re-verify
+    structured_outputs: true
+    response_format: true
+    verified_on: 2026-10-10
+  - id: google/gemma-4-31b-it:free
+    context_length: 262144  # context §5 records "262k"; exact value to re-verify
+    structured_outputs: false
+    response_format: true
+    verified_on: 2026-10-10
+  - id: dots-studio/dots-3-note-preview:free
+    context_length: 524288  # context §5 records "512k"; exact value to re-verify
+    structured_outputs: true
+    response_format: null  # TODO(phase-4): not recorded in context §5
     verified_on: 2026-10-10
