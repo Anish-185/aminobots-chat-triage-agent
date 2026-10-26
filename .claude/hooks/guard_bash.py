@@ -4,7 +4,7 @@
 Blocks: `git push` with force flags, `git tag`, and any command that references
 data/test/ or data/challenge/ (cat/head/grep/sed/awk/python -c open(), but also ls, cp, >).
 Allows exactly the two eval entry points, and only when not chained with other commands.
-Pattern matching is a speed bump, not a sandbox: see ADR-0013.
+Pattern matching is a speed bump, not a sandbox.
 """
 
 import re

@@ -1,1 +1,1 @@
-Dev split: generated transcripts and gold labels for development (SPEC §13.6).
+Dev split: hand-written synthetic WhatsApp `.txt` chats with gold JSON alongside (SPEC §8). Used for development only.
