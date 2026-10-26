@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.0 (Phase 0, simplified design). Replaces SPEC v1.x, which is kept on the
+Status: v2.1 (Phase 1; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -63,12 +63,16 @@ WhatsApp .txt
 - Message IDs `m001`, `m002`, … are assigned in parse order.
 - Author is a phone number or a saved name; a name maps to a phone via optional
   `data/world/contacts.yaml`.
-- System lines are kept as messages with `kind = system` (e.g., "security code changed").
+- System lines are kept as messages with `kind = system` ("security code changed", added/left,
+  "This message was deleted"). Phase 3 checks whether chat-miner keeps them; if not, a ≤ 30-line
+  pre-pass recovers them before IDs are assigned.
 - Media placeholders become `kind = media`, rendered `[image]`.
 
 ### 3.2 Rendering for the model
 One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 - Sender handles `S1…Sn` are stable within a chat.
+- A date divider line (`--- 2026-10-25 ---`) precedes the first message of each new day, so
+  relative dates ("repu" = tomorrow) resolve.
 - **Phone numbers are never sent to the model.**
 
 ### 3.3 Extract
@@ -161,7 +165,11 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 - **Principal:** "maa outlet" resolves to the sender's outlets; 2+ outlets → flag
   `outlet_ambiguous`. An on-behalf request is verified only if the roster lists the sender as a
   delegate of the principal.
-- **Authority:** sender's roster role must be in the intent's allowed roles (§6).
+- **Authority:** sender's roster role must be in the intent's allowed roles (§6). An `AMBIGUOUS`
+  sender is authorised only if **every** candidate contact is authorised. (`AMBIGUOUS` + payout
+  change → hand_off R1, by design: finance verifies out of band.)
+- **Internal senders (A6):** requests from role `aminobots_staff` are logged but excluded from
+  the request list and from eval.
 - Name matching uses rapidfuzz with the threshold in `config/thresholds.yaml`.
 - Every decision stores a human-readable `reason`, shown on the website.
 
@@ -171,7 +179,9 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 - `data/world/roster.yaml`: partners, outlets, contacts (phone, name, role, outlets, `shared`,
   `delegate_for`). Must include a shared phone, two contacts with the same first name, an owner
   with 2 outlets, an `accounts` role, a delegate, and Aminobots-staff contacts.
-- Phones: `+91` + 10 digits starting with 0–5; a test asserts every phone is invalid.
+- Phones: `+91` + 10 digits. Generate by drawing candidates whose first digit is 0–5 and keeping
+  only those with `phonenumbers.is_valid_number() == False` (Indian landlines starting 2–5 can
+  be valid). A test asserts this for every phone in the repo.
 
 | Split | Size | Written by | Status |
 |---|---|---|---|
@@ -197,13 +207,13 @@ Context fields: `intent`, `risk`, `discloses`, `sender_state`, `authorised`, `on
 |---|---|---|
 | R1 | intent is `payout_details_change` | hand_off (finance, out-of-band verification) |
 | R2 | sender `UNCONFIRMED` and (risk high/critical or discloses account data) | refuse + security alert |
-| R3 | intent `complaint` or `other`, or risk high | hand_off |
+| R3 | intent `complaint` or `other`, or risk high or critical | hand_off |
 | R4 | sender not `CONFIRMED` | seek_approval |
 | R5 | sender lacks authority for the intent, or on-behalf request not verified | seek_approval |
 | R6 | any uncertainty flag | seek_approval |
 | R7 | risk medium, or slot change < `slot_cutoff_hours` (12) before the slot | seek_approval |
 | R8 | status not open (cancelled / already handled) | act (record only) |
-| R9 | sender `CONFIRMED`, authorised, risk none/low | act |
+| R9 | status open, sender `CONFIRMED`, authorised, risk none/low | act |
 | R10 | default — nothing else matched | hand_off |
 
 **Worked checks (unit tests):**
@@ -216,7 +226,11 @@ Context fields: `intent`, `risk`, `discloses`, `sender_state`, `authorised`, `on
 | Same follow-up, sender has 2 outlets | seek_approval, R6 |
 | Same follow-up, sender unknown | seek_approval, R4 |
 | Cancelled request from a `CONFIRMED` sender | act, R8 (record only) |
+| Cancelled payout change from an unknown number | refuse, R2 |
+| `CONFIRMED` owner, payout change | hand_off, R1 |
+| `CONFIRMED` staff, slot change 6 h before the slot | seek_approval, R7 |
 
+R8 never lowers caution: a non-open request still gets the most cautious matching grade.
 A property test checks monotonicity: adding any rule never makes a grade less cautious.
 
 ## 10. Routing and logs
@@ -233,7 +247,9 @@ Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "n
 
 ## 11. Website and API (local only)
 
-**Static site** in `site/`, served on localhost. Not published.
+**Serving: one process.** FastAPI on `127.0.0.1:8000` mounts the static `site/` at `/` and the
+API under `/api` (no second server, no port clash). The site's API base URL is configurable and
+defaults to same origin. Not published.
 
 1. **Home** — the problem, a one-line solution, the two scenarios.
 2. **How it works** — architecture SVG, model-vs-code split, rules table rendered from a JSON
@@ -243,7 +259,7 @@ Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "n
    - Table: gloss, sender + state badge, grade badge, rule ID with its text on hover.
    - Click a request → step panel: chat with evidence highlighted → extraction → identity +
      reason → rule check table (all rules, matched yes/no, decider highlighted) → route +
-     simulated action → Langfuse trace link.
+     simulated action → Langfuse trace link (optional extra; see §12).
    - Approve/Reject on `seek_approval` items appends to a client-side log (sessionStorage).
 4. **Try your own** — paste/upload a chat, optional "your OpenRouter key", POST to the local API
    (URL configurable). If the API isn't running, show the command to start it.
@@ -253,15 +269,14 @@ Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "n
 Footer on every page: "Simulation only — no action is executed. Synthetic data only."
 
 **API** (`api/main.py`, FastAPI + uvicorn):
-- `POST /triage` (chat text + optional key) → `RunResult` with per-stage trace data.
-- `GET /health`.
+- `POST /api/triage` (chat text + optional key) → `RunResult` with per-stage trace data.
+- `GET /api/health`.
 - CORS origins from config (localhost only now).
 - A visitor key is used only for that request: never stored, logged or sent to Langfuse (tested).
 - Without a visitor key the server key is capped at `demo_server_key_rpd` (10/day).
 
-**One command** (`uv run python -m triage.serve`) starts the API, serves the site and prints the
-localhost URL. Paths are relative and the API URL is configurable, so publishing later needs no
-code change.
+**One command** (`uv run python -m triage.serve`) starts that process and prints the localhost
+URL. Paths are relative and the API URL is configurable, so publishing later needs no code change.
 
 ## 12. Evaluation
 
@@ -281,6 +296,8 @@ code change.
   - Targets: detection F1 ≥ 0.85; grade accuracy ≥ 0.85; rule-citation accuracy ≥ 0.90.
 - **Results:** `eval/results/<tag>/summary.json` + `report.md`; scores also sent to Langfuse.
   Test and challenge results store IDs and labels only, never message text.
+- **Observability:** Langfuse Hobby keeps data for 30 days, so the durable per-stage record is
+  `site/data/*.json` and `eval/results/`. Langfuse links are optional extras.
 
 ## 13. Prototypes and request budget
 
@@ -309,7 +326,21 @@ code change.
 - **A1:** Aminobots serves partner outlets with deliveries, orders and payouts.
 - **A2:** in scenario 1, "staff member" means partner-side staff.
 - **A3:** the slot cut-off is 12 h.
+- **A6:** requests from role `aminobots_staff` are internal (§7): logged, not listed, not scored.
 
-All three are unconfirmed and listed with the mentor questions in
+All four are unconfirmed and listed with the mentor questions in
 `docs/context/PROJECT_CONTEXT.md` §7. When answers arrive, update this SPEC, the policy and the
 assumptions in the next phase.
+
+## 16. Risks
+
+- Eval runs send synthetic test and challenge chat text to OpenRouter free models (some
+  providers may log prompts) and to Langfuse. Accepted because all data is synthetic; noted for
+  APPROACH §E. Real partner chats must never be sent.
+
+## 17. Change log
+
+| Version | Changes |
+|---|---|
+| v2.0 | Phase 0: simplified design, condensed from context v2 §4. |
+| v2.1 | Phase 1: one-process serving under `/api` (§11); phone generation rule (§8); R3 adds critical, R9 needs status open, three new worked checks (§9); `AMBIGUOUS` authority and A6 internal senders (§7, §15); system-line check and date dividers (§3.1, §3.2); observability retention (§12); risks (§16). |

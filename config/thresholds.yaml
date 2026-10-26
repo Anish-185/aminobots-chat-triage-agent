@@ -1,18 +1,7 @@
-# Thresholds and defaults (SPEC §14).
-name_match: 90
-entity_match: 85
-slot_cutoff_hours: 12
-max_messages_per_call: 400
-chunk_overlap: 60
-max_reference_distance: 50  # must be <= chunk_overlap
-api_backoff_base_s: 2       # the single wait after a 429 / transport error (SPEC §3.5)
-public_max_messages: 300
-public_runs_per_session: 5
-# TODO(human): daily request cap for the optional demo server key. null = server key disabled.
-demo_server_key_rpd: null
-
-# OpenRouter free-tier limits and retry budget (SPEC §3.5).
-openrouter_rpm: 20
-openrouter_rpd: 50
-llm_max_repair_retries: 1
-llm_max_transport_retries: 1
+# Thresholds and limits (SPEC §14). Change here, never in code.
+name_match: 90               # rapidfuzz score for display-name → roster match (SPEC §7)
+slot_cutoff_hours: 12        # R7: slot changes closer than this need approval (assumption A3)
+requests_per_minute: 20      # OpenRouter free-tier rate limit (SPEC §3.3)
+requests_per_day: 50         # OpenRouter free-tier daily cap (< $10 credits ever bought)
+llm_max_repair_retries: 1    # Instructor retries once on schema failure (SPEC §3.5)
+demo_server_key_rpd: 10      # website "try your own" without a visitor key (SPEC §11)
