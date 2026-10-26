@@ -112,4 +112,21 @@ stop. SPEC section numbers in the prompt map to SPEC v2.2 as: parser/pre-pass §
 
 ## Parser check results
 
-(filled in below after running chat-miner on the fixture)
+Fixture: `tests/fixtures/android_sample.txt` (13 lines; U+200E on one line, U+202F before am/pm
+on 6 lines, emoji author, phone-number author, multi-line message, `<Media omitted>`, deleted
+message, system lines). chat-miner 0.6.0 `WhatsAppParser`:
+
+- Returns a DataFrame with columns `timestamp` (datetime), `author` (str), `message` (str).
+- Rows come back **newest first** (it reads the file reversed); we reverse them.
+- **Drops every system line** (no `Author: ` part): encryption notice, "created group", "added",
+  "left", "security code changed" (logged as "Ignoring sytem message").
+- Keeps `<Media omitted>` and "This message was deleted" as ordinary text from the author.
+- Joins multi-line messages with a space (newlines lost).
+- Strips U+200E; NFKC-normalises, so U+202F becomes a space and `9:15 am` / `10:05 pm` parse
+  correctly (22:05). Emoji author names and phone-number authors are kept verbatim.
+
+Decision: keep chat-miner for messages, plus a pre-pass (≤ 30 lines in `triage/parse.py`) that
+scans message-start lines in file order, marks the ones without `Author: ` as system lines and
+parses their time. chat-miner's rows are zipped into the non-system slots in file order; a count
+mismatch raises (fail closed). `<Media omitted>` → kind `media`; "This message was deleted" →
+kind `system`.
