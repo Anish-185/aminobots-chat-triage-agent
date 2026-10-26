@@ -1,6 +1,6 @@
-# LLM roles (SPEC §15). OpenRouter ':free' models only (CLAUDE.md invariant 10).
+# LLM roles (SPEC §14). OpenRouter ':free' models only (CLAUDE.md invariant 10).
 # Candidates were read from https://openrouter.ai/api/v1/models metadata on verified_on;
-# the final choice is a phase-4 bake-off on the dev seeds (ADR-0014).
+# the final choice is a phase-4 bake-off on the dev chats (Phase 4).
 # Client: instructor.from_provider("openrouter/<model>"), key from OPENROUTER_API_KEY.
 roles:
   extractor:
