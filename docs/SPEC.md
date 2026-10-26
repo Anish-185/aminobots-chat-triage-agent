@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.1 (Phase 1; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.2 (Phase 2; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -78,8 +78,8 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 ### 3.3 Extract
 - One prompt, `prompts/extract/v1.md`, one call per chat, output validated against the
   `Extraction` schema (§5).
-- Instructor mode: `JSON_SCHEMA` where the model supports structured outputs, otherwise `JSON` /
-  `MD_JSON`. Reasoning off or low.
+- Default model `nvidia/nemotron-3-super-120b-a12b:free` (Instructor `JSON_SCHEMA`); fallback
+  `google/gemma-4-31b-it:free` (`JSON`, else `MD_JSON`). Reasoning off or low.
 - Responses cached on disk (diskcache, `.cache/`) keyed by model + prompt version + chat hash.
 - Calls are sequential with a sleep to respect 20 requests/min.
 
@@ -165,6 +165,7 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 - **Principal:** "maa outlet" resolves to the sender's outlets; 2+ outlets → flag
   `outlet_ambiguous`. An on-behalf request is verified only if the roster lists the sender as a
   delegate of the principal.
+- **Roles (fixed):** `owner`, `manager`, `staff`, `accounts`, `aminobots_staff`.
 - **Authority:** sender's roster role must be in the intent's allowed roles (§6). An `AMBIGUOUS`
   sender is authorised only if **every** candidate contact is authorised. (`AMBIGUOUS` + payout
   change → hand_off R1, by design: finance verifies out of band.)
@@ -309,7 +310,7 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
 | v1.0 | final docs (APPROACH, ARTEFACT, README) |
 
 - Free cap: 50 requests/day, 20/min. A dev iteration ≈ 15 requests; a milestone eval ≈ 65
-  (1–2 days).
+  (1–2 days); the Phase 4 bake-off is 2 models × ~10 dev chats ≈ 20 requests.
 - 💰 Decision point (not taken): a one-time $10 OpenRouter credit raises the cap to 1,000/day.
 
 ## 14. Configuration
@@ -326,17 +327,16 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
 - **A1:** Aminobots serves partner outlets with deliveries, orders and payouts.
 - **A2:** in scenario 1, "staff member" means partner-side staff.
 - **A3:** the slot cut-off is 12 h.
+- **A4:** "now" is the timestamp of the chat's last message (§2.8).
+- **A5:** `roster.yaml` is the only source of identity (§7).
 - **A6:** requests from role `aminobots_staff` are internal (§7): logged, not listed, not scored.
 
-All four are unconfirmed and listed with the mentor questions in
-`docs/context/PROJECT_CONTEXT.md` §7. When answers arrive, update this SPEC, the policy and the
-assumptions in the next phase.
+A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and policy when answered.
 
 ## 16. Risks
 
-- Eval runs send synthetic test and challenge chat text to OpenRouter free models (some
-  providers may log prompts) and to Langfuse. Accepted because all data is synthetic; noted for
-  APPROACH §E. Real partner chats must never be sent.
+- Eval runs send synthetic test/challenge text to OpenRouter free models (the nemotron free
+  endpoint logs prompts) and Langfuse. Accepted: all data is synthetic. Real chats never sent.
 
 ## 17. Change log
 
@@ -344,3 +344,4 @@ assumptions in the next phase.
 |---|---|
 | v2.0 | Phase 0: simplified design, condensed from context v2 §4. |
 | v2.1 | Phase 1: one-process serving under `/api` (§11); phone generation rule (§8); R3 adds critical, R9 needs status open, three new worked checks (§9); `AMBIGUOUS` authority and A6 internal senders (§7, §15); system-line check and date dividers (§3.1, §3.2); observability retention (§12); risks (§16). |
+| v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13). |
