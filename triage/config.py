@@ -54,7 +54,8 @@ class Candidate(_Strict):
     id: str
     context_length: int | None
     structured_outputs: bool | None
-    response_format: bool | None
+    instructor_mode: Literal["JSON_SCHEMA", "JSON", "MD_JSON", "TOOLS"]
+    logs_prompts: bool | None
     verified_on: date
 
     @field_validator("id")
@@ -75,7 +76,7 @@ class ModelPrice(_Strict):
 
 
 class PricingConfig(_Strict):
-    checked_on: date
+    checked_on: date | None
     source_url: str
     models: dict[str, ModelPrice]
 
