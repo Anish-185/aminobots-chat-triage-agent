@@ -16,3 +16,9 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+      - id: validate-gold
+        name: validate dev gold and synthetic world
+        entry: uv run python scripts/validate_gold.py
+        language: system
+        pass_filenames: false
+        files: ^(data/(dev|world)/|scripts/validate_gold\.py|triage/(parse|schemas)\.py)
