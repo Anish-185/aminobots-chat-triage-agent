@@ -71,11 +71,12 @@ def test_rejects_unknown_instructor_mode(cfg: Path):
         load_models(cfg)
 
 
-def test_phase2_model_decisions():
+def test_phase4_model_decisions():
     models = load_models()
-    assert models.roles.extractor.model == "nvidia/nemotron-3-super-120b-a12b:free"
     modes = {c.id: c.instructor_mode for c in models.candidates}
     assert modes == {
-        "nvidia/nemotron-3-super-120b-a12b:free": "JSON_SCHEMA",
-        "google/gemma-4-31b-it:free": "JSON",
+        "nvidia/nemotron-3.5-super-vl:free": "JSON_SCHEMA",
+        "google/gemma-4-31b-it:free": "JSON",  # no structured_outputs on its free endpoint
     }
+    role = models.roles.extractor
+    assert {role.model, *role.fallbacks} == modes.keys()
