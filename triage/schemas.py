@@ -79,6 +79,13 @@ class ExtractionResult(_Model):
     candidates: list[Candidate]
 
 
+class Rejected(_Model):
+    """A candidate dropped by grounding (SPEC §3.4), kept for the run record."""
+
+    candidate: Candidate
+    reason: str  # "rejected_hallucination: ..."
+
+
 # --- identity / policy / route ----------------------------------------------------------------
 
 

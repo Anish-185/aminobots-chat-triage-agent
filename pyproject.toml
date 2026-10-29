@@ -50,6 +50,7 @@ select = ["E", "F", "I", "B", "UP", "S"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = '-m "not llm"'
 markers = [
     "llm: calls the real API; skipped when OPENROUTER_API_KEY is unset",

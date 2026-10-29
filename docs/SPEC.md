@@ -131,6 +131,7 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
 | `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_datetime`, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
 | `ExtractionResult` (LLM) | `candidates[]` |
+| `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
 | `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `reason` |
 | `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
 | `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id`, `evidence_msg_ids[]`, `now`, `action`, `simulated: true` |
@@ -340,7 +341,7 @@ v0.2 (test set + B1) was dropped in v2.4.
 |---|---|
 | `config/models.yaml` | extractor and B1 model IDs (`:free` only, validated), temperature |
 | `config/pricing.yaml` | paid-variant list prices for notional cost |
-| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, `demo_server_key_rpd` |
+| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, repair retries, eval evidence Jaccard (0.5), `demo_server_key_rpd` |
 | `.env` (local, gitignored) | `OPENROUTER_API_KEY`, `LANGFUSE_*` — empty in `.env.example` |
 
 ## 15. Assumptions and open questions
