@@ -22,6 +22,7 @@ from triage.policy import POLICY
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "site" / "data"
 EVAL_TAG = "v1.0-dev"
+CHALLENGE_TAG = "v1.0-challenge"  # IDs and labels only, never message text
 # Together these show every case the site's story and demo need (Phase 6 prompt §16).
 CHATS = {
     "d01": "Slot change and the “alaage” follow-up",
@@ -64,6 +65,15 @@ def main() -> None:
     )
     results = {k: summary[k] for k in keep}
     results["n_chats"] = len(summary["chats"])
+    challenge = ROOT / "eval" / "results" / CHALLENGE_TAG / "summary.json"
+    if challenge.exists():
+        ch = json.loads(challenge.read_text())
+        results["challenge_eval"] = {
+            "tag": ch["tag"],
+            "hard_gates": ch["hard_gates"],
+            "metrics": ch["metrics"],
+            "chats": [{k: c[k] for k in ("chat", "scenario", "exact")} for c in ch["chats"]],
+        }
     (OUT / "results.json").write_text(json.dumps(results, indent=1) + "\n")
     shutil.copy(ROOT / "data" / "dev" / "d01.txt", OUT / "sample.txt")
     assets = ROOT / "site" / "assets"
