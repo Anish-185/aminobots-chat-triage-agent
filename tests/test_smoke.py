@@ -21,4 +21,4 @@ def test_version_command():
     assert result.exit_code == 0, result.output
     assert "aminobots-triage" in result.output
     assert "policy:" in result.output
-    assert "prompts:" in result.output
+    assert "prompt: extract/v" in result.output
