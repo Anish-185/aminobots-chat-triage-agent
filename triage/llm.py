@@ -1,6 +1,8 @@
 """OpenRouter client (SPEC §3.3): openai SDK → Langfuse drop-in (only when its keys are set) →
 Instructor. Responses are cached on disk; calls are sequential and paced; nothing retries except
-Instructor's single schema-repair retry. The API key is never logged or printed."""
+Instructor's single schema-repair retry. The API key is never logged or printed.
+Over ~150 lines because quota accounting and error classification must be exact: each wasted
+request is 2% of the free daily cap."""
 
 import hashlib
 import json
@@ -84,14 +86,21 @@ def _client(mode: str) -> instructor.Instructor:
     return instructor.from_openai(raw, mode=instructor.Mode[mode])
 
 
+def _detail(err: openai.APIStatusError) -> str:
+    """Provider message only: the raw body also carries the account's user_id, never logged."""
+    body = err.body if isinstance(err.body, dict) else {}
+    body = body.get("error", body)
+    return str((body.get("metadata") or {}).get("raw") or body.get("message") or "")[:300]
+
+
 def _classify(exc: BaseException) -> LLMError:
     cause = exc.__cause__ or exc
     if isinstance(cause, openai.RateLimitError):
-        return RateLimited(f"rate limited (429): {cause.message}")
+        return RateLimited(f"rate limited (429): {_detail(cause)}")
     if isinstance(cause, openai.NotFoundError | openai.InternalServerError):
-        return ModelUnavailable(f"model unavailable ({cause.status_code}): {cause.message}")
+        return ModelUnavailable(f"model unavailable ({cause.status_code}): {_detail(cause)}")
     if isinstance(cause, openai.APIStatusError):
-        return LLMError(f"OpenRouter error {cause.status_code}: {cause.message}")
+        return LLMError(f"OpenRouter error {cause.status_code}: {_detail(cause)}")
     if isinstance(cause, openai.APIError):
         return LLMError(f"transport error: {type(cause).__name__}")
     return SchemaFailed(f"invalid output after retry: {str(cause)[:300]}")
@@ -117,8 +126,11 @@ def call(
     client = client or _client(candidate.instructor_mode)
     usage = {"requests": 0, "schema_failures": 0, "prompt": 0, "completion": 0}
 
+    def on_send(*_args, **_kwargs) -> None:
+        _pace()
+        usage["requests"] += 1  # counted when sent: a timed-out request still spends quota
+
     def on_response(resp) -> None:
-        usage["requests"] += 1
         if u := getattr(resp, "usage", None):
             usage["prompt"] += u.prompt_tokens or 0
             usage["completion"] += u.completion_tokens or 0
@@ -126,7 +138,7 @@ def call(
     def on_parse_error(*_args, **_kwargs) -> None:
         usage["schema_failures"] += 1
 
-    client.on("completion:kwargs", lambda *a, **k: _pace())
+    client.on("completion:kwargs", on_send)
     client.on("completion:response", on_response)
     client.on("parse:error", on_parse_error)
     start = time.monotonic()

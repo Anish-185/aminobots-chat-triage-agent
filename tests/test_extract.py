@@ -125,10 +125,14 @@ def test_second_schema_failure_raises_extraction_failed(cache):
 
 
 def test_429_is_clear_and_not_retried(cache):
-    server = Server((429, {"error": {"message": "Rate limit exceeded: free-models-per-day"}}))
-    with pytest.raises(llm.RateLimited, match="429"):
+    server = Server(
+        (429, {"error": {"message": "Provider returned error", "metadata": {"raw": "slow down"}},
+               "user_id": "user_abc"})
+    )  # fmt: skip
+    with pytest.raises(llm.RateLimited, match="429.*slow down") as exc:
         _run(server, cache)
     assert len(server.bodies) == 1
+    assert "user_abc" not in str(exc.value)
 
 
 def test_unavailable_model_has_no_fallback(cache):
@@ -143,6 +147,24 @@ def test_auth_error_does_not_leak_key(cache):
     with pytest.raises(ExtractionFailed) as exc:
         _run(server, cache)
     assert FAKE_KEY not in str(exc.value) and FAKE_KEY not in repr(exc.value.__cause__)
+
+
+def test_timeout_counts_as_a_spent_request(cache):
+    def timeout(request: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout("slow", request=request)
+
+    server = Server()
+    raw = openai.OpenAI(
+        base_url=llm.BASE_URL,
+        api_key=FAKE_KEY,
+        max_retries=0,
+        http_client=httpx.Client(transport=httpx.MockTransport(timeout)),
+    )
+    client = instructor.from_openai(raw, mode=instructor.Mode[CAND.instructor_mode])
+    with pytest.raises(ExtractionFailed, match="transport error") as exc:
+        extract(MSGS, CAND, 0, cache=cache, client=client)
+    assert exc.value.__cause__.requests == 1
+    assert not server.bodies
 
 
 def test_cache_hit_makes_no_request(cache):
