@@ -9,6 +9,7 @@ Run: uv run python scripts/validate_gold.py
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import phonenumbers
@@ -41,10 +42,12 @@ CAUTION = ["act", "seek_approval", "hand_off", "refuse"]
 SLOT_CUTOFF = load_thresholds().slot_cutoff_hours
 
 
-def expected_grade(r: GoldRequest) -> tuple[str, str]:
+def expected_grade(r: GoldRequest, now: datetime) -> tuple[str, str]:
     """Apply SPEC §9 by hand: all rules, most cautious grade wins, lowest rule ID cited."""
     risk, discloses, _ = INTENTS[r.intent]
     f, state = r.facts, r.identity_state
+    # SPEC §9: hours from the chat's "now" (A4), not from the request message.
+    hours = (f.slot_datetime - now).total_seconds() / 3600 if f.slot_datetime else None
     matched = [
         rid
         for rid, cond in [
@@ -55,8 +58,8 @@ def expected_grade(r: GoldRequest) -> tuple[str, str]:
             ("R5", not f.authorised or (f.on_behalf and not f.on_behalf_verified)),
             ("R6", bool(r.flags)),
             ("R7", risk == "medium"
-             or (r.intent == "delivery_slot_change" and f.slot_hours_ahead is not None
-                 and f.slot_hours_ahead < SLOT_CUTOFF)),
+             or (r.intent == "delivery_slot_change" and hours is not None
+                 and hours < SLOT_CUTOFF)),
             ("R8", r.status != "open"),
             ("R9", r.status == "open" and state == "CONFIRMED" and f.authorised
              and risk in ("none", "low")),
@@ -75,7 +78,9 @@ def phone_errors(text: str, where: str) -> list[str]:
     ]
 
 
-def check_request(r: GoldRequest, msgs: dict[str, Message], roster: Roster, where: str):
+def check_request(
+    r: GoldRequest, msgs: dict[str, Message], roster: Roster, staff: set[str], where: str
+) -> list[str]:
     errs = []
     ids = [r.primary_msg_id, *r.evidence_msg_ids]
     errs += [f"{where}: message {i} does not exist" for i in ids if i not in msgs]
@@ -102,9 +107,14 @@ def check_request(r: GoldRequest, msgs: dict[str, Message], roster: Roster, wher
         errs.append(f"{where}: shared phone must be AMBIGUOUS")
     elif not people and r.identity_state == "CONFIRMED":
         errs.append(f"{where}: unknown phone cannot be CONFIRMED")
+    if r.status == "handled" and not any(
+        msgs[i].phone in staff and i > r.primary_msg_id for i in r.evidence_msg_ids if i in msgs
+    ):
+        errs.append(f"{where}: handled needs an aminobots_staff confirmation in evidence")
     if RULE_GRADE[r.rule_id] != r.grade:
         errs.append(f"{where}: {r.rule_id} gives {RULE_GRADE[r.rule_id]}, not {r.grade}")
-    if (r.grade, r.rule_id) != (exp := expected_grade(r)):
+    now = max(m.ts for m in msgs.values())
+    if (r.grade, r.rule_id) != (exp := expected_grade(r, now)):
         errs.append(f"{where}: labelled {r.grade}/{r.rule_id}, SPEC §9 gives {exp[0]}/{exp[1]}")
     return errs
 
@@ -125,7 +135,7 @@ def validate(dev: Path = DEV, world: Path = WORLD) -> list[str]:
         gold = GoldChat.model_validate(json.loads(gold_path.read_text(encoding="utf-8")))
         msgs = {m.id: m for m in parse_chat(txt, contacts)}
         for r in gold.requests + gold.internal_requests:
-            errs += check_request(r, msgs, roster, f"{gold.chat_id}/{r.id}")
+            errs += check_request(r, msgs, roster, staff, f"{gold.chat_id}/{r.id}")
         errs += [f"{gold.chat_id}/{r.id}: internal request listed as a partner request"
                  for r in gold.requests if r.requester_phone in staff]  # fmt: skip
         errs += [f"{gold.chat_id}/{r.id}: internal request not from aminobots_staff"

@@ -25,7 +25,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "hand_off",
       "rule_id": "R3"
@@ -46,10 +46,32 @@
         "authorised": false,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "refuse",
       "rule_id": "R2"
+    },
+    {
+      "id": "r3",
+      "intent": "delivery_slot_change",
+      "gloss": "Move Kondapur's 30th morning delivery from 7 to 9; Aminobots confirms done",
+      "primary_msg_id": "m031",
+      "evidence_msg_ids": [
+        "m031",
+        "m032"
+      ],
+      "requester_phone": "+915555010006",
+      "identity_state": "CONFIRMED",
+      "status": "handled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": "2026-10-30T07:00:00"
+      },
+      "grade": "act",
+      "rule_id": "R8"
     }
   ],
   "internal_requests": [
@@ -69,11 +91,11 @@
         "authorised": false,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "seek_approval",
       "rule_id": "R5"
     }
   ],
-  "notes": "Telugu-script complaint; internal Aminobots request is logged, not scored (A6)."
+  "notes": "Telugu-script complaint; internal Aminobots request is logged, not scored (A6). r3: handled = Aminobots staff confirms done in m032 (R8, record only)."
 }

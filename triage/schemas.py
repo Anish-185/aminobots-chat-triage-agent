@@ -58,6 +58,7 @@ class Entities(_Model):
     outlet: str | None = None
     date: str | None = None
     time: str | None = None
+    slot_datetime: datetime | None = None  # the delivery slot the request is about (local time)
     amount: float | None = None
     details: str | None = None
 
@@ -166,7 +167,7 @@ class GoldFacts(_Model):
     authorised: bool
     on_behalf: bool = False
     on_behalf_verified: bool = False
-    slot_hours_ahead: float | None = None
+    slot_datetime: datetime | None = None  # the slot asked to move; hours are taken from "now"
 
 
 class GoldRequest(_Model):
