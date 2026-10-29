@@ -37,7 +37,8 @@ verbatim wording; verbatim versions belong in the human-written challenge set.
   confirms it is done, and that message is in the evidence (SPEC §5, v2.4).
 - `facts.slot_datetime` = the delivery being changed, at the **earliest** time stated for it
   (current or new slot; a follow-up inherits the day of the request it refers to); `null` when
-  the day or time is not stated, and then the request carries `time_unspecified` (SPEC v2.5).
+  the day or time is not stated, and then an **open** request carries `time_unspecified` (SPEC v2.6;
+  a cancelled or handled request executes nothing, so R8 decides it).
   R7 uses hours from the chat's "now" (last message, A4) to that slot, not from the request
   message (SPEC §9, v2.4); the validator derives it.
 - A contact asking about another partner's outlet is `on_behalf: true`, `on_behalf_verified:

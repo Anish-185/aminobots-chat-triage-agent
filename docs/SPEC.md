@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.5 (Phase 5; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.6 (Phase 6; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -86,7 +86,10 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   date: 0 today, 1 "repu", 2 "ellundi"; null if not stated) and `entities.slot_time` (`"HH:MM"`,
   24 h, the earliest time stated for the affected delivery; null if not stated). Code computes
   `slot_datetime` from the primary message's date, then `slot_hours_ahead` from it (§9). A slot
-  change with either part null, or an invalid value, gets the flag `time_unspecified` (→ R6).
+  change with status `open` and either part null, or an invalid value, gets the flag
+  `time_unspecified` (→ R6). A closed (cancelled/handled) request executes nothing, so code does
+  not add the flag and R8 decides unless a more cautious rule matches (v2.6). Consequence: with
+  no slot, R7 cannot fire on a closed request either (dev d03 r1, see Phase 6 report).
   **Known gap (Phase 5):** nemotron left both fields null in every run (prompt v1–v3, with and
   without schema constraints), so every slot change currently fails closed to R6 and R7 never
   decides. The model fills only `outlet`, `amount`, `details` (v3 dropped free-text date/time).
@@ -383,3 +386,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
 | v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |
 | v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing or invalid part → `time_unspecified` (§3.3, §5), known gap stated; `request_timeout_s` 300 (§3.5); prompts v2 and v3; reasoning `low` kept after a trial; schema-aware cache key; principal/outlet and cross-partner rules made precise (§7); `Identity`, `LogRecord`, `RunResult`, `GoldChat.scenario` contracts (§5); pass-rule targets in `config/thresholds.yaml` (§14). |
+| v2.6 | Phase 6: `time_unspecified` added by code only to **open** slot changes (§3.3); website + API contracts as built (§11). |
