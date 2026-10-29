@@ -1,5 +1,5 @@
 {
- "version": 1,
+ "version": 2,
  "grades": [
   "act",
   "seek_approval",
@@ -110,8 +110,8 @@
   {
    "id": "R7",
    "grade": "seek_approval",
-   "text": "Medium risk, or slot change less than the cut-off before the slot → seek approval",
-   "when": "risk == \"medium\" or (intent == \"delivery_slot_change\" and slot_hours_ahead != null and slot_hours_ahead < slot_cutoff_hours)"
+   "text": "Open request with medium risk, or slot change less than the cut-off before the slot → seek approval",
+   "when": "status == \"open\" and (risk == \"medium\" or (intent == \"delivery_slot_change\" and slot_hours_ahead != null and slot_hours_ahead < slot_cutoff_hours))"
   },
   {
    "id": "R8",
