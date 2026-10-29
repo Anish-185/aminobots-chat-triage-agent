@@ -1,0 +1,19 @@
+[
+  {
+    "model": "google/gemma-4-31b-it:free",
+    "reasoning_effort": "low",
+    "prompt": "extract/v3",
+    "chats_attempted": 0,
+    "chats_planned": 10,
+    "stopped": "RateLimited at d01: rate limited (429): google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations",
+    "metrics": null,
+    "schema_failures": 0,
+    "failed_chats": [],
+    "latency_p50_s": null,
+    "latency_p95_s": null,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "requests_this_run": 1,
+    "chats": []
+  }
+]

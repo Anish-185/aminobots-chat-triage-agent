@@ -67,6 +67,11 @@ def _pace() -> None:
     _last_call = time.monotonic()
 
 
+def model_tag(candidate: Candidate) -> str:
+    """Model plus the settings that change its answer, so the cache never mixes them."""
+    return f"{candidate.id}#reasoning={candidate.reasoning_effort}"
+
+
 def cache_key(model: str, prompt_version: str, rendered: str) -> str:
     digest = hashlib.sha256(rendered.encode("utf-8")).hexdigest()
     return f"{model}|{prompt_version}|{digest}"
@@ -82,7 +87,12 @@ def _client(mode: str) -> instructor.Instructor:
     else:
         from openai import OpenAI
     # max_retries=0: the SDK would otherwise silently retry 429s and burn the daily quota.
-    raw = OpenAI(base_url=BASE_URL, api_key=key, max_retries=0)
+    raw = OpenAI(
+        base_url=BASE_URL,
+        api_key=key,
+        max_retries=0,
+        timeout=load_thresholds().request_timeout_s,
+    )
     return instructor.from_openai(raw, mode=instructor.Mode[mode])
 
 
@@ -117,7 +127,8 @@ def call(
     client: instructor.Instructor | None = None,
 ) -> tuple[BaseModel, CallInfo]:
     """One structured call, cached by (model, prompt version, hash of the rendered chat)."""
-    key = cache_key(candidate.id, prompt_version, user)
+    schema = json.dumps(response_model.model_json_schema(), sort_keys=True)
+    key = cache_key(model_tag(candidate), prompt_version, schema + user)
     cache = cache if cache is not None else diskcache.Cache(CACHE_DIR)
     if (hit := cache.get(key)) is not None:
         info = CallInfo(**{**hit["info"], "cached": True, "requests": 0})

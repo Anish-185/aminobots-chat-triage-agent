@@ -5,6 +5,7 @@ ExtractionFailed; the pipeline turns that into UNPROCESSED (SPEC §3.5). RateLim
 ModelUnavailable propagate unchanged: strict mode stops cleanly and a re-run resumes from cache.
 """
 
+import json
 from pathlib import Path
 
 import diskcache
@@ -23,7 +24,7 @@ class ExtractionFailed(RuntimeError):
     """The chat could not be extracted; the whole chat is handed off as UNPROCESSED."""
 
 
-def load_prompt(version: int = 1) -> tuple[dict, str]:
+def load_prompt(version: int) -> tuple[dict, str]:
     """Front-matter and body of prompts/extract/v<version>.md."""
     _, front, body = (PROMPTS / f"v{version}.md").read_text(encoding="utf-8").split("---\n", 2)
     return yaml.safe_load(front), body.strip()
@@ -35,11 +36,25 @@ def user_message(messages: list[Message]) -> str:
     return f"NOW: {now:%Y-%m-%d %H:%M}\n\n{render(messages)}"
 
 
+def is_cached(
+    messages: list[Message], candidate: Candidate, prompt_version: int, cache: diskcache.Cache
+) -> bool:
+    """True if extract() would answer from the cache (costs no request)."""
+    meta, _ = load_prompt(prompt_version)
+    schema = json.dumps(ExtractionResult.model_json_schema(), sort_keys=True)
+    key = llm.cache_key(
+        llm.model_tag(candidate),
+        f"{meta['id']}/v{meta['version']}",
+        schema + user_message(messages),
+    )
+    return key in cache
+
+
 def extract(
     messages: list[Message],
     candidate: Candidate,
     temperature: float,
-    prompt_version: int = 1,
+    prompt_version: int,
     cache: diskcache.Cache | None = None,
     client: instructor.Instructor | None = None,
 ) -> tuple[ExtractionResult, llm.CallInfo]:

@@ -23,7 +23,7 @@ GOOD = {
             "gloss": "Move tomorrow's 8 am slot to 11",
             "primary_msg_id": "m001",
             "evidence_msg_ids": ["m001"],
-            "entities": {"slot_datetime": "2026-03-03T08:00:00"},
+            "entities": {"slot_day_offset": 1, "slot_time": "08:00"},
         }
     ]
 }
@@ -95,13 +95,13 @@ def cache(tmp_path: Path):
 
 
 def _run(server: Server, cache):
-    return extract(MSGS, CAND, 0, cache=cache, client=server.client(CAND.instructor_mode))
+    return extract(MSGS, CAND, 0, 2, cache=cache, client=server.client(CAND.instructor_mode))
 
 
 def test_valid_output(cache):
     server = Server((200, _completion(GOOD)))
     result, info = _run(server, cache)
-    assert result.candidates[0].entities.slot_datetime == datetime(2026, 3, 3, 8, 0)
+    assert result.candidates[0].entities.slot_time == "08:00"
     assert (info.requests, info.schema_failures, info.cached) == (1, 0, False)
     assert info.prompt_tokens == 100
     body = server.bodies[0]
@@ -162,7 +162,7 @@ def test_timeout_counts_as_a_spent_request(cache):
     )
     client = instructor.from_openai(raw, mode=instructor.Mode[CAND.instructor_mode])
     with pytest.raises(ExtractionFailed, match="transport error") as exc:
-        extract(MSGS, CAND, 0, cache=cache, client=client)
+        extract(MSGS, CAND, 0, 2, cache=cache, client=client)
     assert exc.value.__cause__.requests == 1
     assert not server.bodies
 
@@ -177,6 +177,8 @@ def test_cache_hit_makes_no_request(cache):
 
 
 def test_cache_key_varies_with_model_prompt_and_chat():
+    a = CAND.model_copy(update={"reasoning_effort": "none"})
+    assert llm.model_tag(a) != llm.model_tag(CAND)
     keys = {
         llm.cache_key("a:free", "extract/v1", "chat"),
         llm.cache_key("b:free", "extract/v1", "chat"),
@@ -194,15 +196,22 @@ def test_missing_key_is_clear(monkeypatch):
 
 
 def test_prompt_front_matter_and_coverage():
-    meta, body = load_prompt(1)
+    meta, body = load_prompt(2)
     assert {"id", "version", "model", "output_schema", "purpose"} <= meta.keys()
     for name in [
         "delivery_slot_change", "order_change", "status_query", "invoice_request",
         "payout_details_change", "refund_request", "complaint", "other",
         "referent_unresolved", "time_unspecified", "intent_unclear", "possible_forward",
-        "injection_attempt", "slot_datetime", "NOW",
+        "injection_attempt", "slot_day_offset", "slot_time", "NOW",
     ]:  # fmt: skip
         assert name in body, name
+
+
+def test_model_schema_hides_slot_datetime():
+    from triage.schemas import ExtractionResult
+
+    props = ExtractionResult.model_json_schema()["$defs"]["Entities"]["properties"]
+    assert "slot_datetime" not in props and {"slot_day_offset", "slot_time"} <= props.keys()
 
 
 def test_user_message_uses_last_timestamp_as_now():
