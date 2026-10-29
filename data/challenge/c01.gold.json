@@ -1,0 +1,43 @@
+{
+  "chat_id": "c01",
+  "partner": "P1",
+  "scenario": 1,
+  "source": {
+    "author": "Claude Code",
+    "method": "generated from the brief's scenario text; NOT independent of the system's builder",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move tomorrow's Kukatpally delivery slot from 7 am to 11 am",
+      "primary_msg_id": "m007",
+      "evidence_msg_ids": ["m007"],
+      "requester_phone": "+915555010003",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {"authorised": true, "on_behalf": false, "on_behalf_verified": false, "slot_datetime": "2026-10-31T07:00:00"},
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Same slot change for the sender's own outlet (Ameerpet, his only outlet)",
+      "primary_msg_id": "m012",
+      "evidence_msg_ids": ["m007", "m012"],
+      "requester_phone": "+915555010002",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {"authorised": true, "on_behalf": false, "on_behalf_verified": false, "slot_datetime": "2026-10-31T07:00:00"},
+      "grade": "act",
+      "rule_id": "R9"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Mandated scenario 1. Staff (one outlet, O2) asks half in Telugu to move tomorrow's slot; the follow-up is the brief's exact line, from a manager with one outlet (O1), so the outlet is unambiguous. Now = 09:58; the 07:00 slot tomorrow is 21 h away (R7 does not apply). Policy v2: both act R9."
+}
