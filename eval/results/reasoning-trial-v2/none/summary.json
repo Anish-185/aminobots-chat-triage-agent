@@ -1,0 +1,181 @@
+[
+  {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "reasoning_effort": "none",
+    "prompt": "extract/v2",
+    "chats_attempted": 2,
+    "chats_planned": 2,
+    "stopped": null,
+    "metrics": {
+      "tp": 6,
+      "n_pred": 9,
+      "n_gold": 7,
+      "precision": 0.6666666666666666,
+      "recall": 0.8571428571428571,
+      "f1": 0.75,
+      "intent_accuracy": 1.0,
+      "evidence_jaccard": 0.8611111111111112
+    },
+    "schema_failures": 0,
+    "failed_chats": [],
+    "latency_p50_s": 4.300000000000001,
+    "latency_p95_s": 4.507000000000001,
+    "prompt_tokens": 5509,
+    "completion_tokens": 1152,
+    "requests_this_run": 2,
+    "chats": [
+      {
+        "chat": "d02",
+        "n_gold": 4,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 4.07,
+        "prompt_tokens": 2756,
+        "completion_tokens": 528,
+        "n_pred": 4,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m005",
+            "evidence_msg_ids": [
+              "m003",
+              "m004",
+              "m005"
+            ],
+            "refers_to_msg_id": null,
+            "status": "handled",
+            "flags": [
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m007",
+            "evidence_msg_ids": [
+              "m007",
+              "m005"
+            ],
+            "refers_to_msg_id": "m005",
+            "status": "handled",
+            "flags": [
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "order_change",
+            "primary_msg_id": "m011",
+            "evidence_msg_ids": [
+              "m011"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m013",
+            "evidence_msg_ids": [
+              "m013"
+            ],
+            "refers_to_msg_id": null,
+            "status": "handled",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d03",
+        "n_gold": 3,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 4.53,
+        "prompt_tokens": 2753,
+        "completion_tokens": 624,
+        "n_pred": 5,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m003",
+            "evidence_msg_ids": [
+              "m003",
+              "m004"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "complaint",
+            "primary_msg_id": "m008",
+            "evidence_msg_ids": [
+              "m008",
+              "m009",
+              "m010"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m012",
+            "evidence_msg_ids": [
+              "m012",
+              "m013",
+              "m015"
+            ],
+            "refers_to_msg_id": null,
+            "status": "cancelled",
+            "flags": [
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m015",
+            "evidence_msg_ids": [
+              "m015",
+              "m016"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m028",
+            "evidence_msg_ids": [
+              "m028",
+              "m029",
+              "m030"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      }
+    ]
+  }
+]

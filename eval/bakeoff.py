@@ -18,7 +18,7 @@ import yaml
 from eval.metrics import detection, match
 from triage import llm
 from triage.config import load_models, load_pricing, load_thresholds
-from triage.extract import ExtractionFailed, extract, load_prompt, user_message
+from triage.extract import ExtractionFailed, extract, is_cached, load_prompt
 from triage.ground import ground
 from triage.parse import parse_chat, to_e164
 from triage.schemas import GoldChat, Roster
@@ -28,9 +28,13 @@ DEV, WORLD = ROOT / "data" / "dev", ROOT / "data" / "world"
 OUT = ROOT / "eval" / "results" / "bakeoff-v1"
 
 
-def run_model(model_id: str, chats: list[str], budget: list[int]) -> dict:
+def run_model(
+    model_id: str, chats: list[str], budget: list[int], reasoning: str | None = None
+) -> dict:
     models = load_models()
     cand = next(c for c in models.candidates if c.id == model_id)
+    if reasoning:  # A/B a reasoning setting without editing config
+        cand = cand.model_copy(update={"reasoning_effort": reasoning})
     meta, _ = load_prompt(models.roles.extractor.prompt_version)
     version = f"{meta['id']}/v{meta['version']}"
     roster = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text()))
@@ -41,7 +45,7 @@ def run_model(model_id: str, chats: list[str], budget: list[int]) -> dict:
     for chat in chats:
         msgs = parse_chat(DEV / f"{chat}.txt", WORLD / "contacts.yaml")
         gold = GoldChat.model_validate_json((DEV / f"{chat}.gold.json").read_text())
-        cached = llm.cache_key(cand.id, version, user_message(msgs)) in cache
+        cached = is_cached(msgs, cand, models.roles.extractor.prompt_version, cache)
         if not cached and budget[0] < 2:  # one call can take 2 requests (repair retry)
             stopped = f"request budget exhausted before {chat}"
             break
@@ -103,6 +107,7 @@ def run_model(model_id: str, chats: list[str], budget: list[int]) -> dict:
     lat = [r["latency_s"] for r in done if r.get("latency_s") is not None]
     return {
         "model": model_id,
+        "reasoning_effort": cand.reasoning_effort,
         "prompt": version,
         "chats_attempted": len(rows),
         "chats_planned": len(chats),
@@ -125,9 +130,10 @@ def main() -> None:
     ap.add_argument("--chats", nargs="+", required=True)
     ap.add_argument("--max-requests", type=int, required=True)
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--reasoning", choices=["none", "minimal", "low"])
     args = ap.parse_args()
     budget = [args.max_requests]
-    results = [run_model(m, args.chats, budget) for m in args.models]
+    results = [run_model(m, args.chats, budget, args.reasoning) for m in args.models]
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "summary.json").write_text(json.dumps(results, indent=2) + "\n")
     report = write_report(results)
@@ -155,7 +161,7 @@ def write_report(results: list[dict]) -> str:
     prices = load_pricing().models
     f = lambda v: "–" if v is None else f"{v:.2f}"  # noqa: E731
     lines = [
-        "# Bake-off v1 (Phase 4, strict mode, prompt extract/v1, dev chats only)",
+        f"# Bake-off (strict mode, prompt {results[0]['prompt']}, dev chats only)",
         "",
         "| Model | Chats | P | R | F1 | Intent acc | Evidence J | Slot datetime | Schema "
         "failures | Latency p50 / p95 (s) | Tokens in / out | Notional $ | Requests |",

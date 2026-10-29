@@ -177,6 +177,8 @@ def test_cache_hit_makes_no_request(cache):
 
 
 def test_cache_key_varies_with_model_prompt_and_chat():
+    a = CAND.model_copy(update={"reasoning_effort": "none"})
+    assert llm.model_tag(a) != llm.model_tag(CAND)
     keys = {
         llm.cache_key("a:free", "extract/v1", "chat"),
         llm.cache_key("b:free", "extract/v1", "chat"),

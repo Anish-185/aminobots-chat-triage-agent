@@ -8,7 +8,7 @@ roles:
     fallbacks:
       - google/gemma-4-31b-it:free
     temperature: 0
-    prompt_version: 2             # prompts/extract/v2.md
+    prompt_version: 3             # prompts/extract/v3.md
     verified_on: 2026-10-29
   baseline_b1:  # B1 dropped in SPEC v2.4; kept so the config schema stays stable
     provider: openrouter

@@ -57,12 +57,20 @@ class Message(_Model):
 
 class Entities(_Model):
     outlet: str | None = None
-    date: str | None = None
-    time: str | None = None
     # Slot changes (SPEC §3.3, v2.5): the model gives a day offset from the primary message's
     # date and a 24 h time; code computes slot_datetime (hidden from the model's schema).
-    slot_day_offset: int | None = Field(default=None, ge=0)
-    slot_time: str | None = Field(default=None, pattern=r"^([01]\d|2[0-3]):[0-5]\d$")
+    # No ge/pattern here: the free endpoint's strict decoder left these null when constrained
+    # (bake-off v1, reasoning trial v2); grounding validates them in code instead.
+    slot_day_offset: int | None = Field(
+        default=None,
+        description="Slot changes: days after the primary message's date "
+        "(0 ivala/today, 1 repu/tomorrow, 2 ellundi); null only if no day is stated",
+    )
+    slot_time: str | None = Field(
+        default=None,
+        description='Slot changes: earliest time stated for that delivery, 24 h "HH:MM" '
+        '("2 pm" -> "14:00"); null only if no time is stated',
+    )
     slot_datetime: SkipJsonSchema[datetime | None] = None
     amount: float | None = None
     details: str | None = None
@@ -100,6 +108,9 @@ class Identity(_Model):
     role: Role | None = None
     outlets: list[str] = []
     authorised: bool = False
+    on_behalf: bool = False  # asks for someone else, or about another partner's outlet
+    on_behalf_verified: bool = False  # sender is a roster delegate of the principal
+    target_outlets: list[str] = []  # outlets the request is about, resolved in code
     reason: str
 
 
@@ -125,11 +136,35 @@ class LogRecord(_Model):
     run_id: str
     request_id: str
     grade: Grade
-    rule_id: RuleId
+    rule_id: RuleId | None  # None only for an UNPROCESSED whole-chat hand-off
     evidence_msg_ids: list[MsgId]
-    now: datetime  # timestamp of the chat's last message (SPEC §2.8)
+    now: datetime | None  # timestamp of the chat's last message (SPEC §2.8); None if unparsable
     action: str
+    requester: str | None = None  # phone masked to the last 4 digits
+    record_only: bool = False  # R8: cancelled / already handled
+    internal: bool = False  # aminobots_staff request (A6)
     simulated: Literal[True] = True
+
+
+class RunResult(_Model):
+    """Everything one run produced, stage by stage; the CLI, eval and website all read this."""
+
+    run_id: str
+    chat: str
+    status: Literal["OK", "UNPROCESSED"]
+    error: str | None = None
+    now: datetime | None = None
+    model: str
+    prompt: str
+    policy_version: int
+    messages: list[Message] = []
+    rendered: str | None = None
+    extraction: ExtractionResult | None = None
+    llm: dict | None = None  # CallInfo: cached, requests, latency, tokens
+    requests: list[GradedRequest] = []
+    internal_requests: list[GradedRequest] = []  # aminobots_staff (A6): logged, not listed
+    rejected: list[Rejected] = []
+    log: list[LogRecord] = []
 
 
 # --- world ------------------------------------------------------------------------------------
