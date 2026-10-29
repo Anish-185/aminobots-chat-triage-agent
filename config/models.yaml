@@ -1,33 +1,39 @@
 # LLM roles and candidates (SPEC §14). OpenRouter ':free' models only (CLAUDE.md invariant 10).
 # Client: Instructor over the openai SDK pointed at OpenRouter; key from OPENROUTER_API_KEY.
-# The final extractor choice is the Phase 4 bake-off (2 models × ~10 dev chats ≈ 20 requests).
+# The extractor default is chosen by the Phase 4 bake-off (docs/adr/0002-model-choice.md).
 roles:
   extractor:
     provider: openrouter
-    model: nvidia/nemotron-3-super-120b-a12b:free
+    model: nvidia/nemotron-3.5-super-vl:free
     fallbacks:
       - google/gemma-4-31b-it:free
     temperature: 0
-    verified_on: 2026-10-26
-  baseline_b1:
+    verified_on: 2026-10-29
+  baseline_b1:  # B1 dropped in SPEC v2.4; kept so the config schema stays stable
     provider: openrouter
-    model: nvidia/nemotron-3-super-120b-a12b:free
+    model: nvidia/nemotron-3.5-super-vl:free
     fallbacks:
       - google/gemma-4-31b-it:free
     temperature: 0
-    verified_on: 2026-10-26
+    verified_on: 2026-10-29
 
-# Verified by the planner on openrouter.ai, 2026-10-26. dots-3-note-preview removed (deprecating).
+# Verified on https://openrouter.ai/api/v1/models and /models/<id>/endpoints, 2026-10-29.
+# nvidia/nemotron-3-super-120b-a12b:free is no longer listed (only its paid variant); replaced by
+# its same-family successor below.
+# instructor_mode: Instructor 1.17 lists OPENROUTER_STRUCTURED_OUTPUTS as a legacy alias of
+# JSON_SCHEMA, so JSON_SCHEMA is used where the endpoint supports structured_outputs, else JSON.
 candidates:
-  - id: nvidia/nemotron-3-super-120b-a12b:free
-    context_length: 262144
-    structured_outputs: true      # tools + JSON-schema structured outputs
+  - id: nvidia/nemotron-3.5-super-vl:free
+    context_length: 1000000
+    structured_outputs: true      # endpoint (Nvidia) lists structured_outputs + response_format
     instructor_mode: JSON_SCHEMA
-    logs_prompts: true            # free endpoint logs prompts; fine, synthetic data only
-    verified_on: 2026-10-26
+    reasoning_effort: low
+    logs_prompts: null            # TODO: endpoint data policy not exposed by the API
+    verified_on: 2026-10-29
   - id: google/gemma-4-31b-it:free
-    context_length: 262144        # planner recorded "262K"
-    structured_outputs: null      # TODO(phase-4): unverified, so Instructor JSON mode
-    instructor_mode: JSON         # MD_JSON if JSON fails in the bake-off
-    logs_prompts: null            # TODO(phase-4): unverified
-    verified_on: 2026-10-26
+    context_length: 262144
+    structured_outputs: false     # endpoint (Google AI Studio) lists response_format + tools only
+    instructor_mode: JSON         # response_format json_object
+    reasoning_effort: low
+    logs_prompts: null            # TODO: endpoint data policy not exposed by the API
+    verified_on: 2026-10-29
