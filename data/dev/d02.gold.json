@@ -26,7 +26,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": 25.0
+        "slot_datetime": "2026-10-23T10:00:00"
       },
       "grade": "act",
       "rule_id": "R9"
@@ -48,7 +48,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "act",
       "rule_id": "R9"
@@ -69,7 +69,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "seek_approval",
       "rule_id": "R7"
@@ -90,7 +90,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "act",
       "rule_id": "R9"

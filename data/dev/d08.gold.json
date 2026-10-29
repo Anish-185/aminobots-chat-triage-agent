@@ -24,7 +24,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "hand_off",
       "rule_id": "R1"
@@ -45,7 +45,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "act",
       "rule_id": "R9"
@@ -66,12 +66,33 @@
         "authorised": false,
         "on_behalf": true,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R5"
+    },
+    {
+      "id": "r4",
+      "intent": "status_query",
+      "gloss": "Status of Sunrise Kukatpally's order (another partner's outlet), asked for Ravi",
+      "primary_msg_id": "m031",
+      "evidence_msg_ids": [
+        "m031"
+      ],
+      "requester_phone": "+915555010005",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": true,
+        "on_behalf_verified": false,
+        "slot_datetime": null
       },
       "grade": "seek_approval",
       "rule_id": "R5"
     }
   ],
   "internal_requests": [],
-  "notes": ""
+  "notes": "r4: cross-partner ask (P2 owner about a P1 outlet) = unverified on-behalf, R5."
 }

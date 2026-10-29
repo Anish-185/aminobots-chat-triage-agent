@@ -43,6 +43,14 @@ def _edit(path: Path, fn) -> None:
         ("d02", lambda g: g["requests"][2].update(grade="act"), "R7 gives"),
         ("d13", lambda g: g["requests"].append(g["internal_requests"][0]), "internal request"),
         ("d01", lambda g: g["requests"][2]["facts"].update(authorised=False), "contradicts role"),
+        # 07:00 next day is 11.5 h after "now" (19:32), so R7 applies even though the request
+        # message was 22 h before the slot (SPEC §9: hours from "now").
+        (
+            "d02",
+            lambda g: g["requests"][0]["facts"].update(slot_datetime="2026-10-23T07:00:00"),
+            "SPEC §9 gives",
+        ),
+        ("d13", lambda g: g["requests"][2].update(evidence_msg_ids=["m031"]), "handled needs"),
     ],
 )
 def test_validator_catches(copy: Path, chat: str, mutate, expected: str):
