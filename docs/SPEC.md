@@ -285,29 +285,44 @@ Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "n
 API under `/api` (no second server, no port clash). The site's API base URL is configurable and
 defaults to same origin. Not published.
 
-1. **Home** — the problem, a one-line solution, the two scenarios.
-2. **How it works** — architecture SVG, model-vs-code split, rules table rendered from a JSON
-   export of the policy.
-3. **Live demo** — precomputed results for sample dev chats (`site/data/*.json`, produced by the
-   real pipeline via a build script). No API needed.
-   - Table: gloss, sender + state badge, grade badge, rule ID with its text on hover.
-   - Click a request → step panel: chat with evidence highlighted → extraction → identity +
-     reason → rule check table (all rules, matched yes/no, decider highlighted) → route +
-     simulated action → Langfuse trace link (optional extra; see §12).
+One long page (`site/index.html`, `app.css`, `app.js`; no build step; design brief in
+`docs/design/brief.md`), every view built from `site/data/` (written by
+`scripts/build_site_data.py` from the cache: `runs/<chat>.json` are `RunResult`s, plus
+`manifest.json`, `policy.json`, `results.json` from the latest dev eval, and `sample.txt`):
+1. **Hero** — the problem and the promise; real d07 bubbles stream in and get stamped.
+2. **Watch it work** — two pinned, scroll-driven scenes (d01, d07) in six steps: chat arrives →
+   noise dims → the model's dockets (with the follow-up's referent line) → roster lookup → all
+   rules, the most cautious stamps → the simulated log line (+ security alert for refuse). Below
+   861 px or under reduced motion: the same content, static.
+3. **How it works** — architecture SVG, model-vs-code split, rules table from `policy.json`;
+   hovering a rule highlights where it matched in the demo.
+4. **The desk** — five precomputed dev chats (`site/data/`). No API needed.
+   - Table: gloss, sender + state badge, grade stamp, rule ID with its text on hover.
+   - Click a request → drawer (`<dialog>`): chat with evidence highlighted → extraction →
+     identity + reason → rule check (all rules, decider highlighted) → route + simulated log
+     record → trace (none in the demo: the API process never traces).
    - Approve/Reject on `seek_approval` items appends to a client-side log (sessionStorage).
-4. **Try your own** — paste/upload a chat, optional "your OpenRouter key", POST to the local API
-   (URL configurable). If the API isn't running, show the command to start it.
-5. **Results** — eval metrics per prototype, the pass-rule table, link to Langfuse.
-6. **Team** (placeholder names) and GitHub link.
+5. **Try your own** — paste/upload a chat, optional key, POST to the local API (URL from a
+   `<meta>` tag). Progress note with elapsed time; UNPROCESSED shown as a whole-chat hand-off;
+   API down → the start command.
+6. **Results** — dev metrics, hard gates, grade confusion, approval load, latency, notional cost,
+   limitations.
+7. **Team** (placeholder names) and GitHub link.
 
 Footer on every page: "Simulation only — no action is executed. Synthetic data only."
 
 **API** (`api/main.py`, FastAPI + uvicorn):
 - `POST /api/triage` (chat text + optional key) → `RunResult` with per-stage trace data.
 - `GET /api/health`.
-- CORS origins from config (localhost only now).
-- A visitor key is used only for that request: never stored, logged or sent to Langfuse (tested).
-- Without a visitor key the server key is capped at `demo_server_key_rpd` (10/day).
+- Host, port, CORS origins and the chat size cap from `config/server.yaml`; the loader rejects
+  any non-loopback host or origin.
+- A visitor key is used only for that request: never stored, logged, part of a cache key or sent
+  to Langfuse (tested). Langfuse's drop-in patches the OpenAI SDK process-wide, so the API process
+  never traces at all (`llm.TRACING = False`).
+- Without a visitor key the server key is capped at `demo_server_key_rpd` (10/day, in memory,
+  counting only uncached requests).
+- The request runs in FastAPI's worker threadpool; the LLM client's `request_timeout_s` bounds it
+  and a timeout returns `UNPROCESSED`.
 
 **One command** (`uv run python -m triage.serve`) starts that process and prints the localhost
 URL. Paths are relative and the API URL is configurable, so publishing later needs no code change.
