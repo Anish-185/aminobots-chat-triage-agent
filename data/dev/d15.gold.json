@@ -63,7 +63,8 @@
       "identity_state": "CONFIRMED",
       "status": "open",
       "flags": [
-        "referent_unresolved"
+        "referent_unresolved",
+        "time_unspecified"
       ],
       "facts": {
         "authorised": true,

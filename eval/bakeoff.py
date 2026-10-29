@@ -31,7 +31,7 @@ OUT = ROOT / "eval" / "results" / "bakeoff-v1"
 def run_model(model_id: str, chats: list[str], budget: list[int]) -> dict:
     models = load_models()
     cand = next(c for c in models.candidates if c.id == model_id)
-    meta, _ = load_prompt(1)
+    meta, _ = load_prompt(models.roles.extractor.prompt_version)
     version = f"{meta['id']}/v{meta['version']}"
     roster = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text()))
     staff = {to_e164(c.phone) for c in roster.contacts if c.role == "aminobots_staff"}
@@ -47,7 +47,13 @@ def run_model(model_id: str, chats: list[str], budget: list[int]) -> dict:
             break
         row: dict = {"chat": chat, "n_gold": len(gold.requests)}
         try:
-            result, info = extract(msgs, cand, models.roles.extractor.temperature, cache=cache)
+            result, info = extract(
+                msgs,
+                cand,
+                models.roles.extractor.temperature,
+                models.roles.extractor.prompt_version,
+                cache=cache,
+            )
         except (llm.RateLimited, llm.ModelUnavailable) as exc:
             budget[0] -= exc.requests
             spent += exc.requests
