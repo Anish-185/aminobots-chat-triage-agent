@@ -6,8 +6,8 @@
 > [architecture](docs/architecture.drawio.svg) · [workflow](docs/workflow.drawio.svg).
 
 This is a demo build on synthetic data, at zero cost, run locally. Contracts live in
-[SPEC.md](docs/SPEC.md); the plain-language story is in [functional.md](docs/functional.md). This
-document states plans; measured results will go in ARTEFACT.md.
+[SPEC.md](docs/SPEC.md); the plain-language story is in [functional.md](docs/functional.md).
+Measured results, error analysis and limitations are in [ARTEFACT.md](ARTEFACT.md).
 
 ---
 
@@ -59,10 +59,10 @@ challenge chats (there is no separate test set; see §D, limitations):
 |---|---|---|---|
 | Parse | `.txt` export | messages `m001…` (time, author, text, kind) | code (chat-miner) |
 | Render | messages | one line per message, sender handles `S1…Sn`, no phone numbers, date dividers | code |
-| Extract | rendered chat | candidate requests: intent, gloss, primary and evidence IDs, references, entities, flags | **model** (one call per chat) |
+| Extract | rendered chat | candidate requests: intent, gloss, primary and evidence IDs, references, entities, flags | **model** (`nemotron-3.5-super-vl:free`, one call per chat, [prompt v3](prompts/extract/v3.md)) |
 | Ground | candidates + messages | candidates with valid IDs only; the rest logged as rejected | code |
 | Identity | sender of the primary message + roster | state, role, outlets, reason | code (phonenumbers, rapidfuzz, `roster.yaml`) |
-| Policy | request + identity | grade, deciding rule, all matched rules | code (rule-engine, `policy_v1.yaml`) |
+| Policy | request + identity | grade, deciding rule, all matched rules | code (rule-engine, [`policy_v2.yaml`](policy/policy_v2.yaml)) |
 | Route | graded request | one append-only JSONL row per request | code |
 
 **Where a model decides and where code decides.** The model only *describes* the chat; it never
@@ -106,8 +106,8 @@ only.
 
 | Split | Size | Written by | Use |
 |---|---|---|---|
-| dev | 15 chats | Claude Code, from the phase prompts in [build-prompts](docs/build-prompts/); Telugu reviewed by a teammate | development and scoring |
-| challenge | 2 chats | humans only: the two mandated scenarios, verbatim | frozen; eval only |
+| dev | 15 chats | Claude Code, from the phase prompts in [build-prompts](docs/build-prompts/README.md); Telugu not yet reviewed by a native speaker | development and scoring |
+| challenge | 2 chats (planned) | humans only: the two mandated scenarios, verbatim | frozen; eval only; **not yet written** |
 
 A separate test set was planned and dropped to fit the schedule.
 
@@ -139,7 +139,7 @@ Results for those sets store IDs and labels only, never message text.
 
 **How knowledge is represented.** Two small YAML files, read directly by code:
 `data/world/roster.yaml` (contacts, roles, outlets, shared phones, delegates) and
-`policy/policy_v1.yaml` (intents with risk and allowed roles, plus rules R1–R10). Lookups are
+`policy/policy_v2.yaml` (intents with risk and allowed roles, plus rules R1–R10). Lookups are
 exact: no retrieval, embeddings or vector store are needed, and Aminobots can swap in its own
 policy by replacing one file.
 
@@ -158,7 +158,7 @@ evidence overlap (Jaccard ≥ 0.5), assigned with the Hungarian algorithm (scipy
 | Rule-citation accuracy | Every grade must cite the rule that decided it |
 | Evidence validity | No request may cite a message that does not exist |
 | Approval load | Share of legitimate requests graded `seek_approval`: the cost of caution (§E) |
-| Latency p50 / p95, tokens, notional cost | Measured on the running system via Langfuse; billed cost is $0, notional cost uses the paid variant's list price |
+| Latency p50 / p95, tokens, notional cost | Measured on the running system by the eval script (Langfuse tracing is wired in but off); billed cost is $0, notional cost uses the paid variant's list price |
 
 **Cases the system must refuse or hand off** (unit tests and challenge chats):
 - an unknown number asking to change payout details: `refuse`, R2;
@@ -184,8 +184,13 @@ the pipeline works end to end, not as a measure of accuracy on real chats.
 simple heuristic), per intent and per identity state. Research shows romanised, code-mixed text is
 where models lose most accuracy.
 
-**Run on every prototype.** v0.1 (CLI, full policy, dev + challenge), v0.3
-(website + API), v1.0 (final docs). Results are committed under `eval/results/<tag>/`.
+**Run on every prototype.** v0.1 (CLI, policy v1), v0.3 (website + API), v1.0 (policy v2).
+Results are committed under `eval/results/<tag>/`.
+
+**Results (v1.0, dev).** F1 0.89, grade accuracy 0.94, rule citation 0.89 (target 0.90, missed),
+over-autonomy 0, approval load 0.18. Three hard gates pass; the mandated-scenario gate has not run
+because the challenge chats do not exist yet. Every grade error is more cautious than gold. Full
+table and error analysis: [ARTEFACT.md §e](ARTEFACT.md#e-evaluation-results).
 
 ## E. Risks and responsibility
 
@@ -212,6 +217,8 @@ services.
 that any doubt sends a request to a person. A confirmed staff member's ordinary slot change is
 still graded `seek_approval` if one flag fires, such as an unclear time. The cost is reviewer time
 and slower service on requests that were in fact fine. We accept it because one wrong `act` on a
-payout or identity case costs far more than many extra approvals. We will measure the cost as
+payout or identity case costs far more than many extra approvals. We measure the cost as
 **approval load**: the share of legitimate, gold-`act` requests the system graded
-`seek_approval`, reported per prototype in ARTEFACT.md.
+`seek_approval`. It fell from 0.44 (v0.1) to 0.18 (v1.0) after two changes that relax caution only
+for closed requests, which execute nothing: `time_unspecified` is set only on open requests, and
+policy v2's R7 applies only to open requests. What remains is the model leaving slot times empty.
