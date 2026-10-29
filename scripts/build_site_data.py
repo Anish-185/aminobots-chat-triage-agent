@@ -17,10 +17,11 @@ from triage import llm, pipeline
 from triage.config import load_models
 from triage.extract import is_cached
 from triage.parse import parse_chat
+from triage.policy import POLICY
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "site" / "data"
-EVAL_TAG = "v0.1.1-dev"
+EVAL_TAG = "v1.0-dev"
 # Together these show every case the site's story and demo need (Phase 6 prompt §16).
 CHATS = {
     "d01": "Slot change and the “alaage” follow-up",
@@ -47,7 +48,7 @@ def main() -> None:
         print(f"{chat_id}: {result.status}, {len(result.requests)} requests")
     manifest = [{"id": k, "title": v, "file": f"runs/{k}.json"} for k, v in CHATS.items()]
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False) + "\n")
-    policy = yaml.safe_load((ROOT / "policy" / "policy_v1.yaml").read_text(encoding="utf-8"))
+    policy = yaml.safe_load(POLICY.read_text(encoding="utf-8"))  # the configured policy
     (OUT / "policy.json").write_text(json.dumps(policy, indent=1, ensure_ascii=False) + "\n")
     summary = json.loads((ROOT / "eval" / "results" / EVAL_TAG / "summary.json").read_text())
     keep = (

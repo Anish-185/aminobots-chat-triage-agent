@@ -24,7 +24,7 @@ verbatim wording; verbatim versions belong in the human-written challenge set.
   script-heavy); d15 is plain English. Spelling variants: repu/repuu, cheyyandi/cheyandi.
 - Noise in every chat: greetings, "ok sir 👍", `<Media omitted>`, festival wishes, banter, system
   lines (encryption notice, added/joined/removed, security code changed).
-- Grades: 9 act · 15 seek_approval · 10 hand_off · 3 refuse.
+- Grades (policy v2): 11 act · 13 seek_approval · 10 hand_off · 3 refuse.
 
 ## Labelling conventions
 
@@ -46,6 +46,11 @@ verbatim wording; verbatim versions belong in the human-written challenge set.
 - `facts.authorised` follows the roster role and the intent's allowed roles (SPEC §6); an
   `AMBIGUOUS` sender is authorised only if every candidate contact is (SPEC §7).
 
+- **Policy v2 relabel (Phase 7, SPEC v2.7):** d03 r1 (cancelled slot change, slot under 12 h)
+  and d15 r1 (cancelled order change, medium risk) went from seek_approval R7 to act R8. This
+  follows the human's policy decision that R7 applies only to open requests; it was not done to
+  match the model. Labels are re-derived from the configured policy by `scripts/validate_gold.py`.
+
 ## Coverage
 
 | Situation | Chats |
@@ -64,7 +69,7 @@ verbatim wording; verbatim versions belong in the human-written challenge set.
 | `UNCONFIRMED` sender | d04 (after security-code change), d06 (one name match), d07, d13 (unknown numbers) |
 | Vouching / self-claim | d07 |
 | Injection attempt | d10 |
-| Cancellation (act R8, and seek R7 that stays) | d03, d15 |
+| Cancellation (act R8, record only) | d03, d15 |
 | Handled: Aminobots staff confirms done (act R8, record only) | d13 |
 | Cross-partner: contact asks about another partner's outlet (seek R5) | d08 |
 | Forward | d11 |

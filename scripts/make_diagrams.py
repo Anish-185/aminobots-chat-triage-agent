@@ -5,11 +5,27 @@ whose root `content` attribute holds the uncompressed mxfile XML, so diagrams.ne
 editable diagram and the drawn SVG matches it. Run: uv run python scripts/make_diagrams.py
 """
 
+import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 
-DOCS = Path(__file__).resolve().parent.parent / "docs"
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from triage.config import load_models, load_policy_config  # noqa: E402
+
+DOCS = ROOT / "docs"
+# Labels follow config, so the diagrams never name a stale model, prompt or policy.
+_ROLE = load_models().roles.extractor
+
+
+def _short(model_id: str) -> str:
+    return model_id.split("/")[-1].removesuffix(":free")
+
+
+MODEL = f"{_short(_ROLE.model)}\nfallback {_short(_ROLE.fallbacks[0])}"
+PROMPT = f"prompts/extract/v{_ROLE.prompt_version}.md"
+POLICY = f"policy/policy_v{load_policy_config().version}.yaml"
 FONT = "Helvetica, Arial, sans-serif"
 
 # kind -> (fill, stroke, dashed)
@@ -234,7 +250,7 @@ ARCHITECTURE = Diagram(
         Box("cache", "diskcache\n.cache/ (LLM responses)", 300, 20, kind="store"),
         Box(
             "llm",
-            "OpenRouter :free LLM\nnemotron-3 (gemma-4 fallback)",
+            f"OpenRouter :free LLM\n{MODEL}",
             560,
             20,
             220,
@@ -245,7 +261,7 @@ ARCHITECTURE = Diagram(
         Box("render", "render\nS1…Sn handles, no phones", 300, 160),
         Box(
             "extract",
-            "extract (LLM, Instructor)\nprompts/extract/v1.md",
+            f"extract (LLM, Instructor)\n{PROMPT}",
             560,
             160,
             220,
@@ -263,12 +279,12 @@ ARCHITECTURE = Diagram(
             280,
             kind="store",
         ),
-        Box("pol", "policy/policy_v1.yaml\nrules R1–R10 + intents", 560, 460, 220, kind="store"),
+        Box("pol", f"{POLICY}\nrules R1–R10 + intents", 560, 460, 220, kind="store"),
         Box("roster", "data/world/roster.yaml\ncontacts · roles · outlets", 820, 460, kind="store"),
         Box("api", "FastAPI  /api/triage\n(uvicorn)", 40, 600, kind="code"),
         Box(
             "site",
-            "static site/  (HTML + Tailwind CDN)\nprecomputed site/data/*.json",
+            "static site/  (HTML, GSAP + Lenis CDN)\nprecomputed site/data/*.json",
             300,
             600,
             260,
@@ -277,7 +293,7 @@ ARCHITECTURE = Diagram(
         Box("eval", "eval/run_eval.py\nmetrics → eval/results/<tag>/", 1100, 160, 220),
         Box(
             "data",
-            "data/ dev · test (frozen)\n· challenge (frozen) + gold",
+            "data/ dev (15 chats) + gold\n· challenge (frozen, human-written)",
             1100,
             320,
             220,

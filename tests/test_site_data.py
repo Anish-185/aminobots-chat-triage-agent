@@ -5,6 +5,7 @@ from pathlib import Path
 
 import yaml
 
+from triage.policy import POLICY
 from triage.schemas import RunResult
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ def test_manifest_points_at_existing_runs():
 
 
 def test_policy_json_is_the_policy_file():
-    policy = yaml.safe_load((ROOT / "policy" / "policy_v1.yaml").read_text())
+    policy = yaml.safe_load(POLICY.read_text())
     assert json.loads((DATA / "policy.json").read_text()) == policy
 
 

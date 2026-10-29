@@ -145,3 +145,11 @@ class ServerConfig(_Strict):
 
 def load_server(config_dir: Path | None = None) -> ServerConfig:
     return ServerConfig.model_validate(_load("server.yaml", config_dir))
+
+
+class PolicyConfig(_Strict):
+    version: int
+
+
+def load_policy_config(config_dir: Path | None = None) -> PolicyConfig:
+    return PolicyConfig.model_validate(_load("policy.yaml", config_dir))

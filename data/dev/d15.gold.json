@@ -27,8 +27,8 @@
         "on_behalf_verified": false,
         "slot_datetime": null
       },
-      "grade": "seek_approval",
-      "rule_id": "R7"
+      "grade": "act",
+      "rule_id": "R8"
     },
     {
       "id": "r2",
