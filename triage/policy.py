@@ -9,9 +9,11 @@ import rule_engine
 import yaml
 from pydantic import BaseModel, ConfigDict
 
+from triage.config import load_policy_config
 from triage.schemas import Candidate, Grade, Identity, Intent, RuleCheck, RuleId
 
-POLICY = Path(__file__).resolve().parent.parent / "policy" / "policy_v1.yaml"
+POLICY_DIR = Path(__file__).resolve().parent.parent / "policy"
+POLICY = POLICY_DIR / f"policy_v{load_policy_config().version}.yaml"  # config/policy.yaml
 
 
 class Rule(BaseModel):

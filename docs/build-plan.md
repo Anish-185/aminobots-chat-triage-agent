@@ -34,6 +34,21 @@ how much code-side grading beats a single prompt. Only the 2 challenge chats are
   requests/day (free models stay $0). Not taken; revisit only if the daily cap becomes the
   bottleneck.
 
+## Deployment option
+
+**Not done: the team decided to submit local only.** Kept here for later (CLAUDE.md invariant 12: local only until
+publishing is approved). The brief asks for a public URL. The code is ready for it: one process
+serves the site and API, paths are relative, the API URL is a `<meta>` tag and the host and CORS
+origins live in `config/server.yaml`. The smallest option is one container running
+`uv run python -m triage.serve` on a free container host, with:
+
+- `config/server.yaml` widened to the public origin (its local-only validator changed on purpose);
+- the demo key's daily cap made persistent (it is in memory today);
+- `OPENROUTER_API_KEY` set as a host secret, never in the repo.
+
+Which host, and whether its free tier still exists, must be checked against its current docs
+before choosing; nothing here is verified.
+
 ## Top risks
 
 | Risk | Impact | Mitigation |

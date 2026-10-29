@@ -1,0 +1,2 @@
+# Which policy file the pipeline, validator and website use (policy/policy_v<version>.yaml).
+version: 2

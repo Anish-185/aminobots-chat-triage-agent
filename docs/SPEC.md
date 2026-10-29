@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.6 (Phase 6; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.7 (Phase 7; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -53,7 +53,7 @@ WhatsApp .txt
   → extract   (LLM: OpenRouter :free via Instructor; diskcache; Langfuse trace)
   → ground    (code)                       drop candidates with invalid IDs
   → identity  (code: phonenumbers + rapidfuzz + roster.yaml)
-  → policy    (code: rule-engine expressions in policy/policy_v1.yaml)
+  → policy    (code: rule-engine expressions in policy/policy_v2.yaml)
   → route     (code)                       append to runs/*.jsonl, simulated=true
 ```
 
@@ -88,8 +88,8 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   `slot_datetime` from the primary message's date, then `slot_hours_ahead` from it (§9). A slot
   change with status `open` and either part null, or an invalid value, gets the flag
   `time_unspecified` (→ R6). A closed (cancelled/handled) request executes nothing, so code does
-  not add the flag and R8 decides unless a more cautious rule matches (v2.6). Consequence: with
-  no slot, R7 cannot fire on a closed request either (dev d03 r1, see Phase 6 report).
+  not add the flag and R8 decides unless a more cautious rule matches (v2.6). Policy v2 (v2.7)
+  makes R7 apply to open requests only, for the same reason.
   **Known gap (Phase 5):** nemotron left both fields null in every run (prompt v1–v3, with and
   without schema constraints), so every slot change currently fails closed to R6 and R7 never
   decides. The model fills only `outlet`, `amount`, `details` (v3 dropped free-text date/time).
@@ -171,7 +171,7 @@ acknowledgement such as "ok sir" is not enough).
 | `complaint` | — | no | any |
 | `other` | — | no | any |
 
-The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the policy swaps both.
+The table lives in the policy file next to the rules, so swapping the policy swaps both.
 
 ## 7. Identity
 
@@ -223,7 +223,10 @@ There is no separate held-out test set (see §12, limitations).
   scripts, spelling variants (cheyyandi / cheyandi; repu / repuu).
 - Licences: data CC BY 4.0, code MIT.
 
-## 9. Autonomy policy v1 (`policy/policy_v1.yaml`)
+## 9. Autonomy policy v2 (`policy/policy_v2.yaml`)
+
+The pipeline, validator and website use the version in `config/policy.yaml` (2). v1 is kept
+unchanged; v2 differs only in R7 (`policy/CHANGELOG.md`).
 
 Grade order, least to most cautious: `act` < `seek_approval` < `hand_off` < `refuse`.
 Every rule is evaluated with rule-engine against a flat context dict. The **most cautious**
@@ -245,7 +248,7 @@ sender asks about an outlet of a different partner (cross-partner); that is neve
 | R4 | sender not `CONFIRMED` | seek_approval |
 | R5 | sender lacks authority for the intent, or on-behalf request not verified | seek_approval |
 | R6 | any uncertainty flag | seek_approval |
-| R7 | risk medium, or slot change < `slot_cutoff_hours` (12) before the slot | seek_approval |
+| R7 | status open, and (risk medium, or slot change < `slot_cutoff_hours` (12) before the slot) | seek_approval |
 | R8 | status not open (cancelled / already handled) | act (record only) |
 | R9 | status open, sender `CONFIRMED`, authorised, risk none/low | act |
 | R10 | default — nothing else matched | hand_off |
@@ -263,6 +266,7 @@ sender asks about an outlet of a different partner (cross-partner); that is neve
 | Cancelled payout change from an unknown number | refuse, R2 |
 | `CONFIRMED` owner, payout change | hand_off, R1 |
 | `CONFIRMED` staff, slot change 6 h before the slot | seek_approval, R7 |
+| Cancelled slot change under 12 h, `CONFIRMED` staff (v2) | act, R8 (record only) |
 
 R8 never lowers caution: a non-open request still gets the most cautious matching grade.
 A property test checks monotonicity: adding any rule never makes a grade less cautious.
@@ -402,3 +406,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |
 | v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing or invalid part → `time_unspecified` (§3.3, §5), known gap stated; `request_timeout_s` 300 (§3.5); prompts v2 and v3; reasoning `low` kept after a trial; schema-aware cache key; principal/outlet and cross-partner rules made precise (§7); `Identity`, `LogRecord`, `RunResult`, `GoldChat.scenario` contracts (§5); pass-rule targets in `config/thresholds.yaml` (§14). |
 | v2.6 | Phase 6: `time_unspecified` added by code only to **open** slot changes (§3.3); website + API contracts as built (§11). |
+| v2.7 | Phase 7: policy v2 (`policy/policy_v2.yaml`, default via `config/policy.yaml`): R7 requires status open, since closed requests execute nothing (§9); the gold validator derives labels from the configured policy; d03 r1 and d15 r1 relabelled act R8; new worked check (§9). |

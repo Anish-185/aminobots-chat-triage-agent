@@ -1,9 +1,9 @@
 {
- "tag": "v0.1.1-dev",
+ "tag": "v1.0-dev",
  "split": "dev",
  "model": "nvidia/nemotron-3.5-super-vl:free",
  "prompt": "extract/v3",
- "policy": "v1",
+ "policy": "v2",
  "metrics": {
   "precision": 0.8333333333333334,
   "recall": 0.9459459459459459,
@@ -16,7 +16,7 @@
   "attribution_accuracy": 1.0,
   "identity_state_accuracy": 1.0,
   "unconfirmed_sender_recall": 1.0,
-  "grade_accuracy": 0.9142857142857143,
+  "grade_accuracy": 0.9428571428571428,
   "confusion_matrix": {
    "labels": [
     "act",
@@ -26,14 +26,14 @@
    ],
    "rows_gold_cols_pred": [
     [
-     7,
+     9,
      2,
      0,
      0
     ],
     [
-     1,
-     13,
+     0,
+     12,
      0,
      0
     ],
@@ -51,12 +51,12 @@
     ]
    ]
   },
-  "over_autonomy_rate": 0.02857142857142857,
+  "over_autonomy_rate": 0.0,
   "over_autonomy_high_risk": 0,
   "extras_graded_act": 0,
-  "rule_citation_accuracy": 0.8571428571428571,
+  "rule_citation_accuracy": 0.8857142857142857,
   "evidence_validity": 1.0,
-  "approval_load": 0.2222222222222222,
+  "approval_load": 0.18181818181818182,
   "latency_p50_s": 62.68,
   "latency_p95_s": 239.447,
   "tokens_in": 41453,
@@ -80,12 +80,12 @@
    "met": true
   },
   "grade_accuracy": {
-   "value": 0.9142857142857143,
+   "value": 0.9428571428571428,
    "target": 0.85,
    "met": true
   },
   "rule_citation_accuracy": {
-   "value": 0.8571428571428571,
+   "value": 0.8857142857142857,
    "target": 0.9,
    "met": false
   }
@@ -100,7 +100,7 @@
    "romanised_telugu": {
     "n_gold": 29,
     "recall": 1.0,
-    "grade_accuracy": 0.896551724137931
+    "grade_accuracy": 0.9310344827586207
    },
    "telugu_script": {
     "n_gold": 3,
@@ -117,7 +117,7 @@
    "delivery_slot_change": {
     "n_gold": 13,
     "recall": 0.9230769230769231,
-    "grade_accuracy": 0.75
+    "grade_accuracy": 0.8333333333333334
    },
    "invoice_request": {
     "n_gold": 4,
@@ -159,7 +159,7 @@
    "CONFIRMED": {
     "n_gold": 30,
     "recall": 0.9333333333333333,
-    "grade_accuracy": 0.8928571428571429
+    "grade_accuracy": 0.9285714285714286
    },
    "UNCONFIRMED": {
     "n_gold": 4,
