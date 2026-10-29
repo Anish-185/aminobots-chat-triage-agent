@@ -109,10 +109,11 @@ def check_request(
         errs.append(f"{where}: unknown phone cannot be CONFIRMED")
     if (
         r.intent == "delivery_slot_change"
+        and r.status == "open"
         and r.facts.slot_datetime is None
         and ("time_unspecified" not in r.flags)
     ):
-        errs.append(f"{where}: slot change without a slot needs time_unspecified (SPEC v2.5)")
+        errs.append(f"{where}: open slot change without a slot needs time_unspecified (SPEC v2.6)")
     if r.status == "handled" and not any(
         msgs[i].phone in staff and i > r.primary_msg_id for i in r.evidence_msg_ids if i in msgs
     ):
