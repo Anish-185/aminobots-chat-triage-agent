@@ -82,7 +82,12 @@ def _client(mode: str) -> instructor.Instructor:
     else:
         from openai import OpenAI
     # max_retries=0: the SDK would otherwise silently retry 429s and burn the daily quota.
-    raw = OpenAI(base_url=BASE_URL, api_key=key, max_retries=0)
+    raw = OpenAI(
+        base_url=BASE_URL,
+        api_key=key,
+        max_retries=0,
+        timeout=load_thresholds().request_timeout_s,
+    )
     return instructor.from_openai(raw, mode=instructor.Mode[mode])
 
 

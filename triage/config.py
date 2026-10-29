@@ -25,6 +25,7 @@ class RoleConfig(_Strict):
     model: str
     fallbacks: list[str]
     temperature: float
+    prompt_version: int
     verified_on: date
 
     @field_validator("model")
@@ -88,6 +89,7 @@ class Thresholds(_Strict):
     requests_per_minute: int
     requests_per_day: int
     llm_max_repair_retries: int
+    request_timeout_s: float
     evidence_jaccard: float
     demo_server_key_rpd: int | None
 

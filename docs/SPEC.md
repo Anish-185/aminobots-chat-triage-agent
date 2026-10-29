@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.4 (Phase 4; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.5 (Phase 5; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -82,8 +82,12 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   `google/gemma-4-31b-it:free` (`JSON`; no `structured_outputs` on OpenRouter). The default is
   chosen by the Phase 4 bake-off (`docs/adr/0002-model-choice.md`); the other is the fallback.
   `nemotron-3-super-120b-a12b:free` was retired by OpenRouter before Phase 4.
-- The model fills `entities.slot_datetime` (ISO local datetime) from the date dividers and "now";
-  code computes `slot_hours_ahead` from it (§9).
+- Slot changes: the model gives `entities.slot_day_offset` (days after the primary message's
+  date: 0 today, 1 "repu", 2 "ellundi"; null if not stated) and `entities.slot_time` (`"HH:MM"`,
+  24 h, the earliest time stated for the affected delivery; null if not stated). Code computes
+  `slot_datetime` from the primary message's date, then `slot_hours_ahead` from it (§9). A slot
+  change with either part null gets the flag `time_unspecified` (→ R6). Prompt:
+  `prompts/extract/v2.md`.
 - Responses cached on disk (diskcache, `.cache/`) keyed by model + prompt version + chat hash.
 - Calls are sequential with a sleep to respect 20 requests/min.
 
@@ -99,7 +103,7 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 |---|---|
 | Schema validation fails | Instructor retries once; still failing → `UNPROCESSED` + hand off |
 | 429 / rate limit | stop cleanly; re-running resumes via the cache |
-| Transport / other error | `UNPROCESSED` + hand off; never an empty result |
+| Transport / other error, incl. timeout (`request_timeout_s`, 300 s) | `UNPROCESSED` + hand off; never retried; never an empty result |
 | Model unavailable (strict mode) | transcript stays pending; no fallback model |
 
 ## 4. Libraries (build vs reuse)
@@ -129,7 +133,7 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | Model | Key fields |
 |---|---|
 | `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
-| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_datetime`, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
+| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_day_offset`, `slot_time`, amount, details; `slot_datetime` is computed in code and hidden from the model's schema), `status` (`open`/`cancelled`/`handled`), `flags[]` |
 | `ExtractionResult` (LLM) | `candidates[]` |
 | `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
 | `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `reason` |
@@ -369,3 +373,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13); approval-load metric (§12). |
 | v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
 | v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |
+| v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing part → `time_unspecified` (§3.3, §5); `request_timeout_s` 300 (§3.5); prompt v2. |

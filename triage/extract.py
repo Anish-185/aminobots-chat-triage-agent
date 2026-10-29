@@ -23,7 +23,7 @@ class ExtractionFailed(RuntimeError):
     """The chat could not be extracted; the whole chat is handed off as UNPROCESSED."""
 
 
-def load_prompt(version: int = 1) -> tuple[dict, str]:
+def load_prompt(version: int) -> tuple[dict, str]:
     """Front-matter and body of prompts/extract/v<version>.md."""
     _, front, body = (PROMPTS / f"v{version}.md").read_text(encoding="utf-8").split("---\n", 2)
     return yaml.safe_load(front), body.strip()
@@ -39,7 +39,7 @@ def extract(
     messages: list[Message],
     candidate: Candidate,
     temperature: float,
-    prompt_version: int = 1,
+    prompt_version: int,
     cache: diskcache.Cache | None = None,
     client: instructor.Instructor | None = None,
 ) -> tuple[ExtractionResult, llm.CallInfo]:

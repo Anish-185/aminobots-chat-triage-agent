@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.json_schema import SkipJsonSchema
 
 MsgId = Annotated[str, Field(pattern=r"^m\d{3,}$")]
 Kind = Literal["text", "media", "system"]
@@ -58,7 +59,11 @@ class Entities(_Model):
     outlet: str | None = None
     date: str | None = None
     time: str | None = None
-    slot_datetime: datetime | None = None  # the delivery slot the request is about (local time)
+    # Slot changes (SPEC §3.3, v2.5): the model gives a day offset from the primary message's
+    # date and a 24 h time; code computes slot_datetime (hidden from the model's schema).
+    slot_day_offset: int | None = Field(default=None, ge=0)
+    slot_time: str | None = Field(default=None, pattern=r"^([01]\d|2[0-3]):[0-5]\d$")
+    slot_datetime: SkipJsonSchema[datetime | None] = None
     amount: float | None = None
     details: str | None = None
 

@@ -62,3 +62,30 @@ def test_unknown_referent_becomes_flag():
     kept, _ = _ground(_cand("m002", ["m002"], refers_to="m050"))
     assert kept[0].refers_to_msg_id is None
     assert kept[0].flags == ["referent_unresolved"]
+
+
+def _slot(offset, at):
+    return Candidate(
+        intent="delivery_slot_change",
+        gloss="g",
+        primary_msg_id="m002",
+        evidence_msg_ids=["m002"],
+        entities={"slot_day_offset": offset, "slot_time": at},
+    )
+
+
+def test_slot_datetime_from_primary_date_offset_and_time():
+    kept, _ = _ground(_slot(1, "07:30"))
+    assert kept[0].entities.slot_datetime == datetime(2026, 3, 3, 7, 30)
+    assert kept[0].flags == []
+
+
+def test_slot_change_missing_day_or_time_gets_time_unspecified():
+    kept, _ = _ground(_slot(None, "07:30"), _slot(0, None))
+    for c in kept:
+        assert c.entities.slot_datetime is None and c.flags == ["time_unspecified"]
+
+
+def test_non_slot_intent_never_gets_time_unspecified():
+    kept, _ = _ground(_cand("m001", ["m001"]))
+    assert kept[0].flags == []

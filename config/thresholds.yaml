@@ -4,5 +4,6 @@ slot_cutoff_hours: 12        # R7: slot changes closer than this need approval (
 requests_per_minute: 20      # OpenRouter free-tier rate limit (SPEC §3.3)
 requests_per_day: 50         # OpenRouter free-tier daily cap (< $10 credits ever bought)
 llm_max_repair_retries: 1    # Instructor retries once on schema failure (SPEC §3.5)
+request_timeout_s: 300       # per LLM request; a timeout fails closed, never retried (SPEC §3.5)
 evidence_jaccard: 0.5        # eval: predicted ↔ gold match needs evidence Jaccard ≥ this (SPEC §12)
 demo_server_key_rpd: 10      # website "try your own" without a visitor key (SPEC §11)

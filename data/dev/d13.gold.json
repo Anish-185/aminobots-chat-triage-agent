@@ -91,7 +91,7 @@
         "authorised": false,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_datetime": null
+        "slot_datetime": "2026-10-29T09:00:00"
       },
       "grade": "seek_approval",
       "rule_id": "R5"
