@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triage Desk</title>
+<meta name="description" content="A local demo that reads a Telugu–English WhatsApp partner group, finds every real request, checks the sender and stamps what may happen next. Simulation only.">
+<meta name="triage-api" content="">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Big+Shoulders+Display:wght@700;900&family=Noto+Sans+Telugu:wght@400;700&display=swap">
+<link rel="stylesheet" href="app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='4' fill='none' stroke='%235A2EA6' stroke-width='4'/%3E%3Cpath d='M10 16l4 4 8-9' fill='none' stroke='%235A2EA6' stroke-width='4'/%3E%3C/svg%3E">
+<script>
+  try { const t = localStorage.getItem("triage-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true">TD</span><span>Triage Desk</span>
+  </a>
+  <nav aria-label="Sections">
+    <a href="#story">Watch it work</a>
+    <a href="#how">How it works</a>
+    <a href="#desk">The desk</a>
+    <a href="#try">Try your own</a>
+    <a href="#results">Results</a>
+  </nav>
+  <button class="theme-toggle" type="button" aria-label="Switch to dark theme" data-theme-toggle>
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg>
+  </button>
+</header>
+
+<main id="main">
+  <section class="desk hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 id="hero-title">Read the whole group. Stamp only what’s real.</h1>
+      <p class="lede">Partner WhatsApp groups bury a few real requests, and now and then a fake bank-detail change, under dozens of good-mornings.</p>
+      <p class="lede strong">The Triage Desk pulls out each request, checks the sender against the roster and stamps what may happen next. It executes nothing.</p>
+      <div class="hero-actions">
+        <a class="btn btn-ink magnetic" href="#story">Watch it work</a>
+        <a class="btn btn-line magnetic" href="#desk">Open the desk</a>
+      </div>
+    </div>
+    <figure class="hero-chat" aria-labelledby="hero-chat-cap">
+      <div class="chat-window" data-hero-chat></div>
+      <figcaption id="hero-chat-cap">Real pipeline output on dev chat d07 (synthetic): a stranger asks for the payout to go to a new account.</figcaption>
+    </figure>
+  </section>
+
+  <section class="desk story" id="story" aria-labelledby="story-title">
+    <div class="section-head on-desk">
+      <h2 id="story-title">Watch it work</h2>
+      <p>Two chats from the dev set, run through the real pipeline. Scroll, and each stage happens on the desk.</p>
+    </div>
+    <div data-scene="d01" data-title="Scenario 1: a slot change, then “same time for my shop”"></div>
+    <div data-scene="d07" data-title="Scenario 2: a new number asks to change the bank account"></div>
+  </section>
+
+  <section class="paper-section" id="how" aria-labelledby="how-title">
+    <div class="section-head">
+      <h2 id="how-title">How it works</h2>
+    </div>
+    <div class="how-grid">
+      <ol class="split">
+        <li><strong>The model describes.</strong> A free LLM reads the chat and lists each request: what is asked, which messages show it, what a follow-up refers to.</li>
+        <li><strong>Code decides who.</strong> The sender is looked up by phone in the roster. Claims and vouching in the chat never count.</li>
+        <li><strong>Code decides what.</strong> Ten written rules are all checked; the most cautious match wins, and the action is only logged.</li>
+      </ol>
+      <figure class="sheet">
+        <img src="assets/architecture.svg" width="1340" height="700" loading="lazy"
+             alt="Pipeline: the WhatsApp export is parsed, a free model extracts requests, code checks evidence IDs, looks up identity in the roster, applies the policy rules, and routes each grade to a simulated log file.">
+        <figcaption>Architecture, from <code>docs/architecture.drawio.svg</code>.</figcaption>
+      </figure>
+    </div>
+    <div class="rules-wrap">
+      <h3>The rules (policy v<span data-policy-version></span>)</h3>
+      <p class="hint">Hover or focus a rule to see where it matched in the desk below.</p>
+      <table class="rules-table" data-rules-table>
+        <thead><tr><th scope="col">Rule</th><th scope="col">When</th><th scope="col">Stamp</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="rule-hit-note" aria-live="polite" data-rule-note></p>
+    </div>
+  </section>
+
+  <section class="paper-section" id="desk" aria-labelledby="desk-title">
+    <div class="section-head">
+      <h2 id="desk-title">The desk</h2>
+      <p>Precomputed runs of five dev chats. Choose one, then open any request to see each step.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Choose a chat" data-chat-tabs></div>
+    <div class="run-view" data-demo-run role="tabpanel"></div>
+    <aside class="decisions" aria-labelledby="decisions-title">
+      <h3 id="decisions-title">Your decisions this session</h3>
+      <p class="hint">Simulated. Kept only in this browser tab (sessionStorage); nothing is sent anywhere.</p>
+      <ol data-decisions></ol>
+    </aside>
+  </section>
+
+  <section class="paper-section" id="try" aria-labelledby="try-title">
+    <div class="section-head">
+      <h2 id="try-title">Try your own</h2>
+      <p>Paste or upload an Android WhatsApp export (.txt). The local API runs the real pipeline on it.</p>
+    </div>
+    <form class="try-form" data-try-form novalidate>
+      <div class="field">
+        <label for="chat-text">Chat export</label>
+        <textarea id="chat-text" name="chat" rows="9" spellcheck="false" aria-describedby="chat-help" placeholder="23/10/26, 7:50 am - Lakshmi Sunrise: Good morning"></textarea>
+        <p id="chat-help" class="help">One message per line, as WhatsApp exports it. <button type="button" class="linkish" data-load-sample>Load a sample chat</button></p>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="chat-file">Or upload a .txt</label>
+          <input id="chat-file" type="file" accept=".txt,text/plain">
+        </div>
+        <div class="field">
+          <label for="api-key">Your OpenRouter key (optional)</label>
+          <input id="api-key" name="key" type="password" autocomplete="off" spellcheck="false" aria-describedby="key-help">
+          <p id="key-help" class="help">Used once for this run, never stored, logged or traced. Without it the demo key allows 10 new requests a day.</p>
+        </div>
+      </div>
+      <p class="form-error" role="alert" data-form-error></p>
+      <button class="btn btn-ink magnetic" type="submit">Triage this chat</button>
+    </form>
+    <div class="try-status" aria-live="polite" data-try-status></div>
+    <div class="run-view" data-try-run></div>
+  </section>
+
+  <section class="paper-section" id="results" aria-labelledby="results-title">
+    <div class="section-head">
+      <h2 id="results-title">Results</h2>
+      <p data-results-sub></p>
+    </div>
+    <div class="counters" data-counters></div>
+    <div class="results-grid">
+      <div class="panel">
+        <h3>Hard gates</h3>
+        <ul class="gates" data-gates></ul>
+      </div>
+      <div class="panel">
+        <h3>Grade: gold vs predicted</h3>
+        <div data-confusion></div>
+      </div>
+      <div class="panel">
+        <h3>Latency per chat</h3>
+        <div data-latency></div>
+      </div>
+      <div class="panel">
+        <h3>Targets</h3>
+        <table class="targets" data-targets><thead><tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Target</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div class="limits">
+      <h3>What these numbers do not show</h3>
+      <ul>
+        <li>The 15 dev chats were written by the same session that wrote the prompt, so these scores are optimistic and say little about new chats.</li>
+        <li>There is no baseline: nothing measures how much code-side grading beats one prompt that also grades.</li>
+        <li>The two human-written challenge chats (the mandated scenarios) have not been added yet, so that gate has not run.</li>
+        <li>The free model leaves slot day and time empty, so open slot changes fall back to “ask approval” (R6) and the 12-hour rule (R7) cannot decide.</li>
+        <li>Rule-citation accuracy misses its 0.90 target.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="paper-section team" id="team" aria-labelledby="team-title">
+    <h2 id="team-title">Team</h2>
+    <ul class="team-list">
+      <li><span class="avatar" aria-hidden="true">A</span><strong>Team member</strong><span>Role to be added</span></li>
+      <li><span class="avatar" aria-hidden="true">B</span><strong>Team member</strong><span>Role to be added</span></li>
+      <li><span class="avatar" aria-hidden="true">C</span><strong>Team member</strong><span>Role to be added</span></li>
+    </ul>
+    <p><a class="btn btn-line magnetic" href="https://github.com/Anish-185/aminobots-chat-triage-agent">Source on GitHub</a></p>
+  </section>
+</main>
+
+<footer class="footer">
+  <p><strong>Simulation only — no action is executed. Synthetic data only.</strong></p>
+  <p>Runs on localhost. Free OpenRouter model, cached responses, policy and roster in code.</p>
+</footer>
+
+<dialog class="drawer" data-drawer aria-labelledby="drawer-title">
+  <div class="drawer-inner">
+    <div class="drawer-head">
+      <h2 id="drawer-title"></h2>
+      <button type="button" class="close" data-close aria-label="Close steps">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" data-drawer-body></div>
+  </div>
+  <p class="drawer-foot">Simulation only — no action is executed. Synthetic data only.</p>
+</dialog>
+
+<noscript><p class="noscript">This page needs JavaScript to load the pipeline results. The data is in <code>site/data/</code>.</p></noscript>
+</body>
+</html>
