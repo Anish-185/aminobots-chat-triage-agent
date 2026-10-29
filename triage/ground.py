@@ -10,6 +10,7 @@ date + `slot_day_offset` + `slot_time`; if either part is missing it adds `time_
 """
 
 import logging
+import re
 from datetime import datetime, time, timedelta
 
 from triage.schemas import Candidate, Entities, ExtractionResult, Flag, Message, Rejected
@@ -17,11 +18,15 @@ from triage.schemas import Candidate, Entities, ExtractionResult, Flag, Message,
 log = logging.getLogger(__name__)
 
 
+SLOT_TIME = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
+
+
 def slot_datetime(e: Entities, primary: Message) -> datetime | None:
-    if e.slot_day_offset is None or e.slot_time is None:
+    """None (→ time_unspecified) unless the offset is ≥ 0 and the time is a valid "HH:MM"."""
+    off, at = e.slot_day_offset, e.slot_time
+    if off is None or off < 0 or at is None or not SLOT_TIME.match(at):
         return None
-    day = primary.ts.date() + timedelta(days=e.slot_day_offset)
-    return datetime.combine(day, time.fromisoformat(e.slot_time))
+    return datetime.combine(primary.ts.date() + timedelta(days=off), time.fromisoformat(at))
 
 
 def ground(

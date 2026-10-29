@@ -86,6 +86,11 @@ def test_slot_change_missing_day_or_time_gets_time_unspecified():
         assert c.entities.slot_datetime is None and c.flags == ["time_unspecified"]
 
 
+def test_invalid_slot_parts_fail_closed():
+    kept, _ = _ground(_slot(-1, "07:30"), _slot(1, "7.30 pm"), _slot(1, "25:00"))
+    assert all(c.flags == ["time_unspecified"] for c in kept)
+
+
 def test_non_slot_intent_never_gets_time_unspecified():
     kept, _ = _ground(_cand("m001", ["m001"]))
     assert kept[0].flags == []

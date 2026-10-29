@@ -5,6 +5,7 @@ ExtractionFailed; the pipeline turns that into UNPROCESSED (SPEC §3.5). RateLim
 ModelUnavailable propagate unchanged: strict mode stops cleanly and a re-run resumes from cache.
 """
 
+import json
 from pathlib import Path
 
 import diskcache
@@ -33,6 +34,20 @@ def user_message(messages: list[Message]) -> str:
     """NOW (SPEC §2.8: the last message's timestamp) followed by the rendered chat."""
     now = max(m.ts for m in messages)
     return f"NOW: {now:%Y-%m-%d %H:%M}\n\n{render(messages)}"
+
+
+def is_cached(
+    messages: list[Message], candidate: Candidate, prompt_version: int, cache: diskcache.Cache
+) -> bool:
+    """True if extract() would answer from the cache (costs no request)."""
+    meta, _ = load_prompt(prompt_version)
+    schema = json.dumps(ExtractionResult.model_json_schema(), sort_keys=True)
+    key = llm.cache_key(
+        llm.model_tag(candidate),
+        f"{meta['id']}/v{meta['version']}",
+        schema + user_message(messages),
+    )
+    return key in cache
 
 
 def extract(
