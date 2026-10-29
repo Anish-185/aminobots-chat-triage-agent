@@ -48,7 +48,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_datetime": null
+        "slot_datetime": "2026-10-23T14:00:00"
       },
       "grade": "act",
       "rule_id": "R9"

@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.4 (Phase 4; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.5 (Phase 5; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -76,15 +76,24 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   `"(number hidden)"`, and any number in text becomes `[phone]`. System lines: `| system | …`.
 
 ### 3.3 Extract
-- One prompt, `prompts/extract/v1.md`, one call per chat, output validated against the
+- One prompt, `prompts/extract/v<N>.md` (N = `roles.extractor.prompt_version`, now 3), one call per chat, output validated against the
   `ExtractionResult` schema (§5).
 - Models: `nvidia/nemotron-3.5-super-vl:free` (Instructor `JSON_SCHEMA`) and
   `google/gemma-4-31b-it:free` (`JSON`; no `structured_outputs` on OpenRouter). The default is
   chosen by the Phase 4 bake-off (`docs/adr/0002-model-choice.md`); the other is the fallback.
   `nemotron-3-super-120b-a12b:free` was retired by OpenRouter before Phase 4.
-- The model fills `entities.slot_datetime` (ISO local datetime) from the date dividers and "now";
-  code computes `slot_hours_ahead` from it (§9).
-- Responses cached on disk (diskcache, `.cache/`) keyed by model + prompt version + chat hash.
+- Slot changes: the model gives `entities.slot_day_offset` (days after the primary message's
+  date: 0 today, 1 "repu", 2 "ellundi"; null if not stated) and `entities.slot_time` (`"HH:MM"`,
+  24 h, the earliest time stated for the affected delivery; null if not stated). Code computes
+  `slot_datetime` from the primary message's date, then `slot_hours_ahead` from it (§9). A slot
+  change with either part null, or an invalid value, gets the flag `time_unspecified` (→ R6).
+  **Known gap (Phase 5):** nemotron left both fields null in every run (prompt v1–v3, with and
+  without schema constraints), so every slot change currently fails closed to R6 and R7 never
+  decides. The model fills only `outlet`, `amount`, `details` (v3 dropped free-text date/time).
+- Reasoning: `effort: low` (`config/models.yaml`). `none` was tried on 2 dev chats (Phase 5):
+  25× faster but lost a gold request, so it was not kept (`eval/results/reasoning-trial-v2/`).
+- Responses cached on disk (diskcache, `.cache/`) keyed by model + reasoning setting + prompt
+  version + hash of the output schema and the rendered chat.
 - Calls are sequential with a sleep to respect 20 requests/min.
 
 ### 3.4 Ground
@@ -99,7 +108,7 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 |---|---|
 | Schema validation fails | Instructor retries once; still failing → `UNPROCESSED` + hand off |
 | 429 / rate limit | stop cleanly; re-running resumes via the cache |
-| Transport / other error | `UNPROCESSED` + hand off; never an empty result |
+| Transport / other error, incl. timeout (`request_timeout_s`, 300 s) | `UNPROCESSED` + hand off; never retried; never an empty result |
 | Model unavailable (strict mode) | transcript stays pending; no fallback model |
 
 ## 4. Libraries (build vs reuse)
@@ -129,14 +138,14 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | Model | Key fields |
 |---|---|
 | `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
-| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_datetime`, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
+| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_day_offset`, `slot_time`, amount, details; `slot_datetime` is computed in code and hidden from the model's schema), `status` (`open`/`cancelled`/`handled`), `flags[]` |
 | `ExtractionResult` (LLM) | `candidates[]` |
 | `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
-| `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `reason` |
+| `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `on_behalf`, `on_behalf_verified`, `target_outlets[]`, `reason` |
 | `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
-| `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id`, `evidence_msg_ids[]`, `now`, `action`, `simulated: true` |
-| `RunResult` (Phase 5) | `run_id`, `status` (`OK`/`UNPROCESSED`), `requests[]`, `rejected[]`, `trace_url?` |
-| `GoldChat` | `chat_id`, `source`, `requests[]` / `internal_requests[]` (intent, evidence, requester, state, status, flags, `facts`, grade, rule) |
+| `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id` (null only for an UNPROCESSED whole-chat hand-off), `evidence_msg_ids[]`, `now`, `action`, `requester` (phone masked to last 4), `record_only` (R8), `internal`, `simulated: true` |
+| `RunResult` | `run_id`, `chat`, `status` (`OK`/`UNPROCESSED`), `error?`, `now`, `model`, `prompt`, `policy_version`, `messages[]`, `rendered`, `extraction`, `llm` (requests, latency, tokens), `requests[]`, `internal_requests[]`, `rejected[]`, `log[]`: every stage, reused by the website |
+| `GoldChat` | `chat_id`, `source`, `scenario?` (1/2, challenge), `requests[]` / `internal_requests[]` (intent, evidence, requester, state, status, flags, `facts`, grade, rule) |
 
 Uncertainty flags (from the LLM or code): `referent_unresolved`, `outlet_ambiguous`,
 `time_unspecified`, `intent_unclear`, `possible_forward`, `injection_attempt`. The model sets the
@@ -172,9 +181,13 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 - A self-claim ("idi naa kotha number, Suresh") or vouching by others **never** confirms a sender.
 - A "security code changed" line for the same sender before the request downgrades `CONFIRMED`
   to `UNCONFIRMED`.
-- **Principal:** "maa outlet" resolves to the sender's outlets; 2+ outlets → flag
-  `outlet_ambiguous`. An on-behalf request is verified only if the roster lists the sender as a
-  delegate of the principal.
+- **Principal:** an outlet named in the request (matched on the roster area, rapidfuzz) is the
+  target. Otherwise "maa outlet" resolves to the sender's outlets, and for outlet-scoped intents
+  (`delivery_slot_change`, `order_change`) 2+ outlets → flag `outlet_ambiguous`. Account-level
+  asks (invoices, statements) are not flagged. An on-behalf request (the model's `on_behalf_of`)
+  is verified only if that name matches exactly one roster contact (honorifics such as "garu",
+  "madam" removed) and the sender is a roster delegate of them. A request naming another
+  partner's outlet is on-behalf and never verified (cross-partner).
 - **Roles (fixed):** `owner`, `manager`, `staff`, `accounts`, `aminobots_staff`.
 - **Authority:** sender's roster role must be in the intent's allowed roles (§6). An `AMBIGUOUS`
   sender is authorised only if **every** candidate contact is authorised. (`AMBIGUOUS` + payout
@@ -341,7 +354,7 @@ v0.2 (test set + B1) was dropped in v2.4.
 |---|---|
 | `config/models.yaml` | extractor and B1 model IDs (`:free` only, validated), temperature |
 | `config/pricing.yaml` | paid-variant list prices for notional cost |
-| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, repair retries, eval evidence Jaccard (0.5), `demo_server_key_rpd` |
+| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, repair retries, request timeout (300 s), eval evidence Jaccard (0.5), pass-rule targets, `demo_server_key_rpd` |
 | `.env` (local, gitignored) | `OPENROUTER_API_KEY`, `LANGFUSE_*` — empty in `.env.example` |
 
 ## 15. Assumptions and open questions
@@ -369,3 +382,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13); approval-load metric (§12). |
 | v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
 | v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |
+| v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing or invalid part → `time_unspecified` (§3.3, §5), known gap stated; `request_timeout_s` 300 (§3.5); prompts v2 and v3; reasoning `low` kept after a trial; schema-aware cache key; principal/outlet and cross-partner rules made precise (§7); `Identity`, `LogRecord`, `RunResult`, `GoldChat.scenario` contracts (§5); pass-rule targets in `config/thresholds.yaml` (§14). |

@@ -51,6 +51,7 @@ def _edit(path: Path, fn) -> None:
             "SPEC §9 gives",
         ),
         ("d13", lambda g: g["requests"][2].update(evidence_msg_ids=["m031"]), "handled needs"),
+        ("d14", lambda g: g["requests"][1].update(flags=[]), "needs time_unspecified"),
     ],
 )
 def test_validator_catches(copy: Path, chat: str, mutate, expected: str):
