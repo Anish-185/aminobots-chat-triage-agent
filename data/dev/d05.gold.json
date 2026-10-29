@@ -24,7 +24,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": 20.7
+        "slot_datetime": "2026-10-22T06:00:00"
       },
       "grade": "seek_approval",
       "rule_id": "R4"
@@ -45,7 +45,7 @@
         "authorised": true,
         "on_behalf": false,
         "on_behalf_verified": false,
-        "slot_hours_ahead": null
+        "slot_datetime": null
       },
       "grade": "seek_approval",
       "rule_id": "R4"

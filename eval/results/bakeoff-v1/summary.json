@@ -1,0 +1,470 @@
+[
+  {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "prompt": "extract/v1",
+    "chats_attempted": 10,
+    "chats_planned": 10,
+    "stopped": null,
+    "metrics": {
+      "tp": 21,
+      "n_pred": 24,
+      "n_gold": 26,
+      "precision": 0.875,
+      "recall": 0.8076923076923077,
+      "f1": 0.8400000000000001,
+      "intent_accuracy": 1.0,
+      "evidence_jaccard": 0.9206349206349206
+    },
+    "schema_failures": 0,
+    "failed_chats": [
+      "d10",
+      "d13"
+    ],
+    "latency_p50_s": 65.01,
+    "latency_p95_s": 212.53549999999993,
+    "prompt_tokens": 19928,
+    "completion_tokens": 58071,
+    "requests_this_run": 9,
+    "chats": [
+      {
+        "chat": "d01",
+        "n_gold": 3,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": true,
+        "requests": 0,
+        "schema_failures": 0,
+        "latency_s": 31.23,
+        "prompt_tokens": 2571,
+        "completion_tokens": 4476,
+        "n_pred": 3,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m011",
+            "evidence_msg_ids": [
+              "m011"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m016",
+            "evidence_msg_ids": [
+              "m016",
+              "m011"
+            ],
+            "refers_to_msg_id": "m011",
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "invoice_request",
+            "primary_msg_id": "m019",
+            "evidence_msg_ids": [
+              "m019"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d02",
+        "n_gold": 4,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 266.04,
+        "prompt_tokens": 2508,
+        "completion_tokens": 14779,
+        "n_pred": 4,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m005",
+            "evidence_msg_ids": [
+              "m003",
+              "m004",
+              "m005"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m007",
+            "evidence_msg_ids": [
+              "m007",
+              "m004",
+              "m005"
+            ],
+            "refers_to_msg_id": "m005",
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "order_change",
+            "primary_msg_id": "m011",
+            "evidence_msg_ids": [
+              "m011"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m013",
+            "evidence_msg_ids": [
+              "m013"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d03",
+        "n_gold": 3,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 113.17,
+        "prompt_tokens": 2505,
+        "completion_tokens": 8880,
+        "n_pred": 3,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m003",
+            "evidence_msg_ids": [
+              "m003",
+              "m015"
+            ],
+            "refers_to_msg_id": null,
+            "status": "cancelled",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "complaint",
+            "primary_msg_id": "m008",
+            "evidence_msg_ids": [
+              "m008",
+              "m009"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m012",
+            "evidence_msg_ids": [
+              "m012",
+              "m015"
+            ],
+            "refers_to_msg_id": null,
+            "status": "cancelled",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d05",
+        "n_gold": 2,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 70.65,
+        "prompt_tokens": 2448,
+        "completion_tokens": 7135,
+        "n_pred": 2,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m006",
+            "evidence_msg_ids": [
+              "m006"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m012",
+            "evidence_msg_ids": [
+              "m012"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d07",
+        "n_gold": 1,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 59.37,
+        "prompt_tokens": 2516,
+        "completion_tokens": 8163,
+        "n_pred": 3,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "payout_details_change",
+            "primary_msg_id": "m005",
+            "evidence_msg_ids": [
+              "m005"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "payout_details_change",
+            "primary_msg_id": "m006",
+            "evidence_msg_ids": [
+              "m006",
+              "m005"
+            ],
+            "refers_to_msg_id": "m005",
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "payout_details_change",
+            "primary_msg_id": "m009",
+            "evidence_msg_ids": [
+              "m009",
+              "m005"
+            ],
+            "refers_to_msg_id": "m005",
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d08",
+        "n_gold": 4,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 36.53,
+        "prompt_tokens": 2561,
+        "completion_tokens": 5862,
+        "n_pred": 4,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "payout_details_change",
+            "primary_msg_id": "m003",
+            "evidence_msg_ids": [
+              "m003"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "invoice_request",
+            "primary_msg_id": "m006",
+            "evidence_msg_ids": [
+              "m006"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "invoice_request",
+            "primary_msg_id": "m008",
+            "evidence_msg_ids": [
+              "m008"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m031",
+            "evidence_msg_ids": [
+              "m031"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      },
+      {
+        "chat": "d10",
+        "n_gold": 2,
+        "error": "transport error: APITimeoutError",
+        "requests": 1,
+        "schema_failures": 0
+      },
+      {
+        "chat": "d12",
+        "n_gold": 0,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 11.0,
+        "prompt_tokens": 2403,
+        "completion_tokens": 1020,
+        "n_pred": 0,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": []
+      },
+      {
+        "chat": "d13",
+        "n_gold": 3,
+        "error": "transport error: APITimeoutError",
+        "requests": 1,
+        "schema_failures": 0
+      },
+      {
+        "chat": "d15",
+        "n_gold": 4,
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 78.13,
+        "prompt_tokens": 2416,
+        "completion_tokens": 7756,
+        "n_pred": 5,
+        "n_internal": 0,
+        "n_rejected": 0,
+        "predictions": [
+          {
+            "intent": "order_change",
+            "primary_msg_id": "m003",
+            "evidence_msg_ids": [
+              "m003",
+              "m011"
+            ],
+            "refers_to_msg_id": null,
+            "status": "cancelled",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "status_query",
+            "primary_msg_id": "m005",
+            "evidence_msg_ids": [
+              "m005"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "delivery_slot_change",
+            "primary_msg_id": "m008",
+            "evidence_msg_ids": [
+              "m008"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [
+              "referent_unresolved",
+              "time_unspecified"
+            ],
+            "slot_datetime": null
+          },
+          {
+            "intent": "order_change",
+            "primary_msg_id": "m011",
+            "evidence_msg_ids": [
+              "m011",
+              "m003"
+            ],
+            "refers_to_msg_id": "m003",
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          },
+          {
+            "intent": "refund_request",
+            "primary_msg_id": "m015",
+            "evidence_msg_ids": [
+              "m015",
+              "m016"
+            ],
+            "refers_to_msg_id": null,
+            "status": "open",
+            "flags": [],
+            "slot_datetime": null
+          }
+        ]
+      }
+    ],
+    "note": "request counts corrected after the run: timed-out / 429 requests are now counted when sent (triage/llm.py fix in the same PR)"
+  },
+  {
+    "model": "google/gemma-4-31b-it:free",
+    "prompt": "extract/v1",
+    "chats_attempted": 0,
+    "chats_planned": 10,
+    "stopped": "RateLimited at d01: rate limited (429): google/gemma-4-31b-it:free is temporarily rate-limited upstream (Google AI Studio shared pool)",
+    "metrics": null,
+    "schema_failures": 0,
+    "failed_chats": [],
+    "latency_p50_s": null,
+    "latency_p95_s": null,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "requests_this_run": 1,
+    "chats": [],
+    "note": "request counts corrected after the run: timed-out / 429 requests are now counted when sent (triage/llm.py fix in the same PR)"
+  }
+]

@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.3 (Phase 3; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.4 (Phase 4; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -77,9 +77,13 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 
 ### 3.3 Extract
 - One prompt, `prompts/extract/v1.md`, one call per chat, output validated against the
-  `Extraction` schema (§5).
-- Default model `nvidia/nemotron-3-super-120b-a12b:free` (Instructor `JSON_SCHEMA`); fallback
-  `google/gemma-4-31b-it:free` (`JSON`, else `MD_JSON`). Reasoning off or low.
+  `ExtractionResult` schema (§5).
+- Models: `nvidia/nemotron-3.5-super-vl:free` (Instructor `JSON_SCHEMA`) and
+  `google/gemma-4-31b-it:free` (`JSON`; no `structured_outputs` on OpenRouter). The default is
+  chosen by the Phase 4 bake-off (`docs/adr/0002-model-choice.md`); the other is the fallback.
+  `nemotron-3-super-120b-a12b:free` was retired by OpenRouter before Phase 4.
+- The model fills `entities.slot_datetime` (ISO local datetime) from the date dividers and "now";
+  code computes `slot_hours_ahead` from it (§9).
 - Responses cached on disk (diskcache, `.cache/`) keyed by model + prompt version + chat hash.
 - Calls are sequential with a sleep to respect 20 requests/min.
 
@@ -125,8 +129,9 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | Model | Key fields |
 |---|---|
 | `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
-| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
+| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_datetime`, amount, details), `status` (`open`/`cancelled`/`handled`), `flags[]` |
 | `ExtractionResult` (LLM) | `candidates[]` |
+| `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
 | `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `reason` |
 | `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
 | `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id`, `evidence_msg_ids[]`, `now`, `action`, `simulated: true` |
@@ -134,7 +139,12 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | `GoldChat` | `chat_id`, `source`, `requests[]` / `internal_requests[]` (intent, evidence, requester, state, status, flags, `facts`, grade, rule) |
 
 Uncertainty flags (from the LLM or code): `referent_unresolved`, `outlet_ambiguous`,
-`time_unspecified`, `intent_unclear`, `possible_forward`, `injection_attempt`.
+`time_unspecified`, `intent_unclear`, `possible_forward`, `injection_attempt`. The model sets the
+five other than `outlet_ambiguous`, which code sets from the roster (§7).
+
+Status: `open` by default; `cancelled` when the requester withdraws it in the chat; `handled`
+only when an `aminobots_staff` message in the chat explicitly confirms the request is done (an
+acknowledgement such as "ok sir" is not enough).
 
 ## 6. Intents
 
@@ -187,9 +197,11 @@ The table lives in `policy/policy_v1.yaml` next to the rules, so swapping the po
 
 | Split | Size | Written by | Status |
 |---|---|---|---|
-| `data/dev/` | ~15 chats | Claude Code (Telugu reviewed by a teammate) | development |
-| `data/test/` | ~15 chats | the team, outside the repo session | **frozen** |
-| `data/challenge/` | 8–10 chats | humans only: both mandated scenarios verbatim + adversarial cases (vouching, injection, cancellations, forwards, split requests, on-behalf) | **frozen** |
+| `data/dev/` | 15 chats | Claude Code (Telugu reviewed by a teammate) | development and scoring |
+| `data/challenge/` | 2 chats | humans only: the two mandated scenarios, verbatim | **frozen** |
+| `data/test/` | — | dropped (v2.4) | not built |
+
+There is no separate held-out test set (see §12, limitations).
 
 - Noise in every chat: greetings, "ok sir 👍", forwards, `[image]`, festival wishes, mixed
   scripts, spelling variants (cheyyandi / cheyandi; repu / repuu).
@@ -204,6 +216,10 @@ matched rules are recorded.
 
 Context fields: `intent`, `risk`, `discloses`, `sender_state`, `authorised`, `on_behalf`,
 `on_behalf_verified`, `flags`, `status`, `slot_hours_ahead`.
+
+`slot_hours_ahead` = hours from the chat's "now" (A4: last message timestamp) to the slot, not
+from the request message; `null` when the slot time is unknown. `on_behalf` is also true when the
+sender asks about an outlet of a different partner (cross-partner); that is never verified.
 
 | Rule | Condition | Grade |
 |---|---|---|
@@ -288,16 +304,20 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
   recall · grade accuracy + confusion matrix · over-autonomy rate (overall and high-risk) ·
   rule-citation accuracy · evidence validity · approval load (gold-`act` requests graded
   `seek_approval`) · latency p50 / p95 · tokens + notional cost (paid-variant price; billed $0).
-- **Baseline B1:** one prompt that does everything incl. grading, same model — shows with numbers
-  why code must decide.
+- **No baseline.** Baseline B1 (one prompt that also grades) was dropped in v2.4, so there is no
+  number showing how much code-side grading helps over a single prompt.
 - **Strict-model mode** for milestones: no fallbacks; paired comparisons only on transcripts
   answered by the same model.
-- **Pass rule** (test + challenge; dev is for development only):
+- **Pass rule** (dev, 15 chats, plus challenge, 2 chats: the two mandated scenarios verbatim):
   - Hard gates: high-risk over-autonomy = 0; unconfirmed-sender recall = 1.0; evidence validity =
     100%; both mandated scenarios pass exactly.
   - Targets: detection F1 ≥ 0.85; grade accuracy ≥ 0.85; rule-citation accuracy ≥ 0.90.
+- **Limitations (stated plainly):** there is **no separate test set** and **no baseline**. Dev
+  chats were written by the same session that writes the prompt and is scored on them, so dev
+  scores are optimistic and are not evidence of generalisation. Only the 2 challenge chats are
+  human-written and unseen.
 - **Results:** `eval/results/<tag>/summary.json` + `report.md`; scores also sent to Langfuse.
-  Test and challenge results store IDs and labels only, never message text.
+  Challenge results store IDs and labels only, never message text.
 - **Observability:** Langfuse Hobby keeps data for 30 days, so the durable per-stage record is
   `site/data/*.json` and `eval/results/`. Langfuse links are optional extras.
 
@@ -305,13 +325,14 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
 
 | Tag | Content |
 |---|---|
-| v0.1 | CLI end-to-end on dev + eval |
-| v0.2 | full identity/policy + test/challenge eval + B1 |
-| v0.3 | website + API running locally |
-| v1.0 | final docs (APPROACH, ARTEFACT, README) |
+| v0.1 | identity + policy + routing + CLI; eval on dev + 2 challenge chats (P5) |
+| v0.3 | website + API running locally (P6) |
+| v1.0 | final docs (APPROACH, ARTEFACT, README) (P7) |
 
-- Free cap: 50 requests/day, 20/min. A dev iteration ≈ 15 requests; a milestone eval ≈ 65
-  (1–2 days); the Phase 4 bake-off is 2 models × ~10 dev chats ≈ 20 requests.
+v0.2 (test set + B1) was dropped in v2.4.
+
+- Free cap: 50 requests/day, 20/min. A dev + challenge eval ≈ 17 requests; the Phase 4 bake-off
+  is 2 models × 10 dev chats ≈ 20 requests.
 - 💰 Decision point (not taken): a one-time $10 OpenRouter credit raises the cap to 1,000/day.
 
 ## 14. Configuration
@@ -320,7 +341,7 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
 |---|---|
 | `config/models.yaml` | extractor and B1 model IDs (`:free` only, validated), temperature |
 | `config/pricing.yaml` | paid-variant list prices for notional cost |
-| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, `demo_server_key_rpd` |
+| `config/thresholds.yaml` | name-match threshold, slot cut-off (12 h), rate limits, repair retries, eval evidence Jaccard (0.5), `demo_server_key_rpd` |
 | `.env` (local, gitignored) | `OPENROUTER_API_KEY`, `LANGFUSE_*` — empty in `.env.example` |
 
 ## 15. Assumptions and open questions
@@ -336,8 +357,8 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 
 ## 16. Risks
 
-- Eval runs send synthetic test/challenge text to OpenRouter free models (the nemotron free
-  endpoint logs prompts) and Langfuse. Accepted: all data is synthetic. Real chats never sent.
+- Eval runs send synthetic dev/challenge text to OpenRouter free models (free endpoints may log
+  prompts) and Langfuse. Accepted: all data is synthetic. Real chats never sent.
 
 ## 17. Change log
 
@@ -347,3 +368,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.1 | Phase 1: one-process serving under `/api` (§11); phone generation rule (§8); R3 adds critical, R9 needs status open, three new worked checks (§9); `AMBIGUOUS` authority and A6 internal senders (§7, §15); system-line check and date dividers (§3.1, §3.2); observability retention (§12); risks (§16). |
 | v2.2 | Phase 2: A4, A5 (§15); fixed roles (§7); nemotron default + gemma fallback, dots removed (§3.3, §13); approval-load metric (§12). |
 | v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
+| v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |

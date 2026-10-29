@@ -40,8 +40,8 @@ Senders may be unknown numbers, shared phones, or names that match two people.
 | Approval queue, hand-off queue, refusals with security alerts; all logged | Chunking very long chats |
 | Inspect any run step by step on a local website | Public deployment (a later, explicit decision) |
 
-**How we will know it works.** The pass rule, evaluated on the test and challenge sets (dev is
-for development only):
+**How we will know it works.** The pass rule, evaluated on the 15 dev chats plus 2 human-written
+challenge chats (there is no separate test set; see §D, limitations):
 
 | Kind | Criterion |
 |---|---|
@@ -106,18 +106,20 @@ only.
 
 | Split | Size | Written by | Use |
 |---|---|---|---|
-| dev | ~15 chats | Claude Code, from the phase prompts in [build-prompts](docs/build-prompts/); Telugu reviewed by a teammate | development |
-| test | ~15 chats | the team, outside this repo session (different names and outlets) | frozen; eval only |
-| challenge | 8–10 chats | humans only | frozen; eval only |
+| dev | 15 chats | Claude Code, from the phase prompts in [build-prompts](docs/build-prompts/); Telugu reviewed by a teammate | development and scoring |
+| challenge | 2 chats | humans only: the two mandated scenarios, verbatim | frozen; eval only |
+
+A separate test set was planned and dropped to fit the schedule.
 
 Each chat is a WhatsApp-format `.txt` with a gold JSON file alongside it. Gold lists each request
 with its intent, evidence IDs, requester, identity state, expected grade and expected rule.
 
 **Why it is a fair test.** Every chat carries the noise of a real group: greetings,
 acknowledgements, forwards, `[image]` lines, festival wishes, mixed scripts and spelling variants
-(repu / repuu). The challenge set holds both mandated scenarios verbatim, plus adversarial cases:
-in-chat vouching for a new number, prompt injection, cancelled requests, forwarded requests,
-requests split across messages, and on-behalf requests. The roster includes a shared phone, two
+(repu / repuu). The challenge set holds both mandated scenarios verbatim. The dev set covers the
+adversarial cases: in-chat vouching for a new number, prompt injection, cancelled and
+staff-handled requests, forwarded requests, requests split across messages, and on-behalf and
+cross-partner requests. The roster includes a shared phone, two
 contacts with the same first name, an owner with two outlets, an accounts role, a delegate and
 Aminobots staff, so every identity state is exercised.
 
@@ -126,7 +128,7 @@ outlets are fictional. Phone numbers are `+91` numbers kept only if
 `phonenumbers.is_valid_number()` is false, and a test checks every one. Data is CC BY 4.0, code is
 MIT. How the dev data was produced is recorded in the saved phase prompts.
 
-**Keeping evaluation data separate.** Only `eval/run_eval.py` reads the test and challenge sets.
+**Keeping evaluation data separate.** Only `eval/run_eval.py` reads the challenge set.
 This is enforced in three layers:
 - Claude Code hooks block file tools and shell commands that can reach them, including globs,
   `cd` and recursive tools.
@@ -165,16 +167,24 @@ evidence overlap (Jaccard ≥ 0.5), assigned with the Hungarian algorithm (scipy
 - complaints and refund requests from a confirmed sender: `hand_off`, R3;
 - an extraction failure: whole chat `UNPROCESSED` and handed off.
 
-**Pass rule.** As in §A: four hard gates plus three targets, on test + challenge.
+**Pass rule.** As in §A: four hard gates plus three targets, on dev (15 chats) + challenge
+(2 chats).
 
-**Baseline.** B1 is one prompt on the same free model that does everything, grading included. It
-exists to show with numbers why code, not the model, should decide grades and rules.
+**What we compare against: nothing.** There is no baseline. A one-prompt baseline that also
+grades (B1) was planned and dropped, so we cannot show with numbers how much code-side grading
+helps.
+
+**Limitations of this evaluation.** There is **no separate test set** and **no baseline**. The dev
+chats were written in the same session that writes the prompt and is scored on them, so dev
+scores are optimistic and say little about unseen chats. Only the 2 challenge chats are
+human-written and unseen, which is too few to estimate rates. Treat the numbers as a check that
+the pipeline works end to end, not as a measure of accuracy on real chats.
 
 **Slices.** Results are reported per script (Telugu script / romanised Telugu / English, using a
 simple heuristic), per intent and per identity state. Research shows romanised, code-mixed text is
 where models lose most accuracy.
 
-**Run on every prototype.** v0.1 (CLI, dev), v0.2 (full policy, test + challenge, B1), v0.3
+**Run on every prototype.** v0.1 (CLI, full policy, dev + challenge), v0.3
 (website + API), v1.0 (final docs). Results are committed under `eval/results/<tag>/`.
 
 ## E. Risks and responsibility
@@ -193,7 +203,7 @@ where models lose most accuracy.
 email or messaging client. The website's approve/reject only writes to browser session storage.
 Nothing in the system can send a message, change a record or move money.
 
-**Data sent to third parties.** Eval runs send synthetic chat text, including test and challenge
+**Data sent to third parties.** Eval runs send synthetic chat text, including challenge
 text, to OpenRouter free models (the default endpoint logs prompts) and to Langfuse. We accept
 this only because every message is synthetic. Real partner chats must never be sent to these
 services.
