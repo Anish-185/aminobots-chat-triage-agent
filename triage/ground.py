@@ -53,7 +53,7 @@ def ground(
             refers_to = None
             flags.append("referent_unresolved")
         slot = slot_datetime(c.entities, by_id[c.primary_msg_id])
-        if c.intent == "delivery_slot_change" and slot is None:
+        if c.intent == "delivery_slot_change" and slot is None and c.status == "open":
             flags.append("time_unspecified")
         kept.append(
             c.model_copy(

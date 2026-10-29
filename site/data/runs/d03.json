@@ -1,0 +1,1012 @@
+{
+ "run_id": "44103a315bdd",
+ "chat": "d03.txt",
+ "status": "OK",
+ "error": null,
+ "now": "2026-10-23T20:00:00",
+ "model": "nvidia/nemotron-3.5-super-vl:free",
+ "prompt": "extract/v3",
+ "policy_version": 1,
+ "messages": [
+  {
+   "id": "m001",
+   "ts": "2026-10-23T07:50:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Good morning",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m002",
+   "ts": "2026-10-23T07:52:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Gm madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m003",
+   "ts": "2026-10-23T08:00:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Divya garu urgent, ivala 2 pm slot ni 4 pm ki marchagalara? Kitchen lo gas problem undi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m004",
+   "ts": "2026-10-23T08:02:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Try chestam madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m005",
+   "ts": "2026-10-23T08:30:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Gas cylinder vachinda Lakshmi?",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m006",
+   "ts": "2026-10-23T08:31:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Inka raledu sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m007",
+   "ts": "2026-10-23T09:15:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m008",
+   "ts": "2026-10-23T09:16:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Ninna vachina tomato boxes anni pagilipoyi unnayi. Ilanti quality tho ela pani cheyyali? Complaint register cheyyandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m009",
+   "ts": "2026-10-23T09:17:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "ప్యాకెట్లు కూడా పగిలిపోయాయి",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m010",
+   "ts": "2026-10-23T09:20:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Sorry sir, quality team ki escalate chestanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m011",
+   "ts": "2026-10-23T09:25:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Ameerpet lo kuda konni boxes damage",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m012",
+   "ts": "2026-10-23T09:40:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Repu Kukatpally slot 8 nundi 11 ki marchandi please",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m013",
+   "ts": "2026-10-23T09:42:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Ok madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m014",
+   "ts": "2026-10-23T10:10:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Gas vachindi 🙏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m015",
+   "ts": "2026-10-23T10:11:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Sorry Divya garu, repu slot change vaddu, 8 ki ne pampandi. Ivala 2pm kuda same unchandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m016",
+   "ts": "2026-10-23T10:12:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Noted madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m017",
+   "ts": "2026-10-23T10:30:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "👍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m018",
+   "ts": "2026-10-23T11:00:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Delivery vehicle Ameerpet reach ayyindi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m019",
+   "ts": "2026-10-23T11:05:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "ok",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m020",
+   "ts": "2026-10-23T11:45:00",
+   "author_raw": "Padma Accounts",
+   "phone": "+915555010004",
+   "display_name": "Padma Accounts",
+   "text": "Accounts meeting ki evaru vastaru?",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m021",
+   "ts": "2026-10-23T11:47:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Nenu vastanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m022",
+   "ts": "2026-10-23T12:30:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m023",
+   "ts": "2026-10-23T12:30:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "New menu board 😍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m024",
+   "ts": "2026-10-23T12:32:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Bagundi!",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m025",
+   "ts": "2026-10-23T12:35:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Very nice madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m026",
+   "ts": "2026-10-23T14:00:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Kukatpally 2 pm delivery on time ✅",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m027",
+   "ts": "2026-10-23T14:05:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Thanks andi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m028",
+   "ts": "2026-10-23T16:00:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Quality issue repu discuss cheddam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m029",
+   "ts": "2026-10-23T16:05:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Sare sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m030",
+   "ts": "2026-10-23T16:06:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "సరే",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m031",
+   "ts": "2026-10-23T20:00:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Good night 🙏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  }
+ ],
+ "rendered": "--- 2026-10-23 ---\n[m001] 07:50 | S1 \"Lakshmi Sunrise\" | Good morning\n[m002] 07:52 | S2 \"Divya Aminobots\" | Gm madam\n[m003] 08:00 | S1 \"Lakshmi Sunrise\" | Divya garu urgent, ivala 2 pm slot ni 4 pm ki marchagalara? Kitchen lo gas problem undi\n[m004] 08:02 | S2 \"Divya Aminobots\" | Try chestam madam\n[m005] 08:30 | S3 \"Ravi Sunrise\" | Gas cylinder vachinda Lakshmi?\n[m006] 08:31 | S1 \"Lakshmi Sunrise\" | Inka raledu sir\n[m007] 09:15 | S3 \"Ravi Sunrise\" | [image]\n[m008] 09:16 | S3 \"Ravi Sunrise\" | Ninna vachina tomato boxes anni pagilipoyi unnayi. Ilanti quality tho ela pani cheyyali? Complaint register cheyyandi\n[m009] 09:17 | S3 \"Ravi Sunrise\" | ప్యాకెట్లు కూడా పగిలిపోయాయి\n[m010] 09:20 | S2 \"Divya Aminobots\" | Sorry sir, quality team ki escalate chestanu\n[m011] 09:25 | S4 \"Suresh Reddy Sunrise\" | Ameerpet lo kuda konni boxes damage\n[m012] 09:40 | S1 \"Lakshmi Sunrise\" | Repu Kukatpally slot 8 nundi 11 ki marchandi please\n[m013] 09:42 | S2 \"Divya Aminobots\" | Ok madam\n[m014] 10:10 | S1 \"Lakshmi Sunrise\" | Gas vachindi 🙏\n[m015] 10:11 | S1 \"Lakshmi Sunrise\" | Sorry Divya garu, repu slot change vaddu, 8 ki ne pampandi. Ivala 2pm kuda same unchandi\n[m016] 10:12 | S2 \"Divya Aminobots\" | Noted madam\n[m017] 10:30 | S4 \"Suresh Reddy Sunrise\" | 👍\n[m018] 11:00 | S5 \"Arjun Aminobots\" | Delivery vehicle Ameerpet reach ayyindi\n[m019] 11:05 | S4 \"Suresh Reddy Sunrise\" | ok\n[m020] 11:45 | S6 \"Padma Accounts\" | Accounts meeting ki evaru vastaru?\n[m021] 11:47 | S3 \"Ravi Sunrise\" | Nenu vastanu\n[m022] 12:30 | S1 \"Lakshmi Sunrise\" | [image]\n[m023] 12:30 | S1 \"Lakshmi Sunrise\" | New menu board 😍\n[m024] 12:32 | S4 \"Suresh Reddy Sunrise\" | Bagundi!\n[m025] 12:35 | S2 \"Divya Aminobots\" | Very nice madam\n[m026] 14:00 | S5 \"Arjun Aminobots\" | Kukatpally 2 pm delivery on time ✅\n[m027] 14:05 | S1 \"Lakshmi Sunrise\" | Thanks andi\n[m028] 16:00 | S3 \"Ravi Sunrise\" | Quality issue repu discuss cheddam\n[m029] 16:05 | S4 \"Suresh Reddy Sunrise\" | Sare sir\n[m030] 16:06 | S3 \"Ravi Sunrise\" | సరే\n[m031] 20:00 | S4 \"Suresh Reddy Sunrise\" | Good night 🙏",
+ "extraction": {
+  "candidates": [
+   {
+    "intent": "delivery_slot_change",
+    "gloss": "Change today's 2 pm delivery slot to 4 pm.",
+    "primary_msg_id": "m003",
+    "evidence_msg_ids": [
+     "m003",
+     "m015"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "cancelled",
+    "flags": []
+   },
+   {
+    "intent": "complaint",
+    "gloss": "Register a complaint about yesterday's damaged tomato boxes and packets.",
+    "primary_msg_id": "m008",
+    "evidence_msg_ids": [
+     "m008",
+     "m009"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   {
+    "intent": "complaint",
+    "gloss": "Report damaged boxes at the Ameerpet outlet too.",
+    "primary_msg_id": "m011",
+    "evidence_msg_ids": [
+     "m011"
+    ],
+    "refers_to_msg_id": "m008",
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Ameerpet",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   {
+    "intent": "delivery_slot_change",
+    "gloss": "Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+    "primary_msg_id": "m012",
+    "evidence_msg_ids": [
+     "m012",
+     "m015"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Kukatpally",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "cancelled",
+    "flags": []
+   },
+   {
+    "intent": "other",
+    "gloss": "Discuss the quality issue tomorrow.",
+    "primary_msg_id": "m028",
+    "evidence_msg_ids": [
+     "m028"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   }
+  ]
+ },
+ "llm": {
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "cached": true,
+  "requests": 0,
+  "schema_failures": 0,
+  "latency_s": 246.02,
+  "prompt_tokens": 2797,
+  "completion_tokens": 16637,
+  "errors": []
+ },
+ "requests": [
+  {
+   "request_id": "44103a315bdd-r1",
+   "candidate": {
+    "intent": "delivery_slot_change",
+    "gloss": "Change today's 2 pm delivery slot to 4 pm.",
+    "primary_msg_id": "m003",
+    "evidence_msg_ids": [
+     "m003",
+     "m015"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "cancelled",
+    "flags": []
+   },
+   "requester_phone": "+915555010003",
+   "requester_name": "Lakshmi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c03"
+    ],
+    "role": "staff",
+    "outlets": [
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O2"
+    ],
+    "reason": "phone is in the roster: Lakshmi Devi (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "act",
+   "rule_id": "R8",
+   "matched_rules": [
+    "R8"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": true
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "44103a315bdd-r2",
+   "candidate": {
+    "intent": "complaint",
+    "gloss": "Register a complaint about yesterday's damaged tomato boxes and packets.",
+    "primary_msg_id": "m008",
+    "evidence_msg_ids": [
+     "m008",
+     "m009"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010001",
+   "requester_name": "Ravi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c01"
+    ],
+    "role": "owner",
+    "outlets": [
+     "O1",
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O1",
+     "O2"
+    ],
+    "reason": "phone is in the roster: Ravi Kumar (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "matched_rules": [
+    "R3"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": true
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "44103a315bdd-r3",
+   "candidate": {
+    "intent": "complaint",
+    "gloss": "Report damaged boxes at the Ameerpet outlet too.",
+    "primary_msg_id": "m011",
+    "evidence_msg_ids": [
+     "m011"
+    ],
+    "refers_to_msg_id": "m008",
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Ameerpet",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010002",
+   "requester_name": "Suresh Reddy Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c02"
+    ],
+    "role": "manager",
+    "outlets": [
+     "O1"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O1"
+    ],
+    "reason": "phone is in the roster: Suresh Reddy (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "matched_rules": [
+    "R3"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": true
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "44103a315bdd-r4",
+   "candidate": {
+    "intent": "delivery_slot_change",
+    "gloss": "Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+    "primary_msg_id": "m012",
+    "evidence_msg_ids": [
+     "m012",
+     "m015"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Kukatpally",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "cancelled",
+    "flags": []
+   },
+   "requester_phone": "+915555010003",
+   "requester_name": "Lakshmi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c03"
+    ],
+    "role": "staff",
+    "outlets": [
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O2"
+    ],
+    "reason": "phone is in the roster: Lakshmi Devi (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "act",
+   "rule_id": "R8",
+   "matched_rules": [
+    "R8"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": true
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "44103a315bdd-r5",
+   "candidate": {
+    "intent": "other",
+    "gloss": "Discuss the quality issue tomorrow.",
+    "primary_msg_id": "m028",
+    "evidence_msg_ids": [
+     "m028"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010001",
+   "requester_name": "Ravi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c01"
+    ],
+    "role": "owner",
+    "outlets": [
+     "O1",
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O1",
+     "O2"
+    ],
+    "reason": "phone is in the roster: Ravi Kumar (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "matched_rules": [
+    "R3"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": true
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  }
+ ],
+ "internal_requests": [],
+ "rejected": [],
+ "log": [
+  {
+   "run_id": "44103a315bdd",
+   "request_id": "44103a315bdd-r1",
+   "grade": "act",
+   "rule_id": "R8",
+   "evidence_msg_ids": [
+    "m003",
+    "m015"
+   ],
+   "now": "2026-10-23T20:00:00",
+   "action": "record only (request cancelled): Change today's 2 pm delivery slot to 4 pm.",
+   "requester": "••••0003",
+   "record_only": true,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "44103a315bdd",
+   "request_id": "44103a315bdd-r2",
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "evidence_msg_ids": [
+    "m008",
+    "m009"
+   ],
+   "now": "2026-10-23T20:00:00",
+   "action": "handed to the team queue: Register a complaint about yesterday's damaged tomato boxes and packets.",
+   "requester": "••••0001",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "44103a315bdd",
+   "request_id": "44103a315bdd-r3",
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "evidence_msg_ids": [
+    "m011"
+   ],
+   "now": "2026-10-23T20:00:00",
+   "action": "handed to the team queue: Report damaged boxes at the Ameerpet outlet too.",
+   "requester": "••••0002",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "44103a315bdd",
+   "request_id": "44103a315bdd-r4",
+   "grade": "act",
+   "rule_id": "R8",
+   "evidence_msg_ids": [
+    "m012",
+    "m015"
+   ],
+   "now": "2026-10-23T20:00:00",
+   "action": "record only (request cancelled): Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+   "requester": "••••0003",
+   "record_only": true,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "44103a315bdd",
+   "request_id": "44103a315bdd-r5",
+   "grade": "hand_off",
+   "rule_id": "R3",
+   "evidence_msg_ids": [
+    "m028"
+   ],
+   "now": "2026-10-23T20:00:00",
+   "action": "handed to the team queue: Discuss the quality issue tomorrow.",
+   "requester": "••••0001",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  }
+ ]
+}

@@ -1,0 +1,625 @@
+{
+ "run_id": "b8b8cff6dce5",
+ "chat": "d05.txt",
+ "status": "OK",
+ "error": null,
+ "now": "2026-10-21T18:31:00",
+ "model": "nvidia/nemotron-3.5-super-vl:free",
+ "prompt": "extract/v3",
+ "policy_version": 1,
+ "messages": [
+  {
+   "id": "m001",
+   "ts": "2026-10-21T08:25:00",
+   "author_raw": null,
+   "phone": null,
+   "display_name": null,
+   "text": "Srinivas Annapurna added Secunderabad Counter",
+   "kind": "system",
+   "subject_raw": "Secunderabad Counter",
+   "subject_phone": "+915555010008"
+  },
+  {
+   "id": "m002",
+   "ts": "2026-10-21T08:30:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Good morning andi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m003",
+   "ts": "2026-10-21T08:31:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Gm sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m004",
+   "ts": "2026-10-21T08:45:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Gm sir, Secunderabad counter nunchi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m005",
+   "ts": "2026-10-21T09:00:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Dilsukhnagar ready 👍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m006",
+   "ts": "2026-10-21T09:20:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Arjun garu, repu Secunderabad delivery 6 am kakunda 8 am ki pampandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m007",
+   "ts": "2026-10-21T09:22:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Evaru matladutunnaru andi? Anil aa Mahesh aa?",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m008",
+   "ts": "2026-10-21T09:25:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Counter phone sir 😅",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m009",
+   "ts": "2026-10-21T09:30:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "ok",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m010",
+   "ts": "2026-10-21T10:00:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Kondapur stock vachindi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m011",
+   "ts": "2026-10-21T10:05:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "Payment reconciliation ivala chestanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m012",
+   "ts": "2026-10-21T10:40:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Ninna pampina order status enti? Inka bill raledu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m013",
+   "ts": "2026-10-21T10:42:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Check chesi cheptanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m014",
+   "ts": "2026-10-21T11:00:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m015",
+   "ts": "2026-10-21T11:00:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Dilsukhnagar breakfast rush 🔥",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m016",
+   "ts": "2026-10-21T11:02:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Good 👏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m017",
+   "ts": "2026-10-21T11:30:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Kondapur lo AC repair ayyindi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m018",
+   "ts": "2026-10-21T11:31:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Good",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m019",
+   "ts": "2026-10-21T12:15:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Kondapur delivery done ✅",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m020",
+   "ts": "2026-10-21T12:16:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Thanks",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m021",
+   "ts": "2026-10-21T13:00:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "Srinivas sir, GST meeting 4 pm",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m022",
+   "ts": "2026-10-21T13:02:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Ok Rajesh",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m023",
+   "ts": "2026-10-21T14:00:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "సరే అండి",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m024",
+   "ts": "2026-10-21T14:30:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Dilsukhnagar lo new staff join ayyaru",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m025",
+   "ts": "2026-10-21T14:31:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Welcome cheppandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m026",
+   "ts": "2026-10-21T15:45:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Holiday schedule next week share chestam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m027",
+   "ts": "2026-10-21T15:46:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "ok",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m028",
+   "ts": "2026-10-21T17:00:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m029",
+   "ts": "2026-10-21T18:00:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "లెక్కలు సరిపోయాయి",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m030",
+   "ts": "2026-10-21T18:30:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Good work all 🙏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m031",
+   "ts": "2026-10-21T18:31:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Thank you sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  }
+ ],
+ "rendered": "--- 2026-10-21 ---\n[m001] 08:25 | system | Srinivas Annapurna added S1\n[m002] 08:30 | S2 \"Srinivas Annapurna\" | Good morning andi\n[m003] 08:31 | S3 \"Arjun Aminobots\" | Gm sir\n[m004] 08:45 | S1 \"Secunderabad Counter\" | Gm sir, Secunderabad counter nunchi\n[m005] 09:00 | S4 \"Kiran Annapurna\" | Dilsukhnagar ready 👍\n[m006] 09:20 | S1 \"Secunderabad Counter\" | Arjun garu, repu Secunderabad delivery 6 am kakunda 8 am ki pampandi\n[m007] 09:22 | S3 \"Arjun Aminobots\" | Evaru matladutunnaru andi? Anil aa Mahesh aa?\n[m008] 09:25 | S1 \"Secunderabad Counter\" | Counter phone sir 😅\n[m009] 09:30 | S2 \"Srinivas Annapurna\" | ok\n[m010] 10:00 | S5 \"Suresh Babu Annapurna\" | Kondapur stock vachindi\n[m011] 10:05 | S6 \"Rajesh Accounts\" | Payment reconciliation ivala chestanu\n[m012] 10:40 | S1 \"Secunderabad Counter\" | Ninna pampina order status enti? Inka bill raledu\n[m013] 10:42 | S3 \"Arjun Aminobots\" | Check chesi cheptanu\n[m014] 11:00 | S4 \"Kiran Annapurna\" | [image]\n[m015] 11:00 | S4 \"Kiran Annapurna\" | Dilsukhnagar breakfast rush 🔥\n[m016] 11:02 | S2 \"Srinivas Annapurna\" | Good 👏\n[m017] 11:30 | S5 \"Suresh Babu Annapurna\" | Kondapur lo AC repair ayyindi\n[m018] 11:31 | S2 \"Srinivas Annapurna\" | Good\n[m019] 12:15 | S3 \"Arjun Aminobots\" | Kondapur delivery done ✅\n[m020] 12:16 | S5 \"Suresh Babu Annapurna\" | Thanks\n[m021] 13:00 | S6 \"Rajesh Accounts\" | Srinivas sir, GST meeting 4 pm\n[m022] 13:02 | S2 \"Srinivas Annapurna\" | Ok Rajesh\n[m023] 14:00 | S1 \"Secunderabad Counter\" | సరే అండి\n[m024] 14:30 | S4 \"Kiran Annapurna\" | Dilsukhnagar lo new staff join ayyaru\n[m025] 14:31 | S2 \"Srinivas Annapurna\" | Welcome cheppandi\n[m026] 15:45 | S3 \"Arjun Aminobots\" | Holiday schedule next week share chestam\n[m027] 15:46 | S5 \"Suresh Babu Annapurna\" | ok\n[m028] 17:00 | S4 \"Kiran Annapurna\" | [image]\n[m029] 18:00 | S6 \"Rajesh Accounts\" | లెక్కలు సరిపోయాయి\n[m030] 18:30 | S2 \"Srinivas Annapurna\" | Good work all 🙏\n[m031] 18:31 | S1 \"Secunderabad Counter\" | Thank you sir",
+ "extraction": {
+  "candidates": [
+   {
+    "intent": "delivery_slot_change",
+    "gloss": "Change Secunderabad delivery from 6 am to 8 am tomorrow",
+    "primary_msg_id": "m006",
+    "evidence_msg_ids": [
+     "m006"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Secunderabad Counter",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   {
+    "intent": "status_query",
+    "gloss": "Ask status of yesterday's order and note that the bill has not arrived",
+    "primary_msg_id": "m012",
+    "evidence_msg_ids": [
+     "m012"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Secunderabad Counter",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   }
+  ]
+ },
+ "llm": {
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "cached": true,
+  "requests": 0,
+  "schema_failures": 0,
+  "latency_s": 62.68,
+  "prompt_tokens": 2740,
+  "completion_tokens": 4812,
+  "errors": []
+ },
+ "requests": [
+  {
+   "request_id": "b8b8cff6dce5-r1",
+   "candidate": {
+    "intent": "delivery_slot_change",
+    "gloss": "Change Secunderabad delivery from 6 am to 8 am tomorrow",
+    "primary_msg_id": "m006",
+    "evidence_msg_ids": [
+     "m006"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Secunderabad Counter",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": [
+     "time_unspecified"
+    ]
+   },
+   "requester_phone": "+915555010008",
+   "requester_name": "Secunderabad Counter",
+   "identity": {
+    "state": "AMBIGUOUS",
+    "contact_ids": [
+     "c08",
+     "c09"
+    ],
+    "role": "staff",
+    "outlets": [],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O5"
+    ],
+    "reason": "shared phone used by 2 roster contacts (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "seek_approval",
+   "rule_id": "R4",
+   "matched_rules": [
+    "R4",
+    "R6"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": true
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": true
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "b8b8cff6dce5-r2",
+   "candidate": {
+    "intent": "status_query",
+    "gloss": "Ask status of yesterday's order and note that the bill has not arrived",
+    "primary_msg_id": "m012",
+    "evidence_msg_ids": [
+     "m012"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Secunderabad Counter",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010008",
+   "requester_name": "Secunderabad Counter",
+   "identity": {
+    "state": "AMBIGUOUS",
+    "contact_ids": [
+     "c08",
+     "c09"
+    ],
+    "role": "staff",
+    "outlets": [],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O5"
+    ],
+    "reason": "shared phone used by 2 roster contacts (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "seek_approval",
+   "rule_id": "R4",
+   "matched_rules": [
+    "R4"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": true
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  }
+ ],
+ "internal_requests": [],
+ "rejected": [],
+ "log": [
+  {
+   "run_id": "b8b8cff6dce5",
+   "request_id": "b8b8cff6dce5-r1",
+   "grade": "seek_approval",
+   "rule_id": "R4",
+   "evidence_msg_ids": [
+    "m006"
+   ],
+   "now": "2026-10-21T18:31:00",
+   "action": "queued for human approval: Change Secunderabad delivery from 6 am to 8 am tomorrow",
+   "requester": "••••0008",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "b8b8cff6dce5",
+   "request_id": "b8b8cff6dce5-r2",
+   "grade": "seek_approval",
+   "rule_id": "R4",
+   "evidence_msg_ids": [
+    "m012"
+   ],
+   "now": "2026-10-21T18:31:00",
+   "action": "queued for human approval: Ask status of yesterday's order and note that the bill has not arrived",
+   "requester": "••••0008",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  }
+ ]
+}

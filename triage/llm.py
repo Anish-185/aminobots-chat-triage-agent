@@ -22,6 +22,9 @@ from triage.config import Candidate, load_thresholds
 ROOT = Path(__file__).resolve().parent.parent
 CACHE_DIR = ROOT / ".cache" / "llm"
 BASE_URL = "https://openrouter.ai/api/v1"
+# Langfuse's drop-in patches the openai SDK process-wide on import, so a process that may carry a
+# visitor's key (the website API) sets this False and never traces at all (SPEC §11).
+TRACING = True
 
 
 class LLMError(RuntimeError):
@@ -77,12 +80,18 @@ def cache_key(model: str, prompt_version: str, rendered: str) -> str:
     return f"{model}|{prompt_version}|{digest}"
 
 
-def _client(mode: str) -> instructor.Instructor:
+def _client(mode: str, api_key: str | None = None) -> instructor.Instructor:
+    """api_key: a website visitor's key, used for this client only and never traced (SPEC §11)."""
     load_dotenv(ROOT / ".env")
-    key = os.environ.get("OPENROUTER_API_KEY")
+    key = api_key or os.environ.get("OPENROUTER_API_KEY")
     if not key:
         raise LLMError("OPENROUTER_API_KEY is not set")
-    if os.environ.get("LANGFUSE_PUBLIC_KEY") and os.environ.get("LANGFUSE_SECRET_KEY"):
+    if (
+        api_key is None
+        and TRACING
+        and os.environ.get("LANGFUSE_PUBLIC_KEY")
+        and os.environ.get("LANGFUSE_SECRET_KEY")
+    ):
         from langfuse.openai import OpenAI
     else:
         from openai import OpenAI

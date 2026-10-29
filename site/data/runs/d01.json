@@ -1,0 +1,788 @@
+{
+ "run_id": "73f3cf6d3661",
+ "chat": "d01.txt",
+ "status": "OK",
+ "error": null,
+ "now": "2026-10-20T19:30:00",
+ "model": "nvidia/nemotron-3.5-super-vl:free",
+ "prompt": "extract/v3",
+ "policy_version": 1,
+ "messages": [
+  {
+   "id": "m001",
+   "ts": "2026-10-20T09:00:00",
+   "author_raw": null,
+   "phone": null,
+   "display_name": null,
+   "text": "Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. Learn more.",
+   "kind": "system",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m002",
+   "ts": "2026-10-20T09:02:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Good morning andi 🙏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m003",
+   "ts": "2026-10-20T09:03:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Good morning sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m004",
+   "ts": "2026-10-20T09:05:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Gm all",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m005",
+   "ts": "2026-10-20T09:06:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Good morning 🌞",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m006",
+   "ts": "2026-10-20T09:10:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m007",
+   "ts": "2026-10-20T09:10:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Diwali offers board ready ayyindi Ameerpet lo",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m008",
+   "ts": "2026-10-20T09:12:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Super sir 👌",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m009",
+   "ts": "2026-10-20T09:30:00",
+   "author_raw": "Padma Accounts",
+   "phone": "+915555010004",
+   "display_name": "Padma Accounts",
+   "text": "శుభోదయం అండి",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m010",
+   "ts": "2026-10-20T09:45:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Divya garu, oka chinna request",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m011",
+   "ts": "2026-10-20T09:46:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Kukatpally ki repuu morning 7 ki delivery slot undi kada, daanni 9am ki marchagalara? Staff late ga vastaru repu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m012",
+   "ts": "2026-10-20T09:48:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Check chesi cheptanu madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m013",
+   "ts": "2026-10-20T09:50:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "ok 👍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m014",
+   "ts": "2026-10-20T10:05:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Ameerpet route lo traffic ekkuva undi today, konchem late avvochu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m015",
+   "ts": "2026-10-20T10:06:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Parledu, inform chesinanduku thanks",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m016",
+   "ts": "2026-10-20T10:20:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Maa shop ki kuda same time pettandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m017",
+   "ts": "2026-10-20T10:22:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Noted sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m018",
+   "ts": "2026-10-20T10:40:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "Thank you sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m019",
+   "ts": "2026-10-20T11:00:00",
+   "author_raw": "Padma Accounts",
+   "phone": "+915555010004",
+   "display_name": "Padma Accounts",
+   "text": "Divya garu, September month invoice copy pampandi please, GST filing ki kavali",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m020",
+   "ts": "2026-10-20T11:02:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Sure madam, evening ki pampistanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m021",
+   "ts": "2026-10-20T11:03:00",
+   "author_raw": "Padma Accounts",
+   "phone": "+915555010004",
+   "display_name": "Padma Accounts",
+   "text": "ధన్యవాదాలు",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m022",
+   "ts": "2026-10-20T11:30:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m023",
+   "ts": "2026-10-20T11:30:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Today lunch rush chudandi 😅",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m024",
+   "ts": "2026-10-20T11:31:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "😂😂",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m025",
+   "ts": "2026-10-20T11:35:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Good work team 👏",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m026",
+   "ts": "2026-10-20T12:10:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Ameerpet delivery done sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m027",
+   "ts": "2026-10-20T12:11:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Received, thanks",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m028",
+   "ts": "2026-10-20T13:15:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "lunch ayyinda andaru?",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m029",
+   "ts": "2026-10-20T13:16:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "ha ayyindi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m030",
+   "ts": "2026-10-20T15:00:00",
+   "author_raw": "Divya Aminobots",
+   "phone": "+915555010014",
+   "display_name": "Divya Aminobots",
+   "text": "Repu slot vishayam ops team ki forward chesam madam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m031",
+   "ts": "2026-10-20T15:02:00",
+   "author_raw": "Lakshmi Sunrise",
+   "phone": "+915555010003",
+   "display_name": "Lakshmi Sunrise",
+   "text": "సరే అండి, thank you",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m032",
+   "ts": "2026-10-20T15:05:00",
+   "author_raw": "Ravi Sunrise",
+   "phone": "+915555010001",
+   "display_name": "Ravi Sunrise",
+   "text": "Ok 👍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m033",
+   "ts": "2026-10-20T19:30:00",
+   "author_raw": "Suresh Reddy Sunrise",
+   "phone": "+915555010002",
+   "display_name": "Suresh Reddy Sunrise",
+   "text": "Good night all 🌙",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  }
+ ],
+ "rendered": "--- 2026-10-20 ---\n[m001] 09:00 | system | Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. Learn more.\n[m002] 09:02 | S1 \"Ravi Sunrise\" | Good morning andi 🙏\n[m003] 09:03 | S2 \"Divya Aminobots\" | Good morning sir\n[m004] 09:05 | S3 \"Lakshmi Sunrise\" | Gm all\n[m005] 09:06 | S4 \"Suresh Reddy Sunrise\" | Good morning 🌞\n[m006] 09:10 | S1 \"Ravi Sunrise\" | [image]\n[m007] 09:10 | S1 \"Ravi Sunrise\" | Diwali offers board ready ayyindi Ameerpet lo\n[m008] 09:12 | S2 \"Divya Aminobots\" | Super sir 👌\n[m009] 09:30 | S5 \"Padma Accounts\" | శుభోదయం అండి\n[m010] 09:45 | S3 \"Lakshmi Sunrise\" | Divya garu, oka chinna request\n[m011] 09:46 | S3 \"Lakshmi Sunrise\" | Kukatpally ki repuu morning 7 ki delivery slot undi kada, daanni 9am ki marchagalara? Staff late ga vastaru repu\n[m012] 09:48 | S2 \"Divya Aminobots\" | Check chesi cheptanu madam\n[m013] 09:50 | S4 \"Suresh Reddy Sunrise\" | ok 👍\n[m014] 10:05 | S6 \"Arjun Aminobots\" | Ameerpet route lo traffic ekkuva undi today, konchem late avvochu\n[m015] 10:06 | S4 \"Suresh Reddy Sunrise\" | Parledu, inform chesinanduku thanks\n[m016] 10:20 | S1 \"Ravi Sunrise\" | Maa shop ki kuda same time pettandi\n[m017] 10:22 | S2 \"Divya Aminobots\" | Noted sir\n[m018] 10:40 | S3 \"Lakshmi Sunrise\" | Thank you sir\n[m019] 11:00 | S5 \"Padma Accounts\" | Divya garu, September month invoice copy pampandi please, GST filing ki kavali\n[m020] 11:02 | S2 \"Divya Aminobots\" | Sure madam, evening ki pampistanu\n[m021] 11:03 | S5 \"Padma Accounts\" | ధన్యవాదాలు\n[m022] 11:30 | S4 \"Suresh Reddy Sunrise\" | [image]\n[m023] 11:30 | S4 \"Suresh Reddy Sunrise\" | Today lunch rush chudandi 😅\n[m024] 11:31 | S3 \"Lakshmi Sunrise\" | 😂😂\n[m025] 11:35 | S1 \"Ravi Sunrise\" | Good work team 👏\n[m026] 12:10 | S6 \"Arjun Aminobots\" | Ameerpet delivery done sir\n[m027] 12:11 | S4 \"Suresh Reddy Sunrise\" | Received, thanks\n[m028] 13:15 | S3 \"Lakshmi Sunrise\" | lunch ayyinda andaru?\n[m029] 13:16 | S4 \"Suresh Reddy Sunrise\" | ha ayyindi\n[m030] 15:00 | S2 \"Divya Aminobots\" | Repu slot vishayam ops team ki forward chesam madam\n[m031] 15:02 | S3 \"Lakshmi Sunrise\" | సరే అండి, thank you\n[m032] 15:05 | S1 \"Ravi Sunrise\" | Ok 👍\n[m033] 19:30 | S4 \"Suresh Reddy Sunrise\" | Good night all 🌙",
+ "extraction": {
+  "candidates": [
+   {
+    "intent": "delivery_slot_change",
+    "gloss": "Change Kukatpally delivery slot from tomorrow 7am to 9am",
+    "primary_msg_id": "m011",
+    "evidence_msg_ids": [
+     "m010",
+     "m011"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Kukatpally",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   {
+    "intent": "delivery_slot_change",
+    "gloss": "Set same delivery time for Ravi's shop too",
+    "primary_msg_id": "m016",
+    "evidence_msg_ids": [
+     "m016",
+     "m011"
+    ],
+    "refers_to_msg_id": "m011",
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Maa shop",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   {
+    "intent": "invoice_request",
+    "gloss": "Send September month invoice copy for GST filing",
+    "primary_msg_id": "m019",
+    "evidence_msg_ids": [
+     "m019"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   }
+  ]
+ },
+ "llm": {
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "cached": true,
+  "requests": 0,
+  "schema_failures": 0,
+  "latency_s": 236.63,
+  "prompt_tokens": 2863,
+  "completion_tokens": 9793,
+  "errors": []
+ },
+ "requests": [
+  {
+   "request_id": "73f3cf6d3661-r1",
+   "candidate": {
+    "intent": "delivery_slot_change",
+    "gloss": "Change Kukatpally delivery slot from tomorrow 7am to 9am",
+    "primary_msg_id": "m011",
+    "evidence_msg_ids": [
+     "m010",
+     "m011"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Kukatpally",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": [
+     "time_unspecified"
+    ]
+   },
+   "requester_phone": "+915555010003",
+   "requester_name": "Lakshmi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c03"
+    ],
+    "role": "staff",
+    "outlets": [
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O2"
+    ],
+    "reason": "phone is in the roster: Lakshmi Devi (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "seek_approval",
+   "rule_id": "R6",
+   "matched_rules": [
+    "R6",
+    "R9"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": true
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": true
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "73f3cf6d3661-r2",
+   "candidate": {
+    "intent": "delivery_slot_change",
+    "gloss": "Set same delivery time for Ravi's shop too",
+    "primary_msg_id": "m016",
+    "evidence_msg_ids": [
+     "m016",
+     "m011"
+    ],
+    "refers_to_msg_id": "m011",
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": "Maa shop",
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": [
+     "time_unspecified",
+     "outlet_ambiguous"
+    ]
+   },
+   "requester_phone": "+915555010001",
+   "requester_name": "Ravi Sunrise",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c01"
+    ],
+    "role": "owner",
+    "outlets": [
+     "O1",
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O1",
+     "O2"
+    ],
+    "reason": "phone is in the roster: Ravi Kumar (self-claims and vouching in the chat never confirm a sender); 'our outlet' could be any of O1, O2"
+   },
+   "grade": "seek_approval",
+   "rule_id": "R6",
+   "matched_rules": [
+    "R6",
+    "R9"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": true
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": true
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  },
+  {
+   "request_id": "73f3cf6d3661-r3",
+   "candidate": {
+    "intent": "invoice_request",
+    "gloss": "Send September month invoice copy for GST filing",
+    "primary_msg_id": "m019",
+    "evidence_msg_ids": [
+     "m019"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": null
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010004",
+   "requester_name": "Padma Accounts",
+   "identity": {
+    "state": "CONFIRMED",
+    "contact_ids": [
+     "c04"
+    ],
+    "role": "accounts",
+    "outlets": [
+     "O1",
+     "O2"
+    ],
+    "authorised": true,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [
+     "O1",
+     "O2"
+    ],
+    "reason": "phone is in the roster: Padma Rao (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "act",
+   "rule_id": "R9",
+   "matched_rules": [
+    "R9"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": false
+    },
+    {
+     "rule_id": "R2",
+     "matched": false
+    },
+    {
+     "rule_id": "R3",
+     "matched": false
+    },
+    {
+     "rule_id": "R4",
+     "matched": false
+    },
+    {
+     "rule_id": "R5",
+     "matched": false
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": true
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  }
+ ],
+ "internal_requests": [],
+ "rejected": [],
+ "log": [
+  {
+   "run_id": "73f3cf6d3661",
+   "request_id": "73f3cf6d3661-r1",
+   "grade": "seek_approval",
+   "rule_id": "R6",
+   "evidence_msg_ids": [
+    "m010",
+    "m011"
+   ],
+   "now": "2026-10-20T19:30:00",
+   "action": "queued for human approval: Change Kukatpally delivery slot from tomorrow 7am to 9am",
+   "requester": "••••0003",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "73f3cf6d3661",
+   "request_id": "73f3cf6d3661-r2",
+   "grade": "seek_approval",
+   "rule_id": "R6",
+   "evidence_msg_ids": [
+    "m016",
+    "m011"
+   ],
+   "now": "2026-10-20T19:30:00",
+   "action": "queued for human approval: Set same delivery time for Ravi's shop too",
+   "requester": "••••0001",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  },
+  {
+   "run_id": "73f3cf6d3661",
+   "request_id": "73f3cf6d3661-r3",
+   "grade": "act",
+   "rule_id": "R9",
+   "evidence_msg_ids": [
+    "m019"
+   ],
+   "now": "2026-10-20T19:30:00",
+   "action": "simulated action: Send September month invoice copy for GST filing",
+   "requester": "••••0004",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  }
+ ]
+}

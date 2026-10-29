@@ -1,0 +1,5 @@
+# Local website + API (SPEC §11). Loopback only until the human approves publishing (CLAUDE.md #12).
+host: 127.0.0.1
+port: 8000
+cors_origins: ["http://127.0.0.1:8000", "http://localhost:8000"]
+max_chat_chars: 200000        # POST /api/triage input cap

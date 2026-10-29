@@ -64,8 +64,9 @@ def test_unknown_referent_becomes_flag():
     assert kept[0].flags == ["referent_unresolved"]
 
 
-def _slot(offset, at):
+def _slot(offset, at, status="open"):
     return Candidate(
+        status=status,
         intent="delivery_slot_change",
         gloss="g",
         primary_msg_id="m002",
@@ -94,3 +95,8 @@ def test_invalid_slot_parts_fail_closed():
 def test_non_slot_intent_never_gets_time_unspecified():
     kept, _ = _ground(_cand("m001", ["m001"]))
     assert kept[0].flags == []
+
+
+def test_closed_slot_change_without_time_not_flagged():
+    kept, _ = _ground(_slot(None, None, "cancelled"), _slot(0, None, "handled"))
+    assert all(c.flags == [] and c.entities.slot_datetime is None for c in kept)
