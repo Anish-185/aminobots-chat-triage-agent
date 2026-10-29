@@ -12,7 +12,7 @@
 
 **Run it:** [README → Run the demo](README.md#run-the-demo) · **Screenshots:** [docs/screenshots/](docs/screenshots/) · **Design:** [APPROACH.md](APPROACH.md), [SPEC](docs/SPEC.md)
 
-**Designed but not built:** a public deployment (local only; option in the [build plan](docs/build-plan.md#deployment-option)); a one-prompt baseline (B1, dropped in SPEC v2.4); a separate test set; Hindi; voice notes and images; replying to the group.
+**Designed but not built:** a public deployment (deliberately local only; option in the [build plan](docs/build-plan.md#deployment-option)); a one-prompt baseline (B1, dropped in SPEC v2.4); a separate test set; Hindi; voice notes and images; replying to the group.
 
 | Watch it work | The desk |
 |---|---|
@@ -41,7 +41,7 @@ Every phone number is `+91` plus 10 digits for which `phonenumbers.is_valid_numb
 
 - **Where:** [policy/policy_v2.yaml](policy/policy_v2.yaml) (default, chosen in [config/policy.yaml](config/policy.yaml)); [v1](policy/policy_v1.yaml) is kept; history in [policy/CHANGELOG.md](policy/CHANGELOG.md).
 - **How the rules were chosen:** from the cost of each error. Money and account data go to people (R1 payout → finance, R2 refuse unconfirmed senders on risky or disclosing asks, R3 hand off complaints and high risk); doubt goes to an approver (R4 unconfirmed, R5 no authority or unverified on-behalf, R6 any uncertainty flag, R7 open medium-risk or a slot change under 12 h); only then may the system act (R8 record a closed request, R9 open, confirmed, authorised, low risk); R10 hands off anything unmatched.
-- **v2 change:** R7 also needs `status == "open"`, because closed requests execute nothing. This relabelled d03 r1 and d15 r1 to act R8 (a policy decision, not a fit to the model).
+- **v2 change:** R7 also needs `status == "open"`, because closed requests execute nothing. This covers both parts of R7: the slot cut-off and medium-risk requests (such as order changes), for the same reason. It relabelled d03 r1 (cancelled slot change) and d15 r1 (cancelled order change) to act R8, a policy decision, not a fit to the model.
 - **How a rule is matched:** code builds a flat context (intent, risk, sender state, authority, on-behalf, flags, status, hours to the slot) and evaluates every rule with rule-engine. The most cautious grade wins and the lowest-numbered rule with that grade is cited; all matches are recorded and shown in the website's drawer.
 
 ## e) Evaluation results
@@ -121,7 +121,7 @@ History: [prompts/CHANGELOG.md](prompts/CHANGELOG.md). Each file has YAML front 
 - **Free-model availability:** nemotron-3.5 is the default by availability; gemma (fallback) returned 429 in both bake-offs and was never measured. Free models are slow (p95 ≈ 4 min) and can disappear.
 - **The model leaves slot times empty**, so open slot changes go to approval and the 12-hour rule rarely decides.
 - **The demo key's daily cap is in memory** and resets when the server restarts.
-- **Local only, no public URL**; the deployment option is in the [build plan](docs/build-plan.md#deployment-option) and needs a human decision.
+- **No public URL (deliberate: local only):** the team decided to submit a local-only demo; the deployment option is in the [build plan](docs/build-plan.md#deployment-option).
 - **Do not trust it** with real partner chats (free endpoints may log prompts) or to execute anything: it is a decision aid whose every action is simulated.
 
 **Responsible-AI notes**

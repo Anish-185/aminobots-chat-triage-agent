@@ -12,7 +12,7 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 | Approach document | [APPROACH.md](../APPROACH.md) | ✅ sections A–E, 1,439 words of prose, links both diagrams |
 | Architecture diagram | [docs/architecture.drawio.svg](architecture.drawio.svg) | ✅ editable `.drawio.svg`, regenerated for v1.0 |
 | Workflow diagram | [docs/workflow.drawio.svg](workflow.drawio.svg) | ✅ |
-| UX prototype (optional, not graded) | — | ⚠️ skipped by design; the local website is the working prototype |
+| UX prototype (optional, not graded) | the local website (`uv run python -m triage.serve`), [design brief](design/brief.md), [design review](design/review.md), [screenshots](screenshots/) | ✅ |
 | Build plan | [docs/build-plan.md](build-plan.md) | ✅ includes the deployment option |
 | AI transcript (share link + file) | outside the repo | ⚠️ **human**: claude.ai share link of the planning chats, plus one file of Claude Code `/export`s |
 
@@ -23,7 +23,7 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 | README to set up and run from scratch | [README.md](../README.md#run-the-demo) | ✅ 3 commands |
 | ARTEFACT.md, sections a–i | [ARTEFACT.md](../ARTEFACT.md) | ⚠️ complete except team names in §i and the transcript location (TODO placeholders) |
 | Tagged prototypes | git tags `v0.1`, `v0.3` | ⚠️ `v1.0` is tagged by the human after this PR merges |
-| Deployed system at a public URL | [build plan → deployment option](build-plan.md#deployment-option) | ⚠️ local only, by decision; publishing needs explicit approval |
+| Deployed system at a public URL | [build plan → deployment option](build-plan.md#deployment-option) | ⚠️ deliberate: local only; deployment option in build plan (team decision for this submission) |
 | Step-by-step inspection of any input | website drawer + Try your own ([screenshots](screenshots/)) | ✅ locally |
 | Prompt pack, versioned | [prompts/](../prompts/CHANGELOG.md) | ✅ extract v1–v3 + CHANGELOG |
 | Evaluation set | [data/dev/](../data/dev/README.md) (15 chats + gold) | ⚠️ the 2 human-written challenge chats do not exist yet |
