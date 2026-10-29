@@ -238,4 +238,5 @@ class GoldChat(_Model):
     source: GoldSource
     requests: list[GoldRequest]
     internal_requests: list[GoldRequest] = []  # aminobots_staff (A6): not scored
+    scenario: Literal[1, 2] | None = None  # a mandated scenario, verbatim (challenge only)
     notes: str = ""

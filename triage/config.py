@@ -90,6 +90,9 @@ class Thresholds(_Strict):
     requests_per_day: int
     llm_max_repair_retries: int
     request_timeout_s: float
+    target_f1: float
+    target_grade_accuracy: float
+    target_rule_accuracy: float
     evidence_jaccard: float
     demo_server_key_rpd: int | None
 
