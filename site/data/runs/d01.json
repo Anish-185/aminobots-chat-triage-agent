@@ -6,7 +6,7 @@
  "now": "2026-10-20T19:30:00",
  "model": "nvidia/nemotron-3.5-super-vl:free",
  "prompt": "extract/v3",
- "policy_version": 1,
+ "policy_version": 2,
  "messages": [
   {
    "id": "m001",
