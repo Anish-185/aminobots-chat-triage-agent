@@ -13,7 +13,7 @@ __pycache__/
 !.env.example
 
 # Local run outputs (simulated action logs)
-runs/
+/runs/
 eval/tmp/
 
 # OS
