@@ -55,6 +55,7 @@ class Candidate(_Strict):
     context_length: int | None
     structured_outputs: bool | None
     instructor_mode: Literal["JSON_SCHEMA", "JSON", "MD_JSON", "TOOLS"]
+    reasoning_effort: Literal["none", "minimal", "low"]  # SPEC §3.3: reasoning off or low
     logs_prompts: bool | None
     verified_on: date
 
@@ -87,6 +88,7 @@ class Thresholds(_Strict):
     requests_per_minute: int
     requests_per_day: int
     llm_max_repair_retries: int
+    evidence_jaccard: float
     demo_server_key_rpd: int | None
 
 

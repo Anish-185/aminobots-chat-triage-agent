@@ -1,14 +1,13 @@
 # Free-tier calls are never billed (billed cost = $0). These are list prices of each free
 # model's paid OpenRouter variant, USD per million tokens, used for notional cost (SPEC §12).
-# TODO(phase-4): fill from https://openrouter.ai/api/v1/models once reachable; null until then.
-checked_on: null
+checked_on: 2026-10-29
 source_url: https://openrouter.ai/api/v1/models
 models:
-  "nvidia/nemotron-3-super-120b-a12b:free":
-    paid_variant: nvidia/nemotron-3-super-120b-a12b
-    input: null
-    output: null
+  "nvidia/nemotron-3.5-super-vl:free":
+    paid_variant: nvidia/nemotron-3.5-super-vl
+    input: 0.15
+    output: 0.50
   "google/gemma-4-31b-it:free":
     paid_variant: google/gemma-4-31b-it
-    input: null
-    output: null
+    input: 0.20
+    output: 0.40
