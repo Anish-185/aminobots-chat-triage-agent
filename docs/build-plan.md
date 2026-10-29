@@ -36,7 +36,7 @@ how much code-side grading beats a single prompt. Only the 2 challenge chats are
 
 ## Deployment option
 
-**Not done; needs an explicit human decision** (CLAUDE.md invariant 12: local only until
+**Not done: the team decided to submit local only.** Kept here for later (CLAUDE.md invariant 12: local only until
 publishing is approved). The brief asks for a public URL. The code is ready for it: one process
 serves the site and API, paths are relative, the API URL is a `<meta>` tag and the host and CORS
 origins live in `config/server.yaml`. The smallest option is one container running
