@@ -121,3 +121,27 @@ def load_pricing(config_dir: Path | None = None) -> PricingConfig:
 
 def load_thresholds(config_dir: Path | None = None) -> Thresholds:
     return Thresholds.model_validate(_load("thresholds.yaml", config_dir))
+
+
+_LOOPBACK = ("127.0.0.1", "localhost")
+
+
+class ServerConfig(_Strict):
+    host: str
+    port: int
+    cors_origins: list[str]
+    max_chat_chars: int
+
+    @model_validator(mode="after")
+    def _local_only(self) -> Self:
+        # CLAUDE.md invariant 12: localhost only until publishing is approved.
+        if self.host not in _LOOPBACK:
+            raise ValueError(f"host must be loopback, got {self.host!r}")
+        for o in self.cors_origins:
+            if o.split("://", 1)[-1].split(":")[0] not in _LOOPBACK:
+                raise ValueError(f"CORS origin must be localhost, got {o!r}")
+        return self
+
+
+def load_server(config_dir: Path | None = None) -> ServerConfig:
+    return ServerConfig.model_validate(_load("server.yaml", config_dir))
