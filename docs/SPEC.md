@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.5 (Phase 5; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.6 (Phase 6; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -86,7 +86,10 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   date: 0 today, 1 "repu", 2 "ellundi"; null if not stated) and `entities.slot_time` (`"HH:MM"`,
   24 h, the earliest time stated for the affected delivery; null if not stated). Code computes
   `slot_datetime` from the primary message's date, then `slot_hours_ahead` from it (§9). A slot
-  change with either part null, or an invalid value, gets the flag `time_unspecified` (→ R6).
+  change with status `open` and either part null, or an invalid value, gets the flag
+  `time_unspecified` (→ R6). A closed (cancelled/handled) request executes nothing, so code does
+  not add the flag and R8 decides unless a more cautious rule matches (v2.6). Consequence: with
+  no slot, R7 cannot fire on a closed request either (dev d03 r1, see Phase 6 report).
   **Known gap (Phase 5):** nemotron left both fields null in every run (prompt v1–v3, with and
   without schema constraints), so every slot change currently fails closed to R6 and R7 never
   decides. The model fills only `outlet`, `amount`, `details` (v3 dropped free-text date/time).
@@ -282,29 +285,44 @@ Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "n
 API under `/api` (no second server, no port clash). The site's API base URL is configurable and
 defaults to same origin. Not published.
 
-1. **Home** — the problem, a one-line solution, the two scenarios.
-2. **How it works** — architecture SVG, model-vs-code split, rules table rendered from a JSON
-   export of the policy.
-3. **Live demo** — precomputed results for sample dev chats (`site/data/*.json`, produced by the
-   real pipeline via a build script). No API needed.
-   - Table: gloss, sender + state badge, grade badge, rule ID with its text on hover.
-   - Click a request → step panel: chat with evidence highlighted → extraction → identity +
-     reason → rule check table (all rules, matched yes/no, decider highlighted) → route +
-     simulated action → Langfuse trace link (optional extra; see §12).
+One long page (`site/index.html`, `app.css`, `app.js`; no build step; design brief in
+`docs/design/brief.md`), every view built from `site/data/` (written by
+`scripts/build_site_data.py` from the cache: `runs/<chat>.json` are `RunResult`s, plus
+`manifest.json`, `policy.json`, `results.json` from the latest dev eval, and `sample.txt`):
+1. **Hero** — the problem and the promise; real d07 bubbles stream in and get stamped.
+2. **Watch it work** — two pinned, scroll-driven scenes (d01, d07) in six steps: chat arrives →
+   noise dims → the model's dockets (with the follow-up's referent line) → roster lookup → all
+   rules, the most cautious stamps → the simulated log line (+ security alert for refuse). Below
+   861 px or under reduced motion: the same content, static.
+3. **How it works** — architecture SVG, model-vs-code split, rules table from `policy.json`;
+   hovering a rule highlights where it matched in the demo.
+4. **The desk** — five precomputed dev chats (`site/data/`). No API needed.
+   - Table: gloss, sender + state badge, grade stamp, rule ID with its text on hover.
+   - Click a request → drawer (`<dialog>`): chat with evidence highlighted → extraction →
+     identity + reason → rule check (all rules, decider highlighted) → route + simulated log
+     record → trace (none in the demo: the API process never traces).
    - Approve/Reject on `seek_approval` items appends to a client-side log (sessionStorage).
-4. **Try your own** — paste/upload a chat, optional "your OpenRouter key", POST to the local API
-   (URL configurable). If the API isn't running, show the command to start it.
-5. **Results** — eval metrics per prototype, the pass-rule table, link to Langfuse.
-6. **Team** (placeholder names) and GitHub link.
+5. **Try your own** — paste/upload a chat, optional key, POST to the local API (URL from a
+   `<meta>` tag). Progress note with elapsed time; UNPROCESSED shown as a whole-chat hand-off;
+   API down → the start command.
+6. **Results** — dev metrics, hard gates, grade confusion, approval load, latency, notional cost,
+   limitations.
+7. **Team** (placeholder names) and GitHub link.
 
 Footer on every page: "Simulation only — no action is executed. Synthetic data only."
 
 **API** (`api/main.py`, FastAPI + uvicorn):
 - `POST /api/triage` (chat text + optional key) → `RunResult` with per-stage trace data.
 - `GET /api/health`.
-- CORS origins from config (localhost only now).
-- A visitor key is used only for that request: never stored, logged or sent to Langfuse (tested).
-- Without a visitor key the server key is capped at `demo_server_key_rpd` (10/day).
+- Host, port, CORS origins and the chat size cap from `config/server.yaml`; the loader rejects
+  any non-loopback host or origin.
+- A visitor key is used only for that request: never stored, logged, part of a cache key or sent
+  to Langfuse (tested). Langfuse's drop-in patches the OpenAI SDK process-wide, so the API process
+  never traces at all (`llm.TRACING = False`).
+- Without a visitor key the server key is capped at `demo_server_key_rpd` (10/day, in memory,
+  counting only uncached requests).
+- The request runs in FastAPI's worker threadpool; the LLM client's `request_timeout_s` bounds it
+  and a timeout returns `UNPROCESSED`.
 
 **One command** (`uv run python -m triage.serve`) starts that process and prints the localhost
 URL. Paths are relative and the API URL is configurable, so publishing later needs no code change.
@@ -383,3 +401,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.3 | Phase 3: parser facts and pre-pass (§3.1), render masking (§3.2), contracts match code (§5), Android-only (§1), gold validator (§8). |
 | v2.4 | Phase 4: `slot_hours_ahead` measured from "now" (§9); `handled` = Aminobots staff confirms done (§5); cross-partner ask = unverified on-behalf (§9); `entities.slot_datetime` (§3.3, §5); retired nemotron-3-super replaced by nemotron-3.5-super-vl (§3.3); test set, B1 and v0.2 dropped, pass rule on dev + 2 challenge chats, limitations stated (§8, §12, §13). |
 | v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing or invalid part → `time_unspecified` (§3.3, §5), known gap stated; `request_timeout_s` 300 (§3.5); prompts v2 and v3; reasoning `low` kept after a trial; schema-aware cache key; principal/outlet and cross-partner rules made precise (§7); `Identity`, `LogRecord`, `RunResult`, `GoldChat.scenario` contracts (§5); pass-rule targets in `config/thresholds.yaml` (§14). |
+| v2.6 | Phase 6: `time_unspecified` added by code only to **open** slot changes (§3.3); website + API contracts as built (§11). |

@@ -1,0 +1,134 @@
+{
+ "version": 1,
+ "grades": [
+  "act",
+  "seek_approval",
+  "hand_off",
+  "refuse"
+ ],
+ "intents": {
+  "delivery_slot_change": {
+   "risk": "low",
+   "discloses": false,
+   "roles": [
+    "owner",
+    "manager",
+    "staff"
+   ]
+  },
+  "order_change": {
+   "risk": "medium",
+   "discloses": false,
+   "roles": [
+    "owner",
+    "manager"
+   ]
+  },
+  "status_query": {
+   "risk": "none",
+   "discloses": true,
+   "roles": [
+    "owner",
+    "manager",
+    "staff",
+    "accounts"
+   ]
+  },
+  "invoice_request": {
+   "risk": "none",
+   "discloses": true,
+   "roles": [
+    "owner",
+    "manager",
+    "accounts"
+   ]
+  },
+  "payout_details_change": {
+   "risk": "critical",
+   "discloses": true,
+   "roles": [
+    "owner"
+   ]
+  },
+  "refund_request": {
+   "risk": "high",
+   "discloses": false,
+   "roles": [
+    "owner",
+    "manager",
+    "accounts"
+   ]
+  },
+  "complaint": {
+   "risk": null,
+   "discloses": false,
+   "roles": null
+  },
+  "other": {
+   "risk": null,
+   "discloses": false,
+   "roles": null
+  }
+ },
+ "rules": [
+  {
+   "id": "R1",
+   "grade": "hand_off",
+   "text": "Payout details change → finance verifies out of band",
+   "when": "intent == \"payout_details_change\""
+  },
+  {
+   "id": "R2",
+   "grade": "refuse",
+   "text": "Unconfirmed sender asking for a high/critical-risk action or account data → refuse + security alert",
+   "when": "sender_state == \"UNCONFIRMED\" and (risk in [\"high\", \"critical\"] or discloses)"
+  },
+  {
+   "id": "R3",
+   "grade": "hand_off",
+   "text": "Complaint, other, or high/critical risk → hand off to the team",
+   "when": "intent in [\"complaint\", \"other\"] or risk in [\"high\", \"critical\"]"
+  },
+  {
+   "id": "R4",
+   "grade": "seek_approval",
+   "text": "Sender not confirmed → seek approval",
+   "when": "sender_state != \"CONFIRMED\""
+  },
+  {
+   "id": "R5",
+   "grade": "seek_approval",
+   "text": "Sender lacks authority for the intent, or on-behalf request not verified → seek approval",
+   "when": "not authorised or (on_behalf and not on_behalf_verified)"
+  },
+  {
+   "id": "R6",
+   "grade": "seek_approval",
+   "text": "Any uncertainty flag → seek approval",
+   "when": "flags.length > 0"
+  },
+  {
+   "id": "R7",
+   "grade": "seek_approval",
+   "text": "Medium risk, or slot change less than the cut-off before the slot → seek approval",
+   "when": "risk == \"medium\" or (intent == \"delivery_slot_change\" and slot_hours_ahead != null and slot_hours_ahead < slot_cutoff_hours)"
+  },
+  {
+   "id": "R8",
+   "grade": "act",
+   "text": "Not open (cancelled / already handled) → record only",
+   "when": "status != \"open\""
+  },
+  {
+   "id": "R9",
+   "grade": "act",
+   "text": "Open, confirmed, authorised, risk none or low → act (simulated)",
+   "when": "status == \"open\" and sender_state == \"CONFIRMED\" and authorised and risk in [\"none\", \"low\"]"
+  }
+ ],
+ "default": {
+  "id": "R10",
+  "grade": "hand_off",
+  "text": "Nothing else matched → hand off"
+ }
+}

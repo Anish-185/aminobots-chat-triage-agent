@@ -80,3 +80,22 @@ def test_phase4_model_decisions():
     }
     role = models.roles.extractor
     assert {role.model, *role.fallbacks} == modes.keys()
+
+
+def test_server_config_is_local_only(tmp_path):
+    import shutil
+
+    import pytest
+
+    from triage.config import CONFIG_DIR, load_server
+
+    assert load_server().host == "127.0.0.1"
+    for bad in ("host: 0.0.0.0", 'cors_origins: ["https://example.com"]'):
+        shutil.copytree(CONFIG_DIR, tmp_path / bad[:4], dirs_exist_ok=True)
+        f = tmp_path / bad[:4] / "server.yaml"
+        key = bad.split(":")[0]
+        f.write_text(
+            "\n".join(bad if ln.startswith(key) else ln for ln in f.read_text().splitlines())
+        )
+        with pytest.raises(ValueError, match="loopback|localhost"):
+            load_server(tmp_path / bad[:4])
