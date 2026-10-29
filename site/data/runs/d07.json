@@ -1,0 +1,506 @@
+{
+ "run_id": "ce773584fa2c",
+ "chat": "d07.txt",
+ "status": "OK",
+ "error": null,
+ "now": "2026-10-25T19:00:00",
+ "model": "nvidia/nemotron-3.5-super-vl:free",
+ "prompt": "extract/v3",
+ "policy_version": 1,
+ "messages": [
+  {
+   "id": "m001",
+   "ts": "2026-10-25T07:55:00",
+   "author_raw": null,
+   "phone": null,
+   "display_name": null,
+   "text": "+91 55550 10031 joined using this group's invite link",
+   "kind": "system",
+   "subject_raw": "+91 55550 10031",
+   "subject_phone": "+915555010031"
+  },
+  {
+   "id": "m002",
+   "ts": "2026-10-25T08:00:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Good morning",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m003",
+   "ts": "2026-10-25T08:01:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Gm sir",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m004",
+   "ts": "2026-10-25T08:15:00",
+   "author_raw": "+91 55550 10031",
+   "phone": "+915555010031",
+   "display_name": null,
+   "text": "Hi, idi naa kotha number, Kiran ni. Paata phone pani cheyyatledu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m005",
+   "ts": "2026-10-25T08:16:00",
+   "author_raw": "+91 55550 10031",
+   "phone": "+915555010031",
+   "display_name": null,
+   "text": "Ivala payment mundu maa bank account details marchali. Kotha account: SBI, a/c 0000111122223333, IFSC SBIN0000000",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m006",
+   "ts": "2026-10-25T08:17:00",
+   "author_raw": "+91 55550 10031",
+   "phone": "+915555010031",
+   "display_name": null,
+   "text": "Payout ee account ki pampandi please, urgent",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m007",
+   "ts": "2026-10-25T08:20:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Avunu, Kiran e anukunta, kotha number teesukunnadu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m008",
+   "ts": "2026-10-25T08:22:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Sir, bank details marpu ki verification process undi, finance team call chestaru",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m009",
+   "ts": "2026-10-25T08:25:00",
+   "author_raw": "+91 55550 10031",
+   "phone": "+915555010031",
+   "display_name": null,
+   "text": "Time ledu, 12 lopu cheyyandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m010",
+   "ts": "2026-10-25T08:30:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Good morning andi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m011",
+   "ts": "2026-10-25T08:31:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Kiran garu, meeru kotha number teesukunnara?",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m012",
+   "ts": "2026-10-25T08:35:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Ledu andi, naa number ide. Aa message nenu pampaledu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m013",
+   "ts": "2026-10-25T08:36:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Ayyo, sorry, nenu thappuga cheppanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m014",
+   "ts": "2026-10-25T08:40:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Thanks sir, security team ki report chestam",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m015",
+   "ts": "2026-10-25T09:00:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Good morning",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m016",
+   "ts": "2026-10-25T09:30:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "<Media omitted>",
+   "kind": "media",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m017",
+   "ts": "2026-10-25T09:30:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "Ivala payout statement",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m018",
+   "ts": "2026-10-25T09:32:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "👍",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m019",
+   "ts": "2026-10-25T10:00:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "జాగ్రత్తగా ఉండండి అందరూ",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m020",
+   "ts": "2026-10-25T10:05:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Avunu, ilanti messages chala vastunnayi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m021",
+   "ts": "2026-10-25T11:00:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Dilsukhnagar delivery on the way",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m022",
+   "ts": "2026-10-25T11:30:00",
+   "author_raw": "Kiran Annapurna",
+   "phone": "+915555010007",
+   "display_name": "Kiran Annapurna",
+   "text": "Received ✅",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m023",
+   "ts": "2026-10-25T12:00:00",
+   "author_raw": "Secunderabad Counter",
+   "phone": "+915555010008",
+   "display_name": "Secunderabad Counter",
+   "text": "Good afternoon",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m024",
+   "ts": "2026-10-25T13:00:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "భోజనం సమయం 🍛",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m025",
+   "ts": "2026-10-25T14:00:00",
+   "author_raw": "Rajesh Accounts",
+   "phone": "+915555010010",
+   "display_name": "Rajesh Accounts",
+   "text": "Payout process start ayyindi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m026",
+   "ts": "2026-10-25T14:05:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "ok",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m027",
+   "ts": "2026-10-25T15:00:00",
+   "author_raw": "Arjun Aminobots",
+   "phone": "+915555010015",
+   "display_name": "Arjun Aminobots",
+   "text": "Srinivas sir, please aa kotha number ni group nunchi remove cheyyandi",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m028",
+   "ts": "2026-10-25T15:02:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Remove chestanu",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m029",
+   "ts": "2026-10-25T15:03:00",
+   "author_raw": null,
+   "phone": null,
+   "display_name": null,
+   "text": "Srinivas Annapurna removed +91 55550 10031",
+   "kind": "system",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m030",
+   "ts": "2026-10-25T17:00:00",
+   "author_raw": "Suresh Babu Annapurna",
+   "phone": "+915555010006",
+   "display_name": "Suresh Babu Annapurna",
+   "text": "Good evening",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  },
+  {
+   "id": "m031",
+   "ts": "2026-10-25T19:00:00",
+   "author_raw": "Srinivas Annapurna",
+   "phone": "+915555010005",
+   "display_name": "Srinivas Annapurna",
+   "text": "Gn all",
+   "kind": "text",
+   "subject_raw": null,
+   "subject_phone": null
+  }
+ ],
+ "rendered": "--- 2026-10-25 ---\n[m001] 07:55 | system | S1 joined using this group's invite link\n[m002] 08:00 | S2 \"Srinivas Annapurna\" | Good morning\n[m003] 08:01 | S3 \"Arjun Aminobots\" | Gm sir\n[m004] 08:15 | S1 \"(number hidden)\" | Hi, idi naa kotha number, Kiran ni. Paata phone pani cheyyatledu\n[m005] 08:16 | S1 \"(number hidden)\" | Ivala payment mundu maa bank account details marchali. Kotha account: SBI, a/c [phone], IFSC SBIN0000000\n[m006] 08:17 | S1 \"(number hidden)\" | Payout ee account ki pampandi please, urgent\n[m007] 08:20 | S2 \"Srinivas Annapurna\" | Avunu, Kiran e anukunta, kotha number teesukunnadu\n[m008] 08:22 | S3 \"Arjun Aminobots\" | Sir, bank details marpu ki verification process undi, finance team call chestaru\n[m009] 08:25 | S1 \"(number hidden)\" | Time ledu, 12 lopu cheyyandi\n[m010] 08:30 | S4 \"Kiran Annapurna\" | Good morning andi\n[m011] 08:31 | S3 \"Arjun Aminobots\" | Kiran garu, meeru kotha number teesukunnara?\n[m012] 08:35 | S4 \"Kiran Annapurna\" | Ledu andi, naa number ide. Aa message nenu pampaledu\n[m013] 08:36 | S2 \"Srinivas Annapurna\" | Ayyo, sorry, nenu thappuga cheppanu\n[m014] 08:40 | S3 \"Arjun Aminobots\" | Thanks sir, security team ki report chestam\n[m015] 09:00 | S5 \"Suresh Babu Annapurna\" | Good morning\n[m016] 09:30 | S6 \"Rajesh Accounts\" | [image]\n[m017] 09:30 | S6 \"Rajesh Accounts\" | Ivala payout statement\n[m018] 09:32 | S2 \"Srinivas Annapurna\" | 👍\n[m019] 10:00 | S4 \"Kiran Annapurna\" | జాగ్రత్తగా ఉండండి అందరూ\n[m020] 10:05 | S5 \"Suresh Babu Annapurna\" | Avunu, ilanti messages chala vastunnayi\n[m021] 11:00 | S3 \"Arjun Aminobots\" | Dilsukhnagar delivery on the way\n[m022] 11:30 | S4 \"Kiran Annapurna\" | Received ✅\n[m023] 12:00 | S7 \"Secunderabad Counter\" | Good afternoon\n[m024] 13:00 | S2 \"Srinivas Annapurna\" | భోజనం సమయం 🍛\n[m025] 14:00 | S6 \"Rajesh Accounts\" | Payout process start ayyindi\n[m026] 14:05 | S2 \"Srinivas Annapurna\" | ok\n[m027] 15:00 | S3 \"Arjun Aminobots\" | Srinivas sir, please aa kotha number ni group nunchi remove cheyyandi\n[m028] 15:02 | S2 \"Srinivas Annapurna\" | Remove chestanu\n[m029] 15:03 | system | Srinivas Annapurna removed [phone]\n[m030] 17:00 | S5 \"Suresh Babu Annapurna\" | Good evening\n[m031] 19:00 | S2 \"Srinivas Annapurna\" | Gn all",
+ "extraction": {
+  "candidates": [
+   {
+    "intent": "payout_details_change",
+    "gloss": "Change the bank account details before payment and send the payout to the new SBI account",
+    "primary_msg_id": "m005",
+    "evidence_msg_ids": [
+     "m005",
+     "m006",
+     "m007",
+     "m009"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": "SBI, a/c [phone], IFSC SBIN0000000"
+    },
+    "status": "open",
+    "flags": []
+   }
+  ]
+ },
+ "llm": {
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "cached": true,
+  "requests": 0,
+  "schema_failures": 0,
+  "latency_s": 53.59,
+  "prompt_tokens": 2808,
+  "completion_tokens": 5273,
+  "errors": []
+ },
+ "requests": [
+  {
+   "request_id": "ce773584fa2c-r1",
+   "candidate": {
+    "intent": "payout_details_change",
+    "gloss": "Change the bank account details before payment and send the payout to the new SBI account",
+    "primary_msg_id": "m005",
+    "evidence_msg_ids": [
+     "m005",
+     "m006",
+     "m007",
+     "m009"
+    ],
+    "refers_to_msg_id": null,
+    "on_behalf_of": null,
+    "entities": {
+     "outlet": null,
+     "slot_day_offset": null,
+     "slot_time": null,
+     "slot_datetime": null,
+     "amount": null,
+     "details": "SBI, a/c [phone], IFSC SBIN0000000"
+    },
+    "status": "open",
+    "flags": []
+   },
+   "requester_phone": "+915555010031",
+   "requester_name": null,
+   "identity": {
+    "state": "UNCONFIRMED",
+    "contact_ids": [],
+    "role": null,
+    "outlets": [],
+    "authorised": false,
+    "on_behalf": false,
+    "on_behalf_verified": false,
+    "target_outlets": [],
+    "reason": "unknown phone (self-claims and vouching in the chat never confirm a sender)"
+   },
+   "grade": "refuse",
+   "rule_id": "R2",
+   "matched_rules": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "rule_checks": [
+    {
+     "rule_id": "R1",
+     "matched": true
+    },
+    {
+     "rule_id": "R2",
+     "matched": true
+    },
+    {
+     "rule_id": "R3",
+     "matched": true
+    },
+    {
+     "rule_id": "R4",
+     "matched": true
+    },
+    {
+     "rule_id": "R5",
+     "matched": true
+    },
+    {
+     "rule_id": "R6",
+     "matched": false
+    },
+    {
+     "rule_id": "R7",
+     "matched": false
+    },
+    {
+     "rule_id": "R8",
+     "matched": false
+    },
+    {
+     "rule_id": "R9",
+     "matched": false
+    },
+    {
+     "rule_id": "R10",
+     "matched": false
+    }
+   ],
+   "internal": false
+  }
+ ],
+ "internal_requests": [],
+ "rejected": [],
+ "log": [
+  {
+   "run_id": "ce773584fa2c",
+   "request_id": "ce773584fa2c-r1",
+   "grade": "refuse",
+   "rule_id": "R2",
+   "evidence_msg_ids": [
+    "m005",
+    "m006",
+    "m007",
+    "m009"
+   ],
+   "now": "2026-10-25T19:00:00",
+   "action": "refused and security alert raised: Change the bank account details before payment and send the payout to the new SBI account",
+   "requester": "••••0031",
+   "record_only": false,
+   "internal": false,
+   "simulated": true
+  }
+ ]
+}
