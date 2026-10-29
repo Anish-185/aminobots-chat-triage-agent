@@ -148,7 +148,7 @@ flowchart TB
 | Rules | rule-engine (rules in a YAML file, easy to swap for Aminobots' own policy) |
 | Sender check | phonenumbers + rapidfuzz + a synthetic roster |
 | Observability | Langfuse Cloud free tier |
-| Evaluation | scikit-learn + scipy, on dev / frozen test / human-written challenge sets |
+| Evaluation | scikit-learn + scipy, on dev + 2 human-written challenge chats (no separate test set) |
 | Showcase | a static website + small FastAPI service, run locally |
 
 **Safety by construction:** fail closed (any error → the whole chat goes to a person), evidence
