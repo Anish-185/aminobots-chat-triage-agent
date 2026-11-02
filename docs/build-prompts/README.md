@@ -17,3 +17,4 @@ Each phase prompt given to Claude Code is saved here verbatim as `phase-NN-<shor
 | 5 | [phase-05-decisions.md](phase-05-decisions.md) | Slot contract, identity, policy v1, routing, pipeline, CLI, run_eval → PR #6, **v0.1** |
 | 6 | [phase-06-website.md](phase-06-website.md) | `time_unspecified` fix, the Triage Desk website and local API → PR #7, **v0.3** |
 | 7 | [phase-07-final.md](phase-07-final.md) | Policy v2, final eval, ARTEFACT, final docs, submission checklist → **v1.0** |
+| 8 | [phase-08-challenge.md](phase-08-challenge.md) | Generate the 2 challenge chats (staged; moved and committed by the human), run the challenge eval |
