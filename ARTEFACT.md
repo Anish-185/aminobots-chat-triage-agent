@@ -1,11 +1,11 @@
-# ARTEFACT — Aminobots Chat Triage Agent (v1.0)
+# ARTEFACT — Aminobots Chat Triage Agent (v1.1)
 
 > Simulation only — no action is executed. Synthetic data only. Free LLMs only ($0 billed).
 
 ## a) What was built
 
 1. A pipeline that reads an Android WhatsApp group export (Telugu–English, mostly romanised) and lists every real request with its evidence message IDs.
-2. One free LLM call per chat *describes* the requests; code decides everything else: the sender's identity from a roster (`CONFIRMED` / `AMBIGUOUS` / `UNCONFIRMED`, with a reason), the grade (`act` / `seek_approval` / `hand_off` / `refuse`) and the numbered rule.
+2. One free LLM call per chat *describes* the requests (including whether anyone asked explicitly); code fills slot days and times the model left empty, and decides everything else: the sender's identity from a roster (`CONFIRMED` / `AMBIGUOUS` / `UNCONFIRMED`, with a reason), the grade (`act` / `seek_approval` / `hand_off` / `refuse`) and the numbered rule.
 3. A written policy of rules R1–R10 is applied in code; every rule is checked and the most cautious match wins.
 4. Every decision is routed to an append-only, simulated JSONL log (actions, approvals, hand-offs, alerts). A failed run hands off the whole chat (`UNPROCESSED`).
 5. A local website shows the system step by step, lets you inspect any request and try your own chat, and shows the evaluation.
@@ -25,7 +25,8 @@
 | (bake-off, Phase 4) | — | Extraction only, two free models | nemotron-3.5: F1 0.84 on 8/10 chats (2 timeouts); gemma: 429, never measured ([ADR 0002](docs/adr/0002-model-choice.md)) | 300 s timeout; slot fields moved to code |
 | **v0.1** | `13a16d4` | Full CLI pipeline, policy v1, routing, eval | F1 0.89, grade 0.89, rule citation 0.80, approval load 0.44 ([v0.1-dev](eval/results/v0.1-dev/report.md)) | `time_unspecified` only on open requests (SPEC v2.6) |
 | **v0.3** | `0f73ea6` | + website and local API | Grade 0.91, rule 0.86, approval load 0.22, but one over-autonomy case (d03 r1) ([v0.1.1-dev](eval/results/v0.1.1-dev/report.md)) | Policy v2: R7 only for open requests |
-| **v1.0** | this release | + policy v2, final docs | Dev: grade 0.94, rule 0.89, approval load 0.18, over-autonomy 0 ([v1.0-dev](eval/results/v1.0-dev/report.md)). Challenge (generated): scenario 2 exact, scenario 1 not ([v1.0-challenge](eval/results/v1.0-challenge/report.md)) | Next: fill slot times in code; stop `act` on extracted noise |
+| **v1.0** | `08d7855` | + policy v2, final docs | Dev: grade 0.94, rule 0.89, approval load 0.18, over-autonomy 0 ([v1.0-dev](eval/results/v1.0-dev/report.md)). Challenge (generated): scenario 2 exact, scenario 1 not ([v1.0-challenge](eval/results/v1.0-challenge/report.md)) | Fill slot times in code; stop `act` on extracted noise; phantom-acts gate |
+| **v1.1** | this release | + slot fallback in code (dateparser), prompt v4 `explicit_ask`, phantom-acts gate | Dev: F1 0.92, grade 1.00, rule 1.00, approval load 0.00, phantom acts 0 ([v1.1-dev](eval/results/v1.1-dev/report.md)); slot fallback alone, no new requests: grade 1.00, rule 1.00 ([v1.1-partA-dev](eval/results/v1.1-partA-dev/report.md)). Challenge re-run once: both scenarios exact ([v1.1-challenge](eval/results/v1.1-challenge/report.md)) | Independent, unseen chats (the remaining gap) |
 
 ## c) Data provenance
 
@@ -46,65 +47,68 @@ Every phone number is `+91` plus 10 digits for which `phonenumbers.is_valid_numb
 
 ## e) Evaluation results
 
-Pass rule ([SPEC §12](docs/SPEC.md#12-evaluation)): four hard gates plus three targets. Matching uses the same intent and evidence Jaccard ≥ 0.5 (Hungarian assignment). Strict mode: one model, no fallback.
+Pass rule ([SPEC §12](docs/SPEC.md#12-evaluation)): five hard gates plus three targets. Matching uses the same intent and evidence Jaccard ≥ 0.5 (Hungarian assignment). Strict mode: one model, no fallback.
 
-**Dev split (15 chats, 37 gold requests), nemotron-3.5-super-vl:free, prompt extract/v3**
+**What happened between v1.0 and v1.1.** The v1.0 challenge run exposed two issues in mandated scenario 1: both slot changes went to approval (R6) because the model left the slot day and time empty, and the system stamped `act` on a message nobody had asked anything in. Both fixes were built and tuned on the **dev chats only** (Phase 9): code now reads the slot from the requester's own messages (a small Telugu day-word map + dateparser, filled only when there is one reading), and prompt v4 asks the model whether anyone asked explicitly (`explicit_ask: false` → flag → R6). The **phantom-acts gate was added after the challenge run revealed the gap**: no earlier gate counted an `act` on a request that is not in the gold. The challenge was then run once more. **It is therefore no longer a blind test**: its result was seen before the fixes, so the v1.1 challenge pass shows the two failures are gone, not how the system does on unseen chats.
 
-| Metric | v0.1 (policy v1) | v0.1.1 (v1 + fix) | **v1.0 (policy v2)** | Target |
+**Dev split (15 chats, 37 gold requests), nemotron-3.5-super-vl:free**
+
+| Metric | v0.1 (policy v1) | v1.0 (policy v2, prompt v3) | v1.1 slot fallback only (v3, cache) | **v1.1 (prompt v4)** | Target |
+|---|---|---|---|---|---|
+| Detection P / R / F1 | 0.83 / 0.95 / 0.89 | 0.83 / 0.95 / 0.89 | 0.83 / 0.95 / 0.89 | **0.90 / 0.95 / 0.92** | F1 ≥ 0.85 ✅ |
+| Intent accuracy (matched) | 1.00 | 1.00 | 1.00 | **1.00** | |
+| Attribution / identity state | 1.00 / 1.00 | 1.00 / 1.00 | 1.00 / 1.00 | **1.00 / 1.00** | |
+| Grade accuracy | 0.89 | 0.94 | 1.00 | **1.00** | ≥ 0.85 ✅ |
+| Rule-citation accuracy | 0.80 | 0.89 | 1.00 | **1.00** | ≥ 0.90 ✅ |
+| Over-autonomy (all / high-risk) | 0.00 / 0 | 0.00 / 0 | 0.00 / 0 | **0.00 / 0** | |
+| Approval load | 0.44 | 0.18 | 0.00 | **0.00** | |
+| Phantom acts (was `extras_graded_act`) | 0 | 0 | 0 | **0** | = 0 (gate) |
+| LLM requests for the run | 11 | 0 (cache) | 0 (cache) | **15** | |
+
+Dev scores are **fitted**: the slot rules were tuned on these chats (e.g. d11's "Monday nunchi" led to the standing-change rule, d02's "madhyanam 2" to the afternoon words), so 1.00 is not a measure of accuracy on new chats.
+
+**Hard gates (v1.1)**
+
+| Gate | Dev | Challenge |
+|---|---|---|
+| High-risk over-autonomy = 0 | ✅ | ✅ |
+| Unconfirmed-sender recall = 1.0 | ✅ | ✅ |
+| Evidence validity = 100% | ✅ | ✅ |
+| Phantom acts = 0 (new in v1.1) | ✅ 0 | ✅ 0 (v1.0: 1) |
+| Both mandated scenarios pass exactly | — | ✅ scenario 1 and scenario 2 (v1.0: scenario 1 failed) |
+
+**Challenge split (2 chats, 3 gold requests).** The chats were generated by the same agent that built the system, and v1.1 is their second run, so this is not an independent test.
+
+| Chat | Request | Gold | v1.0 | v1.1 |
 |---|---|---|---|---|
-| Detection P / R / F1 | 0.83 / 0.95 / 0.89 | same | **0.83 / 0.95 / 0.89** | F1 ≥ 0.85 ✅ |
-| Intent accuracy (matched) | 1.00 | 1.00 | **1.00** | |
-| Attribution / identity state | 1.00 / 1.00 | 1.00 / 1.00 | **1.00 / 1.00** | |
-| Grade accuracy | 0.89 | 0.91 | **0.94** | ≥ 0.85 ✅ |
-| Rule-citation accuracy | 0.80 | 0.86 | **0.89** | ≥ 0.90 ❌ |
-| Over-autonomy (all / high-risk) | 0.00 / 0 | 0.03 / 0 | **0.00 / 0** | |
-| Approval load | 0.44 | 0.22 | **0.18** | |
-| Extras graded `act` | 0 | 0 | **0** | |
-| LLM requests for the run | 11 | 0 (cache) | **0 (cache)** | |
+| c01 (scenario 1) | r1: staff asks to move tomorrow's slot | act R9 | seek_approval R6 ❌ | act R9 ✅ |
+| c01 (scenario 1) | r2: "maa outlet ki kooda alaage cheyyandi" | act R9 | seek_approval R6 ❌ | act R9 ✅ |
+| c01 (scenario 1) | extra at m010, not in gold | — | **act R9** (as invoice_request) ❌ | not extracted ✅ |
+| c02 (scenario 2) | r1: unknown number, bank account change | refuse R2 | refuse R2 ✅ | refuse R2 ✅ |
 
-**Hard gates (v1.0)**
+v1.1-challenge: F1 1.00, grade and rule 1.00, phantom acts 0, 2 requests ([report](eval/results/v1.1-challenge/report.md)). Results keep IDs and labels only, so it is not recorded whether the m010 message was not extracted at all or would have been caught by `implicit_request`: in v1.1 the model simply did not list it. On dev, `implicit_request` fired on 3 of 40 candidates, all complaints that R3 already hands off, so it changed no dev grade.
 
-| Gate | Result |
-|---|---|
-| High-risk over-autonomy = 0 | ✅ pass |
-| Unconfirmed-sender recall = 1.0 | ✅ pass |
-| Evidence validity = 100% | ✅ pass |
-| Both mandated scenarios pass exactly | ❌ **fail**: scenario 2 passes, scenario 1 fails ([v1.0-challenge](eval/results/v1.0-challenge/report.md)) |
+**Grade confusion, v1.1 dev** (rows gold, columns predicted: act / seek / hand off / refuse): act 11 / 0 / 0 / 0 · seek 0 / 12 / 0 / 0 · hand off 0 / 0 / 9 / 0 · refuse 0 / 0 / 0 / 3.
 
-**Challenge split (v1.0-challenge: 2 chats, 3 gold requests, 2 requests to the free model).** The chats were generated by the same agent that built the system, so this is not an independent test.
-
-| Chat | Request | Gold | Graded | Exact? |
-|---|---|---|---|---|
-| c01 (scenario 1) | r1: staff asks to move tomorrow's slot | act R9 | seek_approval R6 | ❌ |
-| c01 (scenario 1) | r2: "maa outlet ki kooda alaage cheyyandi" | act R9 | seek_approval R6 | ❌ |
-| c01 (scenario 1) | extra at m010, not in gold | — | **act R9** (as invoice_request) | ❌ |
-| c02 (scenario 2) | r1: unknown number, bank account change | refuse R2 | refuse R2 | ✅ |
-
-Detection F1 0.86, attribution and identity state 1.00, evidence Jaccard 1.00, over-autonomy 0 on gold requests. In scenario 1 the system found both requests, the right senders and the follow-up's link, but graded neither exactly, and it stamped `act` on a noise message (`extras_graded_act` = 1, the first in any eval).
-
-**Grade confusion, v1.0** (rows gold, columns predicted: act / seek / hand off / refuse): act 9 / 2 / 0 / 0 · seek 0 / 12 / 0 / 0 · hand off 0 / 0 / 9 / 0 · refuse 0 / 0 / 0 / 3. Every grade error is more cautious than gold.
-
-**Error analysis (every remaining dev error)**
+**Error analysis (every remaining dev error, v1.1)**
 
 | Error | Cases | Cause | Effect | What would fix it |
 |---|---|---|---|---|
-| Slot fields left empty | d02 r1, r2 (gold act R9 → seek R6) | The model never fills `slot_day_offset` / `slot_time` (prompts v1–v3), so code adds `time_unspecified` | Over-caution (approval load 0.18) | Deterministic time parsing of the evidence ("repu 7 ki", "9am") in code, or a model that fills the fields |
-| Same cause, right grade, wrong rule | d01 r1, d09 r1 (gold seek R7 → seek R6) | As above: R7 cannot see the slot, R6 fires instead | Rule citation 0.89 | As above |
-| English refund missed | d10 r1 | The model split the injected refund into a complaint (m004) and a refund (m005, m007) it marked cancelled after "Sorry, copied the message from another group"; evidence overlap 1/4 < 0.5 | Unmatched, but still graded hand_off R3, so safe | Prompt rule: one incident = one request; human check of the gold, since m007 can be read as a withdrawal |
-| Evidence too wide | d15 r3 | Same primary message, but the model added m009–m010 as evidence (overlap 1/3) | Unmatched; grade would match (seek R6) | Prompt: evidence = messages that state the ask; or match on the primary ID |
-| Scenario 1 slot changes graded R6, not R9 | c01 r1, r2 (challenge) | Consistent with the slot-field gap above (challenge results keep only IDs and labels, so the flag is not recorded) | Scenario 1 not exact; over-caution, not over-autonomy | As for the slot gap |
-| Noise stamped `act` | c01 m010 (challenge) | An accounts contact's message was extracted as an `invoice_request`; the sender is confirmed and authorised and the risk is none, so R9 acted on a request nobody made | A simulated invoice send nobody asked for; no hard gate catches it | Prompt examples for sharing vs asking; a gate on `extras_graded_act` |
-| Extra requests (7, none `act`) | d03 m011, m028 · d10 m004, m005 · d13 m008 (2nd ask), m023 · d15 m008 | Two are the halves of the misses above; d13 m008 asks two things in one message (gold counts one); d03 m028 and d13 m023 are not asked of Aminobots; d03 m011 is a plausible second complaint | Precision 0.83; all extras went to a person | Prompt examples for "not addressed to Aminobots" and "two asks in one message"; review the d03 m011 label |
+| English refund missed | d10 r1 | The model split the injected refund into a complaint (m004) and a refund (m005) after "Sorry, copied the message from another group"; evidence overlap < 0.5 | Unmatched, but both halves hand_off R3, so safe | Prompt rule: one incident = one request; human check of the gold |
+| Evidence too wide | d15 r3 | Same primary message, but the model added m009–m010 as evidence | Unmatched; graded seek R6, as gold | Match on the primary ID, or prompt: evidence = messages that state the ask |
+| Extra request | d03 m011 | A plausible second complaint the gold does not list | hand_off R3; precision 0.90 | Review the d03 label |
 
-**Not covered:** real chats; iOS exports; very long chats (no chunking); Hindi; voice and images; a baseline comparison; unseen, independently written chats (the challenge chats were generated by the builder).
+Fixed since v1.0: d02 r1, r2 (seek R6 → act R9) and d01 r1, d09 r1 (R6 → R7), all by the slot fallback; extras fell from 7 to 4 with prompt v4.
+
+**Not covered:** real chats; iOS exports; very long chats (no chunking); Hindi; voice and images; a baseline comparison; unseen, independently written chats (the challenge chats were generated by the builder and have now been seen).
 
 ## f) Accuracy, latency and cost
 
-Measured on the running system (local; there is no deployment) by `eval/run_eval.py` on the dev split; the observability view is the website's **Results** section (`uv run python -m triage.serve` → `/#results`, data from [site/data/results.json](site/data/results.json)) and the committed [eval reports](eval/results/v1.0-dev/report.md). Langfuse tracing is wired in but off (empty keys), so there is no trace view.
+Measured on the running system (local; there is no deployment) by `eval/run_eval.py` on the dev split (v1.1); the observability view is the website's **Results** section (`uv run python -m triage.serve` → `/#results`, data from [site/data/results.json](site/data/results.json)) and the committed [eval reports](eval/results/v1.1-dev/report.md). Langfuse tracing is wired in but off (empty keys), so there is no trace view.
 
 | Kind of request (gold n) | Recall | Grade accuracy |
 |---|---|---|
-| delivery_slot_change (13) | 0.92 | 0.83 |
+| delivery_slot_change (13) | 0.92 | 1.00 |
 | status_query (6) | 1.00 | 1.00 |
 | refund_request (5) | 0.80 | 1.00 |
 | invoice_request (4) | 1.00 | 1.00 |
@@ -112,7 +116,7 @@ Measured on the running system (local; there is no deployment) by `eval/run_eval
 | payout_details_change (2) | 1.00 | 1.00 |
 | complaint (2) / other (2) | 1.00 | 1.00 |
 
-Latency and cost are per **chat** (one model call extracts all its requests), not per request: p50 63 s, p95 239 s (timeout 300 s); 41,453 input and 111,481 output tokens for 15 chats; billed $0 (free model); notional $0.062 for 15 chats (≈ $0.004 per chat at the paid variant's list price, [config/pricing.yaml](config/pricing.yaml)). Code-side steps (ground, identity, policy, route) take milliseconds.
+Latency and cost are per **chat** (one model call extracts all its requests), not per request: p50 38 s, p95 197 s (timeout 300 s); 43,328 input and 104,374 output tokens for 15 chats; billed $0 (free model); notional $0.059 for 15 chats (≈ $0.004 per chat at the paid variant's list price, [config/pricing.yaml](config/pricing.yaml)). Code-side steps (ground, identity, policy, route) take milliseconds.
 
 ## g) Prompt pack
 
@@ -120,17 +124,18 @@ Latency and cost are per **chat** (one model call extracts all its requests), no
 |---|---|---|---|
 | [extract/v1](prompts/extract/v1.md) | Describe every request in the rendered chat | `ExtractionResult` (intent, gloss, primary/evidence IDs, reference, entities, status, flags) | First version |
 | [extract/v2](prompts/extract/v2.md) | same | same, slot as day offset + time | The model output `slot_datetime` badly → code computes it; "one request per ask" after v1 false positives |
-| [extract/v3](prompts/extract/v3.md) (**in use**) | same | same | Free-text date/time fields removed because the model put slot info there instead |
+| [extract/v3](prompts/extract/v3.md) | same | same | Free-text date/time fields removed because the model put slot info there instead |
+| [extract/v4](prompts/extract/v4.md) (**in use**) | same | `ExtractionResultV4`: + required `explicit_ask` | v1.0-challenge acted on a message that asked nothing; false → code flag `implicit_request` → R6 |
 
 History: [prompts/CHANGELOG.md](prompts/CHANGELOG.md). Each file has YAML front matter (`id`, `version`, `model`, `output_schema`, `purpose`); a released version is never edited.
 
 ## h) Known limitations
 
-- **Evaluation is built by the same agent** that wrote the prompt, the gold and the 2 challenge chats, so scores are optimistic and no chat is independent; there is **no baseline**. On the challenge chats, **mandated scenario 1 fails** (see §e).
+- **Evaluation is built by the same agent** that wrote the prompt, the gold and the 2 challenge chats, so scores are optimistic and no chat is independent; there is **no baseline**. The v1.1 fixes were tuned on dev, and the challenge chats have been run twice, so **no blind test remains** (see §e).
 - **Synthetic data only**; Telugu has **not been reviewed by a native speaker** (`telugu_reviewed_by` is null in every gold file).
 - **Android export format only**; iOS exports will not parse (the run fails closed to `UNPROCESSED`).
 - **Free-model availability:** nemotron-3.5 is the default by availability; gemma (fallback) returned 429 in both bake-offs and was never measured. Free models are slow (p95 ≈ 4 min) and can disappear.
-- **The model leaves slot times empty**, so open slot changes go to approval and the 12-hour rule rarely decides.
+- **The model still leaves slot times empty**; code fills them from the text (romanised Telugu map + dateparser). Phrasings outside the small map (e.g. "half past 7", dates in digits such as "23/10") stay empty and go to approval; a missed time that is earlier than the one read could make R7 miss, a risk only real chats would measure.
 - **The demo key's daily cap is in memory** and resets when the server restarts.
 - **No public URL (deliberate: local only):** the team decided to submit a local-only demo; the deployment option is in the [build plan](docs/build-plan.md#deployment-option).
 - **Do not trust it** with real partner chats (free endpoints may log prompts) or to execute anything: it is a decision aid whose every action is simulated.

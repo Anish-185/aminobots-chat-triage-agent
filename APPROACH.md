@@ -59,7 +59,7 @@ challenge chats (there is no separate test set; see §D, limitations):
 |---|---|---|---|
 | Parse | `.txt` export | messages `m001…` (time, author, text, kind) | code (chat-miner) |
 | Render | messages | one line per message, sender handles `S1…Sn`, no phone numbers, date dividers | code |
-| Extract | rendered chat | candidate requests: intent, gloss, primary and evidence IDs, references, entities, flags | **model** (`nemotron-3.5-super-vl:free`, one call per chat, [prompt v3](prompts/extract/v3.md)) |
+| Extract | rendered chat | candidate requests: intent, gloss, primary and evidence IDs, references, entities, flags | **model** (`nemotron-3.5-super-vl:free`, one call per chat, [prompt v4](prompts/extract/v4.md)) |
 | Ground | candidates + messages | candidates with valid IDs only; the rest logged as rejected | code |
 | Identity | sender of the primary message + roster | state, role, outlets, reason | code (phonenumbers, rapidfuzz, `roster.yaml`) |
 | Policy | request + identity | grade, deciding rule, all matched rules | code (rule-engine, [`policy_v2.yaml`](policy/policy_v2.yaml)) |
@@ -184,12 +184,14 @@ the pipeline works end to end, not as a measure of accuracy on real chats.
 simple heuristic), per intent and per identity state. Research shows romanised, code-mixed text is
 where models lose most accuracy.
 
-**Run on every prototype.** v0.1 (CLI, policy v1), v0.3 (website + API), v1.0 (policy v2).
+**Run on every prototype.** v0.1 (CLI, policy v1), v0.3 (website + API), v1.0 (policy v2), v1.1
+(slot fallback in code, prompt v4).
 Results are committed under `eval/results/<tag>/`.
 
-**Results (v1.0, dev).** F1 0.89, grade accuracy 0.94, rule citation 0.89 (target 0.90, missed),
-over-autonomy 0, approval load 0.18. Three hard gates pass; the mandated-scenario gate has not run
-because the challenge chats do not exist yet. Every grade error is more cautious than gold. Full
+**Results (v1.1, dev).** F1 0.92, grade accuracy 1.00, rule citation 1.00, over-autonomy 0,
+approval load 0.00, phantom acts 0; these are fitted, since the v1.1 fixes were tuned on dev. On
+the two generated challenge chats both mandated scenarios pass exactly in v1.1 (scenario 1 failed
+in v1.0, which led to the fixes and to the phantom-acts gate), but that set has now been seen. Full
 table and error analysis: [ARTEFACT.md §e](ARTEFACT.md#e-evaluation-results).
 
 ## E. Risks and responsibility
@@ -221,4 +223,5 @@ payout or identity case costs far more than many extra approvals. We measure the
 **approval load**: the share of legitimate, gold-`act` requests the system graded
 `seek_approval`. It fell from 0.44 (v0.1) to 0.18 (v1.0) after two changes that relax caution only
 for closed requests, which execute nothing: `time_unspecified` is set only on open requests, and
-policy v2's R7 applies only to open requests. What remains is the model leaving slot times empty.
+policy v2's R7 applies only to open requests. In v1.1 it is 0.00 on dev, because code now reads
+the slot time the model leaves empty, and only when the reading is unique.
