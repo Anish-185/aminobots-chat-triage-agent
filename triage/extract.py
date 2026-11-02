@@ -15,9 +15,15 @@ import yaml
 from triage import llm
 from triage.config import Candidate
 from triage.render import render
-from triage.schemas import ExtractionResult, Message
+from triage.schemas import ExtractionResult, ExtractionResultV4, Message
 
 PROMPTS = Path(__file__).resolve().parent.parent / "prompts" / "extract"
+# The prompt's `output_schema` front-matter picks the model's response schema (v4 adds a field;
+# v1–v3 keep theirs byte-identical, so their cache keys do not change).
+OUTPUT_MODELS = {
+    "triage.schemas.ExtractionResult": ExtractionResult,
+    "triage.schemas.ExtractionResultV4": ExtractionResultV4,
+}
 
 
 class ExtractionFailed(RuntimeError):
@@ -41,7 +47,7 @@ def is_cached(
 ) -> bool:
     """True if extract() would answer from the cache (costs no request)."""
     meta, _ = load_prompt(prompt_version)
-    schema = json.dumps(ExtractionResult.model_json_schema(), sort_keys=True)
+    schema = json.dumps(OUTPUT_MODELS[meta["output_schema"]].model_json_schema(), sort_keys=True)
     key = llm.cache_key(
         llm.model_tag(candidate),
         f"{meta['id']}/v{meta['version']}",
@@ -67,7 +73,7 @@ def extract(
             f"{meta['id']}/v{meta['version']}",
             system,
             user_message(messages),
-            ExtractionResult,
+            OUTPUT_MODELS[meta["output_schema"]],
             temperature,
             cache=cache,
             client=client,

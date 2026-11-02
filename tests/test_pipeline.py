@@ -18,7 +18,7 @@ CAND = next(c for c in load_models().candidates if c.id == load_models().roles.e
 
 def _c(intent, primary, evidence, **extra):
     return {"intent": intent, "gloss": f"{intent} {primary}", "primary_msg_id": primary,
-            "evidence_msg_ids": evidence, **extra}  # fmt: skip
+            "evidence_msg_ids": evidence, "explicit_ask": True, **extra}  # fmt: skip
 
 
 D01_OUT = {

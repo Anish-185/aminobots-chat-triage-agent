@@ -83,3 +83,8 @@ one required field `explicit_ask` in a v4-only response model chosen by the prom
 
 **C:** v1.1-dev (v4, ~15 requests), compare with v1.0-dev; then v1.1-challenge once (2 requests).
 ARTEFACT, site data, checklist, README, build-prompts index; PR; report.
+
+**Decision rule, fixed before any v4 request:** v1.1 ships prompt v4 only if the v4 dev run
+completes with every dev hard gate passing (over-autonomy 0, phantom acts 0) and all three
+targets met. Otherwise v1.1 keeps prompt v3 + Part A (`v1.1-partA-dev`, cache only) and the
+challenge runs from cache. The challenge result never feeds back into this choice.
