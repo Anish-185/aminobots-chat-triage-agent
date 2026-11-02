@@ -1,11 +1,11 @@
 {
- "run_id": "b8b8cff6dce5",
+ "run_id": "13456b3eb850",
  "chat": "d05.txt",
  "status": "OK",
  "error": null,
  "now": "2026-10-21T18:31:00",
  "model": "nvidia/nemotron-3.5-super-vl:free",
- "prompt": "extract/v3",
+ "prompt": "extract/v4",
  "policy_version": 2,
  "messages": [
   {
@@ -371,11 +371,13 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    {
     "intent": "status_query",
-    "gloss": "Ask status of yesterday's order and note that the bill has not arrived",
+    "gloss": "Ask status of yesterday's order and note bill not received for Secunderabad Counter",
     "primary_msg_id": "m012",
     "evidence_msg_ids": [
      "m012"
@@ -391,7 +393,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    }
   ]
  },
@@ -400,14 +404,14 @@
   "cached": true,
   "requests": 0,
   "schema_failures": 0,
-  "latency_s": 62.68,
-  "prompt_tokens": 2740,
-  "completion_tokens": 4812,
+  "latency_s": 23.16,
+  "prompt_tokens": 2865,
+  "completion_tokens": 3653,
   "errors": []
  },
  "requests": [
   {
-   "request_id": "b8b8cff6dce5-r1",
+   "request_id": "13456b3eb850-r1",
    "candidate": {
     "intent": "delivery_slot_change",
     "gloss": "Change Secunderabad delivery from 6 am to 8 am tomorrow",
@@ -419,16 +423,16 @@
     "on_behalf_of": null,
     "entities": {
      "outlet": "Secunderabad Counter",
-     "slot_day_offset": null,
-     "slot_time": null,
-     "slot_datetime": null,
+     "slot_day_offset": 1,
+     "slot_time": "06:00",
+     "slot_datetime": "2026-10-22T06:00:00",
      "amount": null,
      "details": null
     },
     "status": "open",
-    "flags": [
-     "time_unspecified"
-    ]
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": "code filled ['slot_day_offset', 'slot_time'] (evidence: days ['2026-10-22'], times ['06:00', '08:00'])"
    },
    "requester_phone": "+915555010008",
    "requester_name": "Secunderabad Counter",
@@ -452,7 +456,7 @@
    "rule_id": "R4",
    "matched_rules": [
     "R4",
-    "R6"
+    "R7"
    ],
    "rule_checks": [
     {
@@ -477,11 +481,11 @@
     },
     {
      "rule_id": "R6",
-     "matched": true
+     "matched": false
     },
     {
      "rule_id": "R7",
-     "matched": false
+     "matched": true
     },
     {
      "rule_id": "R8",
@@ -499,10 +503,10 @@
    "internal": false
   },
   {
-   "request_id": "b8b8cff6dce5-r2",
+   "request_id": "13456b3eb850-r2",
    "candidate": {
     "intent": "status_query",
-    "gloss": "Ask status of yesterday's order and note that the bill has not arrived",
+    "gloss": "Ask status of yesterday's order and note bill not received for Secunderabad Counter",
     "primary_msg_id": "m012",
     "evidence_msg_ids": [
      "m012"
@@ -518,7 +522,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    "requester_phone": "+915555010008",
    "requester_name": "Secunderabad Counter",
@@ -592,8 +598,8 @@
  "rejected": [],
  "log": [
   {
-   "run_id": "b8b8cff6dce5",
-   "request_id": "b8b8cff6dce5-r1",
+   "run_id": "13456b3eb850",
+   "request_id": "13456b3eb850-r1",
    "grade": "seek_approval",
    "rule_id": "R4",
    "evidence_msg_ids": [
@@ -607,15 +613,15 @@
    "simulated": true
   },
   {
-   "run_id": "b8b8cff6dce5",
-   "request_id": "b8b8cff6dce5-r2",
+   "run_id": "13456b3eb850",
+   "request_id": "13456b3eb850-r2",
    "grade": "seek_approval",
    "rule_id": "R4",
    "evidence_msg_ids": [
     "m012"
    ],
    "now": "2026-10-21T18:31:00",
-   "action": "queued for human approval: Ask status of yesterday's order and note that the bill has not arrived",
+   "action": "queued for human approval: Ask status of yesterday's order and note bill not received for Secunderabad Counter",
    "requester": "••••0008",
    "record_only": false,
    "internal": false,

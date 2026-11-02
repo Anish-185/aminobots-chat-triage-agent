@@ -21,8 +21,8 @@ from triage.policy import POLICY
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "site" / "data"
-EVAL_TAG = "v1.0-dev"
-CHALLENGE_TAG = "v1.0-challenge"  # IDs and labels only, never message text
+EVAL_TAG = "v1.1-dev"
+CHALLENGE_TAG = "v1.1-challenge"  # IDs and labels only, never message text
 # Together these show every case the site's story and demo need (Phase 6 prompt §16).
 CHATS = {
     "d01": "Slot change and the “alaage” follow-up",

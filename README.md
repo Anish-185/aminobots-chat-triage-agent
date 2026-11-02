@@ -6,8 +6,9 @@ hand off / refuse), the numbered rule behind the grade, and the messages it reli
 
 > Simulation only — no action is executed. Synthetic data only. Free LLMs only ($0).
 
-**Status:** v1.0 — complete demo (local). Results, limitations and ownership are in
-[ARTEFACT.md](ARTEFACT.md). Tagged prototypes: v0.1, v0.3, v1.0. The first attempt is preserved on
+**Status:** v1.1 — complete demo (local): both mandated scenarios pass (on builder-generated,
+no-longer-blind challenge chats). Results, limitations and ownership are in
+[ARTEFACT.md](ARTEFACT.md). Tagged prototypes: v0.1, v0.3, v1.0 (v1.1 is tagged by the human). The first attempt is preserved on
 the `archive/first-attempt` branch.
 
 ## Docs
@@ -19,7 +20,7 @@ the `archive/first-attempt` branch.
 - [Build plan](docs/build-plan.md): phases, request budget, risks
 - [Functional document](docs/functional.md): problem, current process, interventions, user
   journey, tech construct
-- [SPEC v2.7](docs/SPEC.md): contracts, policy, evaluation
+- [SPEC v2.8](docs/SPEC.md): contracts, policy, evaluation
 - [Policy v2](policy/policy_v2.yaml) and [prompt pack](prompts/CHANGELOG.md)
 - [Screenshots](docs/screenshots/) and the [submission checklist](docs/submission-checklist.md)
 - [Project context](docs/context/PROJECT_CONTEXT.md): decisions and the original brief

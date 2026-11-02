@@ -1,6 +1,7 @@
 """extract + llm with a mocked HTTP transport: real Instructor retry logic, no network."""
 
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -217,3 +218,20 @@ def test_model_schema_hides_slot_datetime():
 def test_user_message_uses_last_timestamp_as_now():
     later = MSGS[0].model_copy(update={"id": "m002", "ts": datetime(2026, 3, 2, 18, 5)})
     assert user_message([MSGS[0], later]).startswith("NOW: 2026-03-02 18:05\n")
+
+
+def test_each_prompt_names_a_known_output_schema():
+    from triage.extract import OUTPUT_MODELS, PROMPTS
+
+    for f in sorted(PROMPTS.glob("v*.md")):
+        assert load_prompt(int(f.stem[1:]))[0]["output_schema"] in OUTPUT_MODELS, f.name
+
+
+def test_v4_requires_explicit_ask_and_v3_schema_never_shows_code_fields():
+    from triage.schemas import ExtractionResult, ExtractionResultV4
+
+    v3 = json.dumps(ExtractionResult.model_json_schema())
+    assert not {"explicit_ask", "implicit_request", "slot_note"} & set(re.findall(r"\w+", v3))
+    v4 = ExtractionResultV4.model_json_schema()["$defs"]["CandidateV4"]
+    assert "explicit_ask" in v4["required"]
+    assert "explicit_ask" in load_prompt(4)[1]

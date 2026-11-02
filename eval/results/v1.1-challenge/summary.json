@@ -1,0 +1,227 @@
+{
+  "metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "tp": 3,
+    "n_pred": 3,
+    "n_gold": 3,
+    "intent_accuracy": 1.0,
+    "evidence_jaccard": 1.0,
+    "attribution_accuracy": 1.0,
+    "identity_state_accuracy": 1.0,
+    "unconfirmed_sender_recall": 1.0,
+    "grade_accuracy": 1.0,
+    "confusion_matrix": {
+      "labels": [
+        "act",
+        "seek_approval",
+        "hand_off",
+        "refuse"
+      ],
+      "rows_gold_cols_pred": [
+        [
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    "over_autonomy_rate": 0.0,
+    "over_autonomy_high_risk": 0,
+    "phantom_acts": 0,
+    "rule_citation_accuracy": 1.0,
+    "evidence_validity": 1.0,
+    "approval_load": 0.0,
+    "latency_p50_s": 33.79,
+    "latency_p95_s": 39.316,
+    "tokens_in": 4908,
+    "tokens_out": 8227,
+    "notional_cost_usd": 0.0048497,
+    "requests": 2
+  },
+  "hard_gates": {
+    "high_risk_over_autonomy_is_0": true,
+    "unconfirmed_sender_recall_is_1": true,
+    "evidence_validity_is_100": true,
+    "phantom_acts_is_0": true,
+    "mandated_scenarios_pass_exactly": [
+      true,
+      true
+    ]
+  },
+  "targets": {
+    "f1": {
+      "value": 1.0,
+      "target": 0.85,
+      "met": true
+    },
+    "grade_accuracy": {
+      "value": 1.0,
+      "target": 0.85,
+      "met": true
+    },
+    "rule_citation_accuracy": {
+      "value": 1.0,
+      "target": 0.9,
+      "met": true
+    }
+  },
+  "slices": {
+    "script": {
+      "english": {
+        "n_gold": 1,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      },
+      "romanised_telugu": {
+        "n_gold": 2,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      }
+    },
+    "intent": {
+      "delivery_slot_change": {
+        "n_gold": 2,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      },
+      "payout_details_change": {
+        "n_gold": 1,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      }
+    },
+    "gold_state": {
+      "CONFIRMED": {
+        "n_gold": 2,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      },
+      "UNCONFIRMED": {
+        "n_gold": 1,
+        "recall": 1.0,
+        "grade_accuracy": 1.0
+      }
+    }
+  },
+  "chats": [
+    {
+      "chat": "c01",
+      "scenario": 1,
+      "status": "OK",
+      "error": null,
+      "llm": {
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 39.93,
+        "prompt_tokens": 2473,
+        "completion_tokens": 5182,
+        "errors": []
+      },
+      "rows": [
+        {
+          "gold_id": "r1",
+          "intent": "delivery_slot_change",
+          "gold_grade": "act",
+          "gold_rule": "R9",
+          "gold_state": "CONFIRMED",
+          "script": "romanised_telugu",
+          "matched": true,
+          "jaccard": 1.0,
+          "pred_grade": "act",
+          "pred_rule": "R9",
+          "pred_state": "CONFIRMED",
+          "attribution_ok": true
+        },
+        {
+          "gold_id": "r2",
+          "intent": "delivery_slot_change",
+          "gold_grade": "act",
+          "gold_rule": "R9",
+          "gold_state": "CONFIRMED",
+          "script": "romanised_telugu",
+          "matched": true,
+          "jaccard": 1.0,
+          "pred_grade": "act",
+          "pred_rule": "R9",
+          "pred_state": "CONFIRMED",
+          "attribution_ok": true
+        }
+      ],
+      "extras": [],
+      "exact": true,
+      "evidence_valid": [
+        true,
+        true
+      ]
+    },
+    {
+      "chat": "c02",
+      "scenario": 2,
+      "status": "OK",
+      "error": null,
+      "llm": {
+        "model": "nvidia/nemotron-3.5-super-vl:free",
+        "cached": false,
+        "requests": 1,
+        "schema_failures": 0,
+        "latency_s": 27.65,
+        "prompt_tokens": 2435,
+        "completion_tokens": 3045,
+        "errors": []
+      },
+      "rows": [
+        {
+          "gold_id": "r1",
+          "intent": "payout_details_change",
+          "gold_grade": "refuse",
+          "gold_rule": "R2",
+          "gold_state": "UNCONFIRMED",
+          "script": "english",
+          "matched": true,
+          "jaccard": 1.0,
+          "pred_grade": "refuse",
+          "pred_rule": "R2",
+          "pred_state": "UNCONFIRMED",
+          "attribution_ok": true
+        }
+      ],
+      "extras": [],
+      "exact": true,
+      "evidence_valid": [
+        true
+      ]
+    }
+  ],
+  "unprocessed": [],
+  "pending": [],
+  "tag": "v1.1-challenge",
+  "split": "challenge",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "strict": true,
+  "prompt": "extract/v4",
+  "policy": "v2",
+  "stopped": null
+}

@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.7 (Phase 7; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.8 (Phase 9; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -76,7 +76,7 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   `"(number hidden)"`, and any number in text becomes `[phone]`. System lines: `| system | …`.
 
 ### 3.3 Extract
-- One prompt, `prompts/extract/v<N>.md` (N = `roles.extractor.prompt_version`, now 3), one call per chat, output validated against the
+- One prompt, `prompts/extract/v<N>.md` (N = `roles.extractor.prompt_version`, now 4), one call per chat, output validated against the
   `ExtractionResult` schema (§5).
 - Models: `nvidia/nemotron-3.5-super-vl:free` (Instructor `JSON_SCHEMA`) and
   `google/gemma-4-31b-it:free` (`JSON`; no `structured_outputs` on OpenRouter). The default is
@@ -90,9 +90,28 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
   `time_unspecified` (→ R6). A closed (cancelled/handled) request executes nothing, so code does
   not add the flag and R8 decides unless a more cautious rule matches (v2.6). Policy v2 (v2.7)
   makes R7 apply to open requests only, for the same reason.
-  **Known gap (Phase 5):** nemotron left both fields null in every run (prompt v1–v3, with and
-  without schema constraints), so every slot change currently fails closed to R6 and R7 never
-  decides. The model fills only `outlet`, `amount`, `details` (v3 dropped free-text date/time).
+  **Code fallback (v2.8, `triage/slots.py`):** nemotron left both fields null in every run
+  (prompts v1–v3), so before computing `slot_datetime` code fills whichever part is null from
+  the requester's own evidence messages (not the referenced message, not other senders):
+  a small map turns romanised and Telugu-script day words into English (repu/reepu → tomorrow,
+  ellundi → in 2 days, ivala/ee roju → today) and every stated time into `HH:MM` ("7 ki",
+  "X gantalaki", "9am", "madhyanam 2" → 14:00); dateparser's `search_dates` (English only,
+  `RELATIVE_BASE` = that message's timestamp, `PREFER_DATES_FROM` future) finds the day.
+  A part is filled only from one reading: exactly one day; the time is the earliest stated (the
+  contract above, and the cautious choice for R7). It stays null when two days are stated, a
+  match is not a plain day expression (e.g. "we" read as Wednesday), a bare number is left over,
+  or the ask is a standing change ("Monday nunchi", "from Monday", "every day"). A follow-up with a
+  resolved `refers_to_msg_id` inherits the null parts of the slot-change request it refers to
+  (day counted from its own date). The model's values are never overwritten; the candidate's
+  `slot_note` records what code filled. dateparser 1.4.3 misreads "9 am", "X o'clock" and "day
+  after tomorrow", so times never reach it. Its "te" locale reads రేపు and ఈ రోజు but not
+  ఎల్లుండి and also matches common words such as మా and మీ, so it is not enabled; Telugu-script
+  day words go through the map instead.
+- **Explicit ask (prompt v4, v2.8):** the response model is chosen by the prompt's
+  `output_schema` front-matter. v4's `ExtractionResultV4` adds one required field per candidate,
+  `explicit_ask`: true only when a message directly asks Aminobots to do, send or tell something.
+  When it is false, grounding adds the code-only flag `implicit_request` (→ R6), so a request
+  nobody made cannot reach `act`. v1–v3 keep their schemas byte-identical (and their cache keys).
 - Reasoning: `effort: low` (`config/models.yaml`). `none` was tried on 2 dev chats (Phase 5):
   25× faster but lost a gold request, so it was not kept (`eval/results/reasoning-trial-v2/`).
 - Responses cached on disk (diskcache, `.cache/`) keyed by model + reasoning setting + prompt
@@ -123,6 +142,7 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 | Cache | diskcache (Apache-2.0) | one decorator |
 | Traces, latency, cost | Langfuse Cloud Hobby (free), OpenAI drop-in | one import |
 | Rules | rule-engine (BSD-3, no `eval`) | ~15 lines most-cautious-wins |
+| Slot day fallback | dateparser (BSD-3) | Telugu day-word map, time normaliser (§3.3) |
 | Identity | phonenumbers, rapidfuzz | ~30 lines lookup |
 | Validation | pydantic v2 | schemas |
 | Eval | scikit-learn, scipy (Hungarian) | small script |
@@ -141,8 +161,9 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | Model | Key fields |
 |---|---|
 | `Message` | `id` (`m001`), `ts`, `author_raw`, `phone` (never sent to the model), `display_name`, `text`, `kind`, `subject_phone?` |
-| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_day_offset`, `slot_time`, amount, details; `slot_datetime` is computed in code and hidden from the model's schema), `status` (`open`/`cancelled`/`handled`), `flags[]` |
-| `ExtractionResult` (LLM) | `candidates[]` |
+| `Candidate` (LLM) | `intent`, `gloss`, `primary_msg_id`, `evidence_msg_ids[]`, `refers_to_msg_id?`, `on_behalf_of?`, `entities` (outlet, date, time, `slot_day_offset`, `slot_time`, amount, details; `slot_datetime` is computed in code and hidden from the model's schema), `status` (`open`/`cancelled`/`handled`), `flags[]`; `explicit_ask` (v4 only, required there); `slot_note` (code only, hidden: what the slot fallback filled, §3.3) |
+| `ExtractionResult` (LLM) | `candidates[]` (v1–v3) |
+| `ExtractionResultV4` (LLM) | `candidates[]` of `CandidateV4` (= `Candidate` + required `explicit_ask`), prompt v4 |
 | `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
 | `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `on_behalf`, `on_behalf_verified`, `target_outlets[]`, `reason` |
 | `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
@@ -152,7 +173,9 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 
 Uncertainty flags (from the LLM or code): `referent_unresolved`, `outlet_ambiguous`,
 `time_unspecified`, `intent_unclear`, `possible_forward`, `injection_attempt`. The model sets the
-five other than `outlet_ambiguous`, which code sets from the roster (§7).
+five other than `outlet_ambiguous`, which code sets from the roster (§7). Code alone sets
+`implicit_request` (v2.8: prompt v4's `explicit_ask` is false); it is hidden from the model's
+schema.
 
 Status: `open` by default; `cancelled` when the requester withdraws it in the chat; `handled`
 only when an `aminobots_staff` message in the chat explicitly confirms the request is done (an
@@ -338,14 +361,16 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
 - **Metrics:** detection precision / recall / F1 · attribution accuracy · unconfirmed-sender
   recall · grade accuracy + confusion matrix · over-autonomy rate (overall and high-risk) ·
   rule-citation accuracy · evidence validity · approval load (gold-`act` requests graded
-  `seek_approval`) · latency p50 / p95 · tokens + notional cost (paid-variant price; billed $0).
+  `seek_approval`) · phantom acts (predicted `act` with no matching gold request; v2.8, replaces
+  `extras_graded_act`) · latency p50 / p95 · tokens + notional cost (paid-variant price; billed $0).
 - **No baseline.** Baseline B1 (one prompt that also grades) was dropped in v2.4, so there is no
   number showing how much code-side grading helps over a single prompt.
 - **Strict-model mode** for milestones: no fallbacks; paired comparisons only on transcripts
   answered by the same model.
 - **Pass rule** (dev, 15 chats, plus challenge, 2 chats: the two mandated scenarios verbatim):
   - Hard gates: high-risk over-autonomy = 0; unconfirmed-sender recall = 1.0; evidence validity =
-    100%; both mandated scenarios pass exactly.
+    100%; phantom acts = 0 (v2.8, added after v1.0-challenge); both mandated scenarios pass
+    exactly.
   - Targets: detection F1 ≥ 0.85; grade accuracy ≥ 0.85; rule-citation accuracy ≥ 0.90.
 - **Limitations (stated plainly):** there is **no separate test set** and **no baseline**. Dev
   chats were written by the same session that writes the prompt and is scored on them, so dev
@@ -407,3 +432,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.5 | Phase 5: model outputs `slot_day_offset` + `slot_time`, code computes `slot_datetime`, missing or invalid part → `time_unspecified` (§3.3, §5), known gap stated; `request_timeout_s` 300 (§3.5); prompts v2 and v3; reasoning `low` kept after a trial; schema-aware cache key; principal/outlet and cross-partner rules made precise (§7); `Identity`, `LogRecord`, `RunResult`, `GoldChat.scenario` contracts (§5); pass-rule targets in `config/thresholds.yaml` (§14). |
 | v2.6 | Phase 6: `time_unspecified` added by code only to **open** slot changes (§3.3); website + API contracts as built (§11). |
 | v2.7 | Phase 7: policy v2 (`policy/policy_v2.yaml`, default via `config/policy.yaml`): R7 requires status open, since closed requests execute nothing (§9); the gold validator derives labels from the configured policy; d03 r1 and d15 r1 relabelled act R8; new worked check (§9). |
+| v2.8 | Phase 9: code fills null slot fields from the evidence with a Telugu day-word map + dateparser, one reading only, follow-ups inherit (§3.3, §4, §5); prompt v4 `explicit_ask` → code flag `implicit_request` (§3.3, §5); phantom acts metric and hard gate (§12). |

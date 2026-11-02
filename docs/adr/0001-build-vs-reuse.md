@@ -15,6 +15,7 @@ rules file, roster and thin glue (SPEC §4). Licences read from PyPI; versions f
 | Eval | scikit-learn · scipy | BSD-3 · BSD-3 | 1.9.1 · 1.18.1 (1.17.x on 3.11) |
 | API / server | fastapi · uvicorn | MIT · BSD-3 | 0.162.0 · 0.54.0 |
 | CLI | typer | MIT | 0.27.3 |
+| Slot day fallback (Phase 9) | dateparser | BSD-3-Clause | 1.4.3 |
 
 **Rejected:** own policy evaluator (rule-engine) · own trace store (Langfuse) · Postgres/Neon/
 SQLAlchemy (JSONL is enough) · LLM data generator (hand-written chats) · Streamlit (website wanted)
