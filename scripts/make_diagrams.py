@@ -267,7 +267,7 @@ ARCHITECTURE = Diagram(
             220,
             kind="model",
         ),
-        Box("ground", "ground\ndrop invalid message IDs", 820, 160),
+        Box("ground", "ground\ndrop invalid IDs, fill slot", 820, 160),
         Box("identity", "identity\nphonenumbers + rapidfuzz", 820, 320),
         Box("policy", "policy\nrule-engine, most cautious wins", 560, 320, 220),
         Box("route", "route\nsimulated actions only", 300, 320),
@@ -357,7 +357,7 @@ WORKFLOW = Diagram(
             64,
             "fail",
         ),
-        Box("ground", "Ground: drop candidates\nwith unknown message IDs", 260, 272, 240, 56),
+        Box("ground", "Ground: drop unknown IDs,\nfill null slot fields", 260, 272, 240, 56),
         Box("rej", "Logged as\nrejected hallucination", 20, 272, 190, 56, "store"),
         Box(
             "ident", "Identity from roster:\nCONFIRMED / AMBIGUOUS / UNCONFIRMED", 230, 358, 300, 56
