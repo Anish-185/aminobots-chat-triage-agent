@@ -1,0 +1,29 @@
+{
+  "chat_id": "c02",
+  "partner": "P2",
+  "scenario": 2,
+  "source": {
+    "author": "Claude Code",
+    "method": "generated from the brief's scenario text; NOT independent of the system's builder",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": null
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "payout_details_change",
+      "gloss": "A new, unknown number asks to change the bank account on file before today's payout",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": ["m008", "m009"],
+      "requester_phone": "+915555010051",
+      "identity_state": "UNCONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {"authorised": false, "on_behalf": false, "on_behalf_verified": false, "slot_datetime": null},
+      "grade": "refuse",
+      "rule_id": "R2"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Mandated scenario 2. The number first appears at m007 (joined) and is not in the roster. Policy v2: refuse R2 (R1, R3, R4, R5 also match)."
+}

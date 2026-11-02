@@ -26,13 +26,13 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 | Deployed system at a public URL | [build plan → deployment option](build-plan.md#deployment-option) | ⚠️ deliberate: local only; deployment option in build plan (team decision for this submission) |
 | Step-by-step inspection of any input | website drawer + Try your own ([screenshots](screenshots/)) | ✅ locally |
 | Prompt pack, versioned | [prompts/](../prompts/CHANGELOG.md) | ✅ extract v1–v3 + CHANGELOG |
-| Evaluation set | [data/dev/](../data/dev/README.md) (15 chats + gold) | ⚠️ the 2 human-written challenge chats do not exist yet |
+| Evaluation set | [data/dev/](../data/dev/README.md) (15 chats + gold) | ⚠️ 2 challenge chats (c01, c02) now exist, but Claude Code generated them from the brief, so they are not independent |
 | Evaluation code | [eval/run_eval.py](../eval/run_eval.py), [scripts/validate_gold.py](../scripts/validate_gold.py) | ✅ |
-| Committed results per prototype | [v0.1-dev](../eval/results/v0.1-dev/report.md), [v0.1.1-dev](../eval/results/v0.1.1-dev/report.md), [v1.0-dev](../eval/results/v1.0-dev/report.md), bake-offs | ✅ dev; ⚠️ no challenge results |
+| Committed results per prototype | [v0.1-dev](../eval/results/v0.1-dev/report.md), [v0.1.1-dev](../eval/results/v0.1.1-dev/report.md), [v1.0-dev](../eval/results/v1.0-dev/report.md), [v1.0-challenge](../eval/results/v1.0-challenge/report.md), bake-offs | ✅ |
 | Observability view (problem metrics + accuracy, latency, cost) | website Results section; [eval reports](../eval/results/v1.0-dev/report.md) | ⚠️ local metrics page only; Langfuse traces off (keys empty) |
 | Code or prompts that generated the data | [phase-03-data prompt](build-prompts/phase-03-data.md), [data/dev/README.md](../data/dev/README.md) | ✅ hand-written by Claude Code, no generator script |
 | Data provenance and licence | [data/LICENSE](../data/LICENSE), [ARTEFACT §c](../ARTEFACT.md#c-data-provenance) | ✅ CC BY 4.0 |
 | Coding-agent setup | [CLAUDE.md](../CLAUDE.md), [.claude/](../.claude/), [SPEC](SPEC.md), [build prompts](build-prompts/README.md) | ✅ |
 | No secrets in the repo | [.env.example](../.env.example), gitleaks pre-commit hook | ✅ |
-| Hard gate: mandated scenarios pass exactly | `run_eval --split challenge` | ⚠️ not run: challenge set empty |
-| Telugu reviewed by a native speaker | `telugu_reviewed_by` in each gold file | ⚠️ null in all 15 dev chats |
+| Hard gate: mandated scenarios pass exactly | [v1.0-challenge](../eval/results/v1.0-challenge/report.md) | ⚠️ fails: scenario 2 passes exactly; scenario 1 graded both slot changes R6 instead of R9 and stamped `act` on a noise message ([ARTEFACT §e](../ARTEFACT.md#e-evaluation-results)) |
+| Telugu reviewed by a native speaker | `telugu_reviewed_by` in each gold file | ⚠️ null in all 15 dev chats and both challenge chats |
