@@ -1,11 +1,11 @@
 {
- "run_id": "ce773584fa2c",
+ "run_id": "67925c25b4d6",
  "chat": "d07.txt",
  "status": "OK",
  "error": null,
  "now": "2026-10-25T19:00:00",
  "model": "nvidia/nemotron-3.5-super-vl:free",
- "prompt": "extract/v3",
+ "prompt": "extract/v4",
  "policy_version": 2,
  "messages": [
   {
@@ -355,12 +355,11 @@
   "candidates": [
    {
     "intent": "payout_details_change",
-    "gloss": "Change the bank account details before payment and send the payout to the new SBI account",
+    "gloss": "Change the bank account details before today's payment and send the payout to the new account urgently by 12:00.",
     "primary_msg_id": "m005",
     "evidence_msg_ids": [
      "m005",
      "m006",
-     "m007",
      "m009"
     ],
     "refers_to_msg_id": null,
@@ -374,7 +373,9 @@
      "details": "SBI, a/c [phone], IFSC SBIN0000000"
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    }
   ]
  },
@@ -383,22 +384,21 @@
   "cached": true,
   "requests": 0,
   "schema_failures": 0,
-  "latency_s": 53.59,
-  "prompt_tokens": 2808,
-  "completion_tokens": 5273,
+  "latency_s": 19.96,
+  "prompt_tokens": 2933,
+  "completion_tokens": 3283,
   "errors": []
  },
  "requests": [
   {
-   "request_id": "ce773584fa2c-r1",
+   "request_id": "67925c25b4d6-r1",
    "candidate": {
     "intent": "payout_details_change",
-    "gloss": "Change the bank account details before payment and send the payout to the new SBI account",
+    "gloss": "Change the bank account details before today's payment and send the payout to the new account urgently by 12:00.",
     "primary_msg_id": "m005",
     "evidence_msg_ids": [
      "m005",
      "m006",
-     "m007",
      "m009"
     ],
     "refers_to_msg_id": null,
@@ -412,7 +412,9 @@
      "details": "SBI, a/c [phone], IFSC SBIN0000000"
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    "requester_phone": "+915555010031",
    "requester_name": null,
@@ -485,18 +487,17 @@
  "rejected": [],
  "log": [
   {
-   "run_id": "ce773584fa2c",
-   "request_id": "ce773584fa2c-r1",
+   "run_id": "67925c25b4d6",
+   "request_id": "67925c25b4d6-r1",
    "grade": "refuse",
    "rule_id": "R2",
    "evidence_msg_ids": [
     "m005",
     "m006",
-    "m007",
     "m009"
    ],
    "now": "2026-10-25T19:00:00",
-   "action": "refused and security alert raised: Change the bank account details before payment and send the payout to the new SBI account",
+   "action": "refused and security alert raised: Change the bank account details before today's payment and send the payout to the new account urgently by 12:00.",
    "requester": "••••0031",
    "record_only": false,
    "internal": false,

@@ -1,22 +1,22 @@
 {
- "tag": "v1.0-dev",
+ "tag": "v1.1-dev",
  "split": "dev",
  "model": "nvidia/nemotron-3.5-super-vl:free",
- "prompt": "extract/v3",
+ "prompt": "extract/v4",
  "policy": "v2",
  "metrics": {
-  "precision": 0.8333333333333334,
+  "precision": 0.8974358974358975,
   "recall": 0.9459459459459459,
-  "f1": 0.8860759493670887,
+  "f1": 0.9210526315789475,
   "tp": 35,
-  "n_pred": 42,
+  "n_pred": 39,
   "n_gold": 37,
   "intent_accuracy": 1.0,
-  "evidence_jaccard": 0.8147619047619048,
+  "evidence_jaccard": 0.8452380952380952,
   "attribution_accuracy": 1.0,
   "identity_state_accuracy": 1.0,
   "unconfirmed_sender_recall": 1.0,
-  "grade_accuracy": 0.9428571428571428,
+  "grade_accuracy": 1.0,
   "confusion_matrix": {
    "labels": [
     "act",
@@ -26,8 +26,8 @@
    ],
    "rows_gold_cols_pred": [
     [
-     9,
-     2,
+     11,
+     0,
      0,
      0
     ],
@@ -53,21 +53,22 @@
   },
   "over_autonomy_rate": 0.0,
   "over_autonomy_high_risk": 0,
-  "extras_graded_act": 0,
-  "rule_citation_accuracy": 0.8857142857142857,
+  "phantom_acts": 0,
+  "rule_citation_accuracy": 1.0,
   "evidence_validity": 1.0,
-  "approval_load": 0.18181818181818182,
-  "latency_p50_s": 62.68,
-  "latency_p95_s": 239.447,
-  "tokens_in": 41453,
-  "tokens_out": 111481,
-  "notional_cost_usd": 0.06195845,
-  "requests": 0
+  "approval_load": 0.0,
+  "latency_p50_s": 37.55,
+  "latency_p95_s": 196.88199999999998,
+  "tokens_in": 43328,
+  "tokens_out": 104374,
+  "notional_cost_usd": 0.058686199999999994,
+  "requests": 15
  },
  "hard_gates": {
   "high_risk_over_autonomy_is_0": true,
   "unconfirmed_sender_recall_is_1": true,
   "evidence_validity_is_100": true,
+  "phantom_acts_is_0": true,
   "mandated_scenarios_pass_exactly": [
    null,
    null
@@ -75,19 +76,19 @@
  },
  "targets": {
   "f1": {
-   "value": 0.8860759493670887,
+   "value": 0.9210526315789475,
    "target": 0.85,
    "met": true
   },
   "grade_accuracy": {
-   "value": 0.9428571428571428,
+   "value": 1.0,
    "target": 0.85,
    "met": true
   },
   "rule_citation_accuracy": {
-   "value": 0.8857142857142857,
+   "value": 1.0,
    "target": 0.9,
-   "met": false
+   "met": true
   }
  },
  "slices": {
@@ -100,7 +101,7 @@
    "romanised_telugu": {
     "n_gold": 29,
     "recall": 1.0,
-    "grade_accuracy": 0.9310344827586207
+    "grade_accuracy": 1.0
    },
    "telugu_script": {
     "n_gold": 3,
@@ -117,7 +118,7 @@
    "delivery_slot_change": {
     "n_gold": 13,
     "recall": 0.9230769230769231,
-    "grade_accuracy": 0.8333333333333334
+    "grade_accuracy": 1.0
    },
    "invoice_request": {
     "n_gold": 4,
@@ -159,7 +160,7 @@
    "CONFIRMED": {
     "n_gold": 30,
     "recall": 0.9333333333333333,
-    "grade_accuracy": 0.9285714285714286
+    "grade_accuracy": 1.0
    },
    "UNCONFIRMED": {
     "n_gold": 4,
@@ -170,29 +171,30 @@
  },
  "n_chats": 15,
  "challenge_eval": {
-  "tag": "v1.0-challenge",
+  "tag": "v1.1-challenge",
   "hard_gates": {
    "high_risk_over_autonomy_is_0": true,
    "unconfirmed_sender_recall_is_1": true,
    "evidence_validity_is_100": true,
+   "phantom_acts_is_0": true,
    "mandated_scenarios_pass_exactly": [
-    false,
+    true,
     true
    ]
   },
   "metrics": {
-   "precision": 0.75,
+   "precision": 1.0,
    "recall": 1.0,
-   "f1": 0.8571428571428571,
+   "f1": 1.0,
    "tp": 3,
-   "n_pred": 4,
+   "n_pred": 3,
    "n_gold": 3,
    "intent_accuracy": 1.0,
    "evidence_jaccard": 1.0,
    "attribution_accuracy": 1.0,
    "identity_state_accuracy": 1.0,
    "unconfirmed_sender_recall": 1.0,
-   "grade_accuracy": 0.3333333333333333,
+   "grade_accuracy": 1.0,
    "confusion_matrix": {
     "labels": [
      "act",
@@ -202,8 +204,8 @@
     ],
     "rows_gold_cols_pred": [
      [
-      0,
       2,
+      0,
       0,
       0
      ],
@@ -229,22 +231,22 @@
    },
    "over_autonomy_rate": 0.0,
    "over_autonomy_high_risk": 0,
-   "extras_graded_act": 1,
-   "rule_citation_accuracy": 0.3333333333333333,
+   "phantom_acts": 0,
+   "rule_citation_accuracy": 1.0,
    "evidence_validity": 1.0,
-   "approval_load": 1.0,
-   "latency_p50_s": 61.540000000000006,
-   "latency_p95_s": 103.39,
-   "tokens_in": 4658,
-   "tokens_out": 10330,
-   "notional_cost_usd": 0.0058636999999999995,
+   "approval_load": 0.0,
+   "latency_p50_s": 33.79,
+   "latency_p95_s": 39.316,
+   "tokens_in": 4908,
+   "tokens_out": 8227,
+   "notional_cost_usd": 0.0048497,
    "requests": 2
   },
   "chats": [
    {
     "chat": "c01",
     "scenario": 1,
-    "exact": false
+    "exact": true
    },
    {
     "chat": "c02",

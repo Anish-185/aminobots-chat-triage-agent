@@ -1,11 +1,11 @@
 {
- "run_id": "73f3cf6d3661",
+ "run_id": "7095bc13b54b",
  "chat": "d01.txt",
  "status": "OK",
  "error": null,
  "now": "2026-10-20T19:30:00",
  "model": "nvidia/nemotron-3.5-super-vl:free",
- "prompt": "extract/v3",
+ "prompt": "extract/v4",
  "policy_version": 2,
  "messages": [
   {
@@ -377,10 +377,9 @@
   "candidates": [
    {
     "intent": "delivery_slot_change",
-    "gloss": "Change Kukatpally delivery slot from tomorrow 7am to 9am",
+    "gloss": "Change Kukatpally delivery slot from 7am to 9am tomorrow",
     "primary_msg_id": "m011",
     "evidence_msg_ids": [
-     "m010",
      "m011"
     ],
     "refers_to_msg_id": null,
@@ -394,11 +393,13 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    {
     "intent": "delivery_slot_change",
-    "gloss": "Set same delivery time for Ravi's shop too",
+    "gloss": "Set same delivery slot change for Ravi's shop too",
     "primary_msg_id": "m016",
     "evidence_msg_ids": [
      "m016",
@@ -415,7 +416,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    {
     "intent": "invoice_request",
@@ -435,7 +438,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    }
   ]
  },
@@ -444,36 +449,35 @@
   "cached": true,
   "requests": 0,
   "schema_failures": 0,
-  "latency_s": 236.63,
-  "prompt_tokens": 2863,
-  "completion_tokens": 9793,
+  "latency_s": 43.64,
+  "prompt_tokens": 2988,
+  "completion_tokens": 6772,
   "errors": []
  },
  "requests": [
   {
-   "request_id": "73f3cf6d3661-r1",
+   "request_id": "7095bc13b54b-r1",
    "candidate": {
     "intent": "delivery_slot_change",
-    "gloss": "Change Kukatpally delivery slot from tomorrow 7am to 9am",
+    "gloss": "Change Kukatpally delivery slot from 7am to 9am tomorrow",
     "primary_msg_id": "m011",
     "evidence_msg_ids": [
-     "m010",
      "m011"
     ],
     "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
      "outlet": "Kukatpally",
-     "slot_day_offset": null,
-     "slot_time": null,
-     "slot_datetime": null,
+     "slot_day_offset": 1,
+     "slot_time": "07:00",
+     "slot_datetime": "2026-10-21T07:00:00",
      "amount": null,
      "details": null
     },
     "status": "open",
-    "flags": [
-     "time_unspecified"
-    ]
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": "code filled ['slot_day_offset', 'slot_time'] (evidence: days ['2026-10-21'], times ['07:00', '09:00'])"
    },
    "requester_phone": "+915555010003",
    "requester_name": "Lakshmi Sunrise",
@@ -495,9 +499,9 @@
     "reason": "phone is in the roster: Lakshmi Devi (self-claims and vouching in the chat never confirm a sender)"
    },
    "grade": "seek_approval",
-   "rule_id": "R6",
+   "rule_id": "R7",
    "matched_rules": [
-    "R6",
+    "R7",
     "R9"
    ],
    "rule_checks": [
@@ -523,11 +527,11 @@
     },
     {
      "rule_id": "R6",
-     "matched": true
+     "matched": false
     },
     {
      "rule_id": "R7",
-     "matched": false
+     "matched": true
     },
     {
      "rule_id": "R8",
@@ -545,10 +549,10 @@
    "internal": false
   },
   {
-   "request_id": "73f3cf6d3661-r2",
+   "request_id": "7095bc13b54b-r2",
    "candidate": {
     "intent": "delivery_slot_change",
-    "gloss": "Set same delivery time for Ravi's shop too",
+    "gloss": "Set same delivery slot change for Ravi's shop too",
     "primary_msg_id": "m016",
     "evidence_msg_ids": [
      "m016",
@@ -558,17 +562,18 @@
     "on_behalf_of": null,
     "entities": {
      "outlet": "Maa shop",
-     "slot_day_offset": null,
-     "slot_time": null,
-     "slot_datetime": null,
+     "slot_day_offset": 1,
+     "slot_time": "07:00",
+     "slot_datetime": "2026-10-21T07:00:00",
      "amount": null,
      "details": null
     },
     "status": "open",
     "flags": [
-     "time_unspecified",
      "outlet_ambiguous"
-    ]
+    ],
+    "explicit_ask": true,
+    "slot_note": "code filled ['slot_day_offset', 'slot_time'] (evidence: days [], times []; inherits from m011)"
    },
    "requester_phone": "+915555010001",
    "requester_name": "Ravi Sunrise",
@@ -595,6 +600,7 @@
    "rule_id": "R6",
    "matched_rules": [
     "R6",
+    "R7",
     "R9"
    ],
    "rule_checks": [
@@ -624,7 +630,7 @@
     },
     {
      "rule_id": "R7",
-     "matched": false
+     "matched": true
     },
     {
      "rule_id": "R8",
@@ -642,7 +648,7 @@
    "internal": false
   },
   {
-   "request_id": "73f3cf6d3661-r3",
+   "request_id": "7095bc13b54b-r3",
    "candidate": {
     "intent": "invoice_request",
     "gloss": "Send September month invoice copy for GST filing",
@@ -661,7 +667,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    "requester_phone": "+915555010004",
    "requester_name": "Padma Accounts",
@@ -738,24 +746,23 @@
  "rejected": [],
  "log": [
   {
-   "run_id": "73f3cf6d3661",
-   "request_id": "73f3cf6d3661-r1",
+   "run_id": "7095bc13b54b",
+   "request_id": "7095bc13b54b-r1",
    "grade": "seek_approval",
-   "rule_id": "R6",
+   "rule_id": "R7",
    "evidence_msg_ids": [
-    "m010",
     "m011"
    ],
    "now": "2026-10-20T19:30:00",
-   "action": "queued for human approval: Change Kukatpally delivery slot from tomorrow 7am to 9am",
+   "action": "queued for human approval: Change Kukatpally delivery slot from 7am to 9am tomorrow",
    "requester": "••••0003",
    "record_only": false,
    "internal": false,
    "simulated": true
   },
   {
-   "run_id": "73f3cf6d3661",
-   "request_id": "73f3cf6d3661-r2",
+   "run_id": "7095bc13b54b",
+   "request_id": "7095bc13b54b-r2",
    "grade": "seek_approval",
    "rule_id": "R6",
    "evidence_msg_ids": [
@@ -763,15 +770,15 @@
     "m011"
    ],
    "now": "2026-10-20T19:30:00",
-   "action": "queued for human approval: Set same delivery time for Ravi's shop too",
+   "action": "queued for human approval: Set same delivery slot change for Ravi's shop too",
    "requester": "••••0001",
    "record_only": false,
    "internal": false,
    "simulated": true
   },
   {
-   "run_id": "73f3cf6d3661",
-   "request_id": "73f3cf6d3661-r3",
+   "run_id": "7095bc13b54b",
+   "request_id": "7095bc13b54b-r3",
    "grade": "act",
    "rule_id": "R9",
    "evidence_msg_ids": [

@@ -1,11 +1,11 @@
 {
- "run_id": "44103a315bdd",
+ "run_id": "66102b815f5d",
  "chat": "d03.txt",
  "status": "OK",
  "error": null,
  "now": "2026-10-23T20:00:00",
  "model": "nvidia/nemotron-3.5-super-vl:free",
- "prompt": "extract/v3",
+ "prompt": "extract/v4",
  "policy_version": 2,
  "messages": [
   {
@@ -355,7 +355,7 @@
   "candidates": [
    {
     "intent": "delivery_slot_change",
-    "gloss": "Change today's 2 pm delivery slot to 4 pm.",
+    "gloss": "Change today's 2 pm delivery slot to 4 pm due to kitchen gas problem",
     "primary_msg_id": "m003",
     "evidence_msg_ids": [
      "m003",
@@ -364,7 +364,7 @@
     "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
-     "outlet": null,
+     "outlet": "Lakshmi Sunrise",
      "slot_day_offset": null,
      "slot_time": null,
      "slot_datetime": null,
@@ -372,11 +372,13 @@
      "details": null
     },
     "status": "cancelled",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    {
     "intent": "complaint",
-    "gloss": "Register a complaint about yesterday's damaged tomato boxes and packets.",
+    "gloss": "Register complaint about damaged tomato boxes and packets from last night's delivery",
     "primary_msg_id": "m008",
     "evidence_msg_ids": [
      "m008",
@@ -385,7 +387,7 @@
     "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
-     "outlet": null,
+     "outlet": "Ravi Sunrise",
      "slot_day_offset": null,
      "slot_time": null,
      "slot_datetime": null,
@@ -393,16 +395,18 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    {
     "intent": "complaint",
-    "gloss": "Report damaged boxes at the Ameerpet outlet too.",
+    "gloss": "Report damaged boxes at Ameerpet",
     "primary_msg_id": "m011",
     "evidence_msg_ids": [
      "m011"
     ],
-    "refers_to_msg_id": "m008",
+    "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
      "outlet": "Ameerpet",
@@ -413,14 +417,17 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": false,
+    "slot_note": null
    },
    {
     "intent": "delivery_slot_change",
-    "gloss": "Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+    "gloss": "Change tomorrow's Kukatpally 8–11 am delivery slot",
     "primary_msg_id": "m012",
     "evidence_msg_ids": [
      "m012",
+     "m013",
      "m015"
     ],
     "refers_to_msg_id": null,
@@ -434,27 +441,9 @@
      "details": null
     },
     "status": "cancelled",
-    "flags": []
-   },
-   {
-    "intent": "other",
-    "gloss": "Discuss the quality issue tomorrow.",
-    "primary_msg_id": "m028",
-    "evidence_msg_ids": [
-     "m028"
-    ],
-    "refers_to_msg_id": null,
-    "on_behalf_of": null,
-    "entities": {
-     "outlet": null,
-     "slot_day_offset": null,
-     "slot_time": null,
-     "slot_datetime": null,
-     "amount": null,
-     "details": null
-    },
-    "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    }
   ]
  },
@@ -463,17 +452,17 @@
   "cached": true,
   "requests": 0,
   "schema_failures": 0,
-  "latency_s": 246.02,
-  "prompt_tokens": 2797,
-  "completion_tokens": 16637,
+  "latency_s": 189.49,
+  "prompt_tokens": 2922,
+  "completion_tokens": 16200,
   "errors": []
  },
  "requests": [
   {
-   "request_id": "44103a315bdd-r1",
+   "request_id": "66102b815f5d-r1",
    "candidate": {
     "intent": "delivery_slot_change",
-    "gloss": "Change today's 2 pm delivery slot to 4 pm.",
+    "gloss": "Change today's 2 pm delivery slot to 4 pm due to kitchen gas problem",
     "primary_msg_id": "m003",
     "evidence_msg_ids": [
      "m003",
@@ -482,15 +471,17 @@
     "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
-     "outlet": null,
+     "outlet": "Lakshmi Sunrise",
      "slot_day_offset": null,
-     "slot_time": null,
+     "slot_time": "08:00",
      "slot_datetime": null,
      "amount": null,
      "details": null
     },
     "status": "cancelled",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": "code filled ['slot_time'] (evidence: days ['2026-10-23', '2026-10-24'], times ['14:00', '16:00', '08:00', '14:00'])"
    },
    "requester_phone": "+915555010003",
    "requester_name": "Lakshmi Sunrise",
@@ -561,10 +552,10 @@
    "internal": false
   },
   {
-   "request_id": "44103a315bdd-r2",
+   "request_id": "66102b815f5d-r2",
    "candidate": {
     "intent": "complaint",
-    "gloss": "Register a complaint about yesterday's damaged tomato boxes and packets.",
+    "gloss": "Register complaint about damaged tomato boxes and packets from last night's delivery",
     "primary_msg_id": "m008",
     "evidence_msg_ids": [
      "m008",
@@ -573,7 +564,7 @@
     "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
-     "outlet": null,
+     "outlet": "Ravi Sunrise",
      "slot_day_offset": null,
      "slot_time": null,
      "slot_datetime": null,
@@ -581,7 +572,9 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    "requester_phone": "+915555010001",
    "requester_name": "Ravi Sunrise",
@@ -654,15 +647,15 @@
    "internal": false
   },
   {
-   "request_id": "44103a315bdd-r3",
+   "request_id": "66102b815f5d-r3",
    "candidate": {
     "intent": "complaint",
-    "gloss": "Report damaged boxes at the Ameerpet outlet too.",
+    "gloss": "Report damaged boxes at Ameerpet",
     "primary_msg_id": "m011",
     "evidence_msg_ids": [
      "m011"
     ],
-    "refers_to_msg_id": "m008",
+    "refers_to_msg_id": null,
     "on_behalf_of": null,
     "entities": {
      "outlet": "Ameerpet",
@@ -673,7 +666,11 @@
      "details": null
     },
     "status": "open",
-    "flags": []
+    "flags": [
+     "implicit_request"
+    ],
+    "explicit_ask": false,
+    "slot_note": null
    },
    "requester_phone": "+915555010002",
    "requester_name": "Suresh Reddy Sunrise",
@@ -697,7 +694,8 @@
    "grade": "hand_off",
    "rule_id": "R3",
    "matched_rules": [
-    "R3"
+    "R3",
+    "R6"
    ],
    "rule_checks": [
     {
@@ -722,7 +720,7 @@
     },
     {
      "rule_id": "R6",
-     "matched": false
+     "matched": true
     },
     {
      "rule_id": "R7",
@@ -744,13 +742,14 @@
    "internal": false
   },
   {
-   "request_id": "44103a315bdd-r4",
+   "request_id": "66102b815f5d-r4",
    "candidate": {
     "intent": "delivery_slot_change",
-    "gloss": "Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+    "gloss": "Change tomorrow's Kukatpally 8–11 am delivery slot",
     "primary_msg_id": "m012",
     "evidence_msg_ids": [
      "m012",
+     "m013",
      "m015"
     ],
     "refers_to_msg_id": null,
@@ -764,7 +763,9 @@
      "details": null
     },
     "status": "cancelled",
-    "flags": []
+    "flags": [],
+    "explicit_ask": true,
+    "slot_note": null
    },
    "requester_phone": "+915555010003",
    "requester_name": "Lakshmi Sunrise",
@@ -833,106 +834,14 @@
     }
    ],
    "internal": false
-  },
-  {
-   "request_id": "44103a315bdd-r5",
-   "candidate": {
-    "intent": "other",
-    "gloss": "Discuss the quality issue tomorrow.",
-    "primary_msg_id": "m028",
-    "evidence_msg_ids": [
-     "m028"
-    ],
-    "refers_to_msg_id": null,
-    "on_behalf_of": null,
-    "entities": {
-     "outlet": null,
-     "slot_day_offset": null,
-     "slot_time": null,
-     "slot_datetime": null,
-     "amount": null,
-     "details": null
-    },
-    "status": "open",
-    "flags": []
-   },
-   "requester_phone": "+915555010001",
-   "requester_name": "Ravi Sunrise",
-   "identity": {
-    "state": "CONFIRMED",
-    "contact_ids": [
-     "c01"
-    ],
-    "role": "owner",
-    "outlets": [
-     "O1",
-     "O2"
-    ],
-    "authorised": true,
-    "on_behalf": false,
-    "on_behalf_verified": false,
-    "target_outlets": [
-     "O1",
-     "O2"
-    ],
-    "reason": "phone is in the roster: Ravi Kumar (self-claims and vouching in the chat never confirm a sender)"
-   },
-   "grade": "hand_off",
-   "rule_id": "R3",
-   "matched_rules": [
-    "R3"
-   ],
-   "rule_checks": [
-    {
-     "rule_id": "R1",
-     "matched": false
-    },
-    {
-     "rule_id": "R2",
-     "matched": false
-    },
-    {
-     "rule_id": "R3",
-     "matched": true
-    },
-    {
-     "rule_id": "R4",
-     "matched": false
-    },
-    {
-     "rule_id": "R5",
-     "matched": false
-    },
-    {
-     "rule_id": "R6",
-     "matched": false
-    },
-    {
-     "rule_id": "R7",
-     "matched": false
-    },
-    {
-     "rule_id": "R8",
-     "matched": false
-    },
-    {
-     "rule_id": "R9",
-     "matched": false
-    },
-    {
-     "rule_id": "R10",
-     "matched": false
-    }
-   ],
-   "internal": false
   }
  ],
  "internal_requests": [],
  "rejected": [],
  "log": [
   {
-   "run_id": "44103a315bdd",
-   "request_id": "44103a315bdd-r1",
+   "run_id": "66102b815f5d",
+   "request_id": "66102b815f5d-r1",
    "grade": "act",
    "rule_id": "R8",
    "evidence_msg_ids": [
@@ -940,15 +849,15 @@
     "m015"
    ],
    "now": "2026-10-23T20:00:00",
-   "action": "record only (request cancelled): Change today's 2 pm delivery slot to 4 pm.",
+   "action": "record only (request cancelled): Change today's 2 pm delivery slot to 4 pm due to kitchen gas problem",
    "requester": "••••0003",
    "record_only": true,
    "internal": false,
    "simulated": true
   },
   {
-   "run_id": "44103a315bdd",
-   "request_id": "44103a315bdd-r2",
+   "run_id": "66102b815f5d",
+   "request_id": "66102b815f5d-r2",
    "grade": "hand_off",
    "rule_id": "R3",
    "evidence_msg_ids": [
@@ -956,55 +865,41 @@
     "m009"
    ],
    "now": "2026-10-23T20:00:00",
-   "action": "handed to the team queue: Register a complaint about yesterday's damaged tomato boxes and packets.",
+   "action": "handed to the team queue: Register complaint about damaged tomato boxes and packets from last night's delivery",
    "requester": "••••0001",
    "record_only": false,
    "internal": false,
    "simulated": true
   },
   {
-   "run_id": "44103a315bdd",
-   "request_id": "44103a315bdd-r3",
+   "run_id": "66102b815f5d",
+   "request_id": "66102b815f5d-r3",
    "grade": "hand_off",
    "rule_id": "R3",
    "evidence_msg_ids": [
     "m011"
    ],
    "now": "2026-10-23T20:00:00",
-   "action": "handed to the team queue: Report damaged boxes at the Ameerpet outlet too.",
+   "action": "handed to the team queue: Report damaged boxes at Ameerpet",
    "requester": "••••0002",
    "record_only": false,
    "internal": false,
    "simulated": true
   },
   {
-   "run_id": "44103a315bdd",
-   "request_id": "44103a315bdd-r4",
+   "run_id": "66102b815f5d",
+   "request_id": "66102b815f5d-r4",
    "grade": "act",
    "rule_id": "R8",
    "evidence_msg_ids": [
     "m012",
+    "m013",
     "m015"
    ],
    "now": "2026-10-23T20:00:00",
-   "action": "record only (request cancelled): Change tomorrow's Kukatpally delivery slot from 8 am to 11 am.",
+   "action": "record only (request cancelled): Change tomorrow's Kukatpally 8–11 am delivery slot",
    "requester": "••••0003",
    "record_only": true,
-   "internal": false,
-   "simulated": true
-  },
-  {
-   "run_id": "44103a315bdd",
-   "request_id": "44103a315bdd-r5",
-   "grade": "hand_off",
-   "rule_id": "R3",
-   "evidence_msg_ids": [
-    "m028"
-   ],
-   "now": "2026-10-23T20:00:00",
-   "action": "handed to the team queue: Discuss the quality issue tomorrow.",
-   "requester": "••••0001",
-   "record_only": false,
    "internal": false,
    "simulated": true
   }
