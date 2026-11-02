@@ -53,6 +53,7 @@ def test_perfect_predictions_pass_everything():
     assert m["unconfirmed_sender_recall"] == 1.0 and m["over_autonomy_rate"] == 0.0
     gates = s["hard_gates"]
     assert gates["high_risk_over_autonomy_is_0"] and gates["evidence_validity_is_100"]
+    assert gates["phantom_acts_is_0"]
     assert all(c["exact"] for c in s["chats"])
 
 
@@ -98,3 +99,18 @@ def test_only_run_eval_mentions_the_challenge_folder():
         if '"challenge"' in p.read_text() or "data/challenge" in p.read_text()
     ]
     assert set(hits) <= {"eval/run_eval.py", "scripts/guard_eval_data.py"}, hits
+
+
+def test_phantom_act_fails_the_gate():
+    """An act on a request nobody made (no matching gold) is a phantom act (Phase 9 gate)."""
+    gold, msgs = _load("d01")
+    phantom = _as_pred(gold.requests[0], "act").model_copy(deep=True)
+    phantom.candidate.intent, phantom.candidate.primary_msg_id = "invoice_request", "m001"
+    phantom.candidate.evidence_msg_ids = ["m001"]
+    preds = [_as_pred(g) for g in gold.requests] + [phantom]
+    s = summarise([evaluate_chat(gold, _res(preds), msgs, 0.5)], 0.5)
+    assert s["metrics"]["phantom_acts"] == 1 and not s["hard_gates"]["phantom_acts_is_0"]
+    seek = phantom.model_copy(update={"grade": "seek_approval"})
+    preds[-1] = seek
+    s = summarise([evaluate_chat(gold, _res(preds), msgs, 0.5)], 0.5)
+    assert s["metrics"]["phantom_acts"] == 0 and s["hard_gates"]["phantom_acts_is_0"]
