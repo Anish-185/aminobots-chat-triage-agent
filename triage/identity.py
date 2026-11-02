@@ -119,3 +119,16 @@ def identify(
         reason=reason,
     )
     return identity, flags, internal
+
+
+def team(ident: Identity, roster: Roster) -> str | None:
+    """Audit label (SPEC §10): the confirmed or ambiguous sender's partner, "Aminobots" for staff.
+
+    None when unconfirmed (a name match is not identity) or when the contacts span partners.
+    """
+    if ident.state == "UNCONFIRMED":
+        return None
+    partners = {p.id: p.name for p in roster.partners}
+    contacts = {c.id: c for c in roster.contacts}
+    teams = {partners.get(contacts[i].partner or "", "Aminobots") for i in ident.contact_ids}
+    return teams.pop() if len(teams) == 1 else None

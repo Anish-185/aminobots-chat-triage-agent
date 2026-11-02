@@ -161,6 +161,8 @@ class LogRecord(_Model):
     requester: str | None = None  # phone masked to the last 4 digits
     record_only: bool = False  # R8: cancelled / already handled
     internal: bool = False  # aminobots_staff request (A6)
+    identity_state: IdentityState | None = None  # None only for an UNPROCESSED hand-off
+    team: str | None = None  # requester's partner from the roster, "Aminobots" for staff (audit)
     simulated: Literal[True] = True
 
 

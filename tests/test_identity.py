@@ -7,10 +7,10 @@ import pytest
 import yaml
 
 from triage.config import load_thresholds
-from triage.identity import identify
+from triage.identity import identify, team
 from triage.parse import parse_chat
 from triage.policy import load_policy
-from triage.schemas import Candidate, GoldChat, Role, Roster
+from triage.schemas import Candidate, GoldChat, Identity, Role, Roster
 
 ROOT = Path(__file__).resolve().parent.parent
 DEV, WORLD = ROOT / "data" / "dev", ROOT / "data" / "world"
@@ -101,3 +101,15 @@ def test_shared_phone_is_ambiguous_and_authorised_only_if_all_are():
     refund, _, _ = _identify("d05", "m006", "refund_request")  # staff may not refund
     assert slot.state == refund.state == "AMBIGUOUS"
     assert slot.authorised and not refund.authorised
+
+
+def _ident(state: str, *contact_ids: str) -> Identity:
+    return Identity(state=state, contact_ids=list(contact_ids), reason="r")
+
+
+def test_team_is_the_roster_partner_and_never_from_a_name_match():
+    assert team(_ident("CONFIRMED", "c03"), ROSTER) == "Sunrise Foods"
+    assert team(_ident("CONFIRMED", "c14"), ROSTER) == "Aminobots"
+    assert team(_ident("AMBIGUOUS", "c08", "c09"), ROSTER) == "Annapurna Tiffins"  # shared phone
+    assert team(_ident("AMBIGUOUS", "c02", "c06"), ROSTER) is None  # two partners
+    assert team(_ident("UNCONFIRMED", "c07"), ROSTER) is None  # name match is not identity
