@@ -29,6 +29,9 @@ Flag = Literal[
     "possible_forward",
     "injection_attempt",
 ]
+# Set by code only and hidden from the model's schema (so the v3 cache key is unchanged):
+# implicit_request = prompt v4's explicit_ask is false (SPEC v2.8).
+CodeFlag = Literal["implicit_request"]
 Status = Literal["open", "cancelled", "handled"]
 RuleId = Literal["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10"]
 
@@ -85,11 +88,26 @@ class Candidate(_Model):
     on_behalf_of: str | None = None
     entities: Entities = Entities()
     status: Status = "open"
-    flags: list[Flag] = []
+    flags: list[Flag | SkipJsonSchema[CodeFlag]] = []
+    explicit_ask: SkipJsonSchema[bool | None] = None  # asked by prompt v4 only (CandidateV4)
+    slot_note: SkipJsonSchema[str | None] = None  # set when code filled a slot field (slots.py)
 
 
 class ExtractionResult(_Model):
     candidates: list[Candidate]
+
+
+class CandidateV4(Candidate):
+    """Prompt v4 (SPEC v2.8): one more, required field; code turns false into implicit_request."""
+
+    explicit_ask: bool = Field(
+        description="true only when a message directly asks Aminobots to do, send or tell "
+        "something; false when it only shares information, thanks, confirms or talks to others",
+    )
+
+
+class ExtractionResultV4(_Model):
+    candidates: list[CandidateV4]
 
 
 class Rejected(_Model):
