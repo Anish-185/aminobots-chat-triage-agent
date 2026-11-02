@@ -1,4 +1,4 @@
-# Submission checklist (v1.1)
+# Submission checklist (v1.1 + Phase 10 integrations)
 
 Portal items from [PROJECT_CONTEXT §3](context/PROJECT_CONTEXT.md#3-submission-portal-items-known-so-far)
 and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTEXT.md#appendix-a--original-brief-verbatim)).
@@ -10,7 +10,7 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 |---|---|---|
 | Functional document | [docs/functional.md](functional.md) | ✅ |
 | Approach document | [APPROACH.md](../APPROACH.md) | ✅ sections A–E, 1,482 words of prose (v1.0 count + 43 words of v1.1 edits), links both diagrams |
-| Architecture diagram | [docs/architecture.drawio.svg](architecture.drawio.svg) | ✅ editable `.drawio.svg`, regenerated for v1.1 |
+| Architecture diagram | [docs/architecture.drawio.svg](architecture.drawio.svg) | ✅ editable `.drawio.svg`, regenerated in Phase 10 (audit trail, red team) |
 | Workflow diagram | [docs/workflow.drawio.svg](workflow.drawio.svg) | ✅ |
 | UX prototype (optional, not graded) | the local website (`uv run python -m triage.serve`), [design brief](design/brief.md), [design review](design/review.md), [screenshots](screenshots/) | ✅ |
 | Build plan | [docs/build-plan.md](build-plan.md) | ✅ includes the deployment option |
@@ -36,4 +36,6 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 | No secrets in the repo | [.env.example](../.env.example), gitleaks pre-commit hook | ✅ |
 | Hard gate: mandated scenarios pass exactly | [v1.1-challenge](../eval/results/v1.1-challenge/report.md) | ✅ both pass exactly in v1.1 (v1.0: scenario 1 failed). ⚠️ the fixes were built on dev only, but the challenge was re-run once, so it is no longer blind ([ARTEFACT §e](../ARTEFACT.md#e-evaluation-results)) |
 | Hard gate: phantom acts = 0 (added in v1.1) | [v1.1-dev](../eval/results/v1.1-dev/report.md), [v1.1-challenge](../eval/results/v1.1-challenge/report.md) | ✅ 0 on both (v1.0-challenge had 1) |
+| Audit trail (Phase 10) | [README → Audit trail](../README.md#audit-trail-datasette), [screenshot](screenshots/1440-audit-trail.jpg) | ✅ Datasette over `runs/*.jsonl`, facets on grade, rule_id, identity_state, team; local only |
+| Red team (Phase 10) | [eval/redteam/](../eval/redteam/README.md), [results](../eval/results/redteam-v1/), [ARTEFACT](../ARTEFACT.md#open-source-integrations-phase-10) | ⚠️ 7/10 chats pass every check: nothing graded act and no grade in model output (10/10), but `injection_attempt` flagged in 1 of 4 injection chats |
 | Telugu reviewed by a native speaker | `telugu_reviewed_by` in each gold file | ⚠️ null in all 15 dev chats and both challenge chats |
