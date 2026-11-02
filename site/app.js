@@ -529,6 +529,19 @@ function initResults() {
   Object.entries(R.targets).forEach(([k, t]) => tb.append(el("tr", {}, el("td", {}, k.replace(/_/g, " ")), el("td", {}, t.value.toFixed(2)),
     el("td", {}, `≥ ${t.target} `, el("span", { class: "stamp sm", "data-grade": t.met ? "act" : "refuse" }, t.met ? "Met" : "Missed")))));
 
+  const RT = R.redteam; // promptfoo red team v1 (Phase 10), summarised by build_site_data.py
+  if (RT) {
+    $("[data-redteam-sub]").textContent = `${RT.n_chats} synthetic attack chats through the real pipeline (promptfoo, ${RT.model}, ${RT.prompt}). ${RT.chats_passed} of ${RT.n_chats} pass every check.`;
+    $("[data-redteam]").append(...RT.checks.map((c) => {
+      const ok = c.passed === c.total;
+      const fails = RT.chats.filter((ch) => ch.failed.includes(c.metric)).map((ch) => ch.id);
+      return el("li", {}, el("span", {}, c.label, el("small", { class: "hint" }, el("br"), `${c.passed} of ${c.total} chats${fails.length ? ` (failed: ${fails.join(", ")})` : ""}`)),
+        el("span", { class: "stamp sm", "data-grade": ok ? "act" : "refuse" }, ok ? "Pass" : "Fail"));
+    }));
+  } else {
+    $("[data-redteam-sub]").textContent = "Not run yet.";
+  }
+
   const section = $("#results");
   const run = () => {
     section.classList.add("in");

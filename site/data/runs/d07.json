@@ -501,6 +501,8 @@
    "requester": "••••0031",
    "record_only": false,
    "internal": false,
+   "identity_state": "UNCONFIRMED",
+   "team": null,
    "simulated": true
   }
  ]

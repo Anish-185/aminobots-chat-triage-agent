@@ -395,6 +395,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size:
 .check-list li[data-grade="hand_off"] { --rc: var(--hand); }
 .check-list li[data-grade="refuse"] { --rc: var(--refuse); }
 pre.json { margin: 8px 0 0; padding: 12px; border-radius: 8px; background: #0A1311; color: #DDE8D5; font-size: .8rem; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+pre.cmd { margin: 10px 0 14px; padding: 12px; border-radius: 8px; background: #0A1311; color: #DDE8D5; font-size: .8rem; white-space: pre-wrap; word-break: break-word; }
 
 /* ---------- try your own ---------- */
 .try-form { display: grid; gap: 18px; max-width: 900px; padding: 24px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
