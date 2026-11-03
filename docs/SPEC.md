@@ -1,7 +1,7 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.9 (Phase 10; see §17). Replaces SPEC v1.x, which is kept on the
-`archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
+Status: v2.9 (Phase 10; see §17). Replaces SPEC v1.x, which is kept in `main`'s
+history (the first attempt's last commit is `3ca1d2e`). Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
 This is a **demo build**: the simplest system that meets the brief, built from open-source

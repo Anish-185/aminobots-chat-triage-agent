@@ -292,7 +292,7 @@ docs/      SPEC, functional doc, ADRs, diagrams, screenshots, build prompts
 
 **Status:** v1.1 plus the Phase 10 integrations (Datasette audit trail, promptfoo red team). This
 is a complete local demo. Tagged prototypes: v0.1, v0.3 and v1.0 (v1.1 is tagged by the human).
-The first attempt is kept on the `archive/first-attempt` branch.
+The first attempt is kept in `main`'s history (its last commit is `3ca1d2e`).
 
 ---
 
