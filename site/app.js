@@ -497,8 +497,8 @@ function initTry() {
     text.focus();
   });
   const down = () => status.replaceChildren(el("div", { class: "down", role: "alert" },
-    el("p", {}, el("strong", {}, "The local API is not running. "), "Start it from the project folder, then try again:"),
-    el("code", {}, "uv run python -m triage.serve")));
+    el("p", {}, el("strong", {}, "The deployed API may be waking up. "), "Wait about a minute on the free Render instance, then try again:"),
+    el("code", {}, "https://aminobots-chat-triage-agent.onrender.com")));
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     err.textContent = "";
@@ -711,7 +711,7 @@ async function main() {
   try {
     await loadData();
   } catch (e) {
-    $("#main").prepend(el("p", { class: "down", role: "alert" }, `Could not load site/data: ${e.message}. Serve the site with uv run python -m triage.serve.`));
+    $("#main").prepend(el("p", { class: "down", role: "alert" }, `Could not load site/data: ${e.message}. Serve the site with https://aminobots-chat-triage-agent.onrender.com.`));
     return;
   }
   renderHero();

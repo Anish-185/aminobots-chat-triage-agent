@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Triage Desk</title>
-<meta name="description" content="A local demo that reads a Telugu–English WhatsApp partner group, finds every real request, checks the sender and stamps what may happen next. Simulation only.">
+<meta name="description" content="A deployed demo at https://aminobots-chat-triage-agent.onrender.com. Free Render instance; first visit may take about a minute to wake. It reads a WhatsApp partner group chat and finds each real request.">
 <meta name="triage-api" content="">
 <meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,12 +96,12 @@
       <section class="feature-group" data-tone="act" aria-labelledby="fg-prove">
         <h3 id="fg-prove"><span>4</span>Prove it</h3>
         <ul>
-          <li class="feature"><b>16</b><h4>Try your own chat</h4><p>Paste an export, and the local API runs the real pipeline. Your own key is optional.</p><a href="#try" data-spot>Show me</a></li>
+          <li class="feature"><b>16</b><h4>Try your own chat</h4><p>Paste an export, and the deployed API runs the real pipeline. Your own key is optional.</p><a href="#try" data-spot>Show me</a></li>
           <li class="feature"><b>17</b><h4>Measured on 15 dev chats</h4><p>Hard gates, every metric, a confusion grid and results by script and by intent.</p><a href="#results" data-spot>Show me</a></li>
           <li class="feature"><b>18</b><h4>Mandated scenarios pass</h4><p>Both challenge scenarios match the expected answer exactly.</p><a href="#scenarios" data-spot>Show me</a></li>
           <li class="feature"><b>19</b><h4>Red-teamed</h4><p>Ten attack chats (injection, fake authority, spoofing), and nothing was stamped act.</p><a href="#redteam" data-spot>Show me</a></li>
           <li class="feature"><b>20</b><h4>Audit trail</h4><p>Every simulated decision goes into one table you can filter, in Datasette.</p><a href="#audit" data-spot>Show me</a></li>
-          <li class="feature"><b>21</b><h4>Open API</h4><p><code>POST /api/triage</code> with interactive OpenAPI docs, on localhost.</p><a href="#try-api" data-spot>Show me</a></li>
+          <li class="feature"><b>21</b><h4>Open API</h4><p><code>POST /api/triage</code> with interactive OpenAPI docs, on the deployed service.</p><a href="#try-api" data-spot>Show me</a></li>
         </ul>
       </section>
     </div>
@@ -184,7 +184,7 @@
   <section class="paper-section" id="try" aria-labelledby="try-title">
     <div class="section-head">
       <h2 id="try-title">Try your own</h2>
-      <p>Paste or upload an Android WhatsApp export (.txt). The local API runs the real pipeline on it.</p>
+      <p>Paste or upload an Android WhatsApp export (.txt). The deployed API runs the real pipeline on it.</p>
     </div>
     <form class="try-form" data-try-form novalidate>
       <div class="field">
@@ -215,8 +215,8 @@
       </div>
       <div class="panel" id="try-api">
         <h3>Open API</h3>
-        <p>The form calls the same endpoint you can call yourself. It runs on localhost only.</p>
-        <pre class="cmd"><code>curl -s localhost:8000/api/triage \
+        <p>The form calls the deployed API at https://aminobots-chat-triage-agent.onrender.com. The free Render instance may take about a minute to wake on your first visit.</p>
+        <pre class="cmd"><code>curl -s https://aminobots-chat-triage-agent.onrender.com/api/triage \
   -H 'Content-Type: application/json' \
   -d '{"chat": "23/10/26, 7:50 am - …"}'</code></pre>
         <p><a class="btn btn-line magnetic" data-api-docs href="/api/docs" target="_blank" rel="noopener">Interactive API docs</a></p>
@@ -305,7 +305,9 @@ uv run datasette runs/audit.db -m config/datasette.yaml</code></pre>
 
 <footer class="footer">
   <p><strong>Simulation only — no action is executed. Synthetic data only.</strong></p>
-  <p>Runs on localhost. Free OpenRouter model, cached responses, policy and roster in code.</p>
+  <p>Deployed at <a href="https://aminobots-chat-triage-agent.onrender.com">https://aminobots-chat-triage-agent.onrender.com</a> on a free Render instance; the first visit may take about a minute to wake. Free OpenRouter model, cached responses, policy and roster in code.</p>
+  <p>Team Ping Pilots — G. Anish, Ch Pranav, Kamsani Shravani, Yedla Sai Bhavani, Miriyala Emmanuel Suvishal</p>
+  <p><a href="https://github.com/Anish-185/aminobots-chat-triage-agent">Project source on GitHub</a></p>
 </footer>
 
 <dialog class="drawer" data-drawer aria-labelledby="drawer-title">

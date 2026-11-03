@@ -8,11 +8,11 @@
 2. One free LLM call per chat *describes* the requests (including whether anyone asked explicitly); code fills slot days and times the model left empty, and decides everything else: the sender's identity from a roster (`CONFIRMED` / `AMBIGUOUS` / `UNCONFIRMED`, with a reason), the grade (`act` / `seek_approval` / `hand_off` / `refuse`) and the numbered rule.
 3. A written policy of rules R1–R10 is applied in code; every rule is checked and the most cautious match wins.
 4. Every decision is routed to an append-only, simulated JSONL log (actions, approvals, hand-offs, alerts). A failed run hands off the whole chat (`UNPROCESSED`).
-5. A local website shows the system step by step, lets you inspect any request and try your own chat, and shows the evaluation.
+5. A deployed website shows the system step by step, lets you inspect any request and try your own chat, and shows the evaluation.
 
-**Run it:** [README → Run the demo](README.md#run-the-demo) · **Screenshots:** [docs/screenshots/](docs/screenshots/) · **Design:** [APPROACH.md](APPROACH.md), [SPEC](docs/SPEC.md)
+**Live demo:** [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com) · **Run locally:** [README → Run the demo](README.md#run-the-demo) · **Screenshots:** [docs/screenshots/](docs/screenshots/) · **Design:** [APPROACH.md](APPROACH.md), [SPEC](docs/SPEC.md)
 
-**Designed but not built:** a public deployment (deliberately local only; option in the [build plan](docs/build-plan.md#deployment-option)); a one-prompt baseline (B1, dropped in SPEC v2.4); a separate test set; Hindi; voice notes and images; replying to the group.
+**Still not built:** a one-prompt baseline (B1, dropped in SPEC v2.4); Hindi; voice notes and images; replying to the group.
 
 | Watch it work | The desk |
 |---|---|
@@ -112,7 +112,7 @@ Fixed since v1.0: d02 r1, r2 (seek R6 → act R9) and d01 r1, d09 r1 (R6 → R7)
 
 ## f) Accuracy, latency and cost
 
-Measured on the running system (local; there is no deployment) by `eval/run_eval.py` on the dev split (v1.1); the observability view is the website's **Results** section (`uv run python -m triage.serve` → `/#results`, data from [site/data/results.json](site/data/results.json)) and the committed [eval reports](eval/results/v1.1-dev/report.md). Langfuse tracing is wired in but off (empty keys), so there is no trace view.
+Measured by `eval/run_eval.py` on the dev split (v1.1); the observability view is the deployed site's [**Results** section](https://aminobots-chat-triage-agent.onrender.com/#results) (data from [site/data/results.json](site/data/results.json)) and the committed [eval reports](eval/results/v1.1-dev/report.md). Langfuse tracing is wired in but off (empty keys), so there is no trace view.
 
 | Kind of request (gold n) | Recall | Grade accuracy |
 |---|---|---|
@@ -168,7 +168,7 @@ The model flagged the injection only when it was in the same message as the ask 
 - **The model still leaves slot times empty**; code fills them from the text (romanised Telugu map + dateparser). Phrasings outside the small map (e.g. "half past 7", dates in digits such as "23/10") stay empty and go to approval; a missed time that is earlier than the one read could make R7 miss, a risk only real chats would measure.
 - **Injection flag misses split messages:** the red team (above) found the model flags `injection_attempt` only when the instruction and the ask share a message (1 of 4); code held all four, but by risk or authority, not by the flag.
 - **The demo key's daily cap is in memory** and resets when the server restarts.
-- **No public URL (deliberate: local only):** the team decided to submit a local-only demo; the deployment option is in the [build plan](docs/build-plan.md#deployment-option).
+- **Public deployment:** live on a free Render instance at [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com); the first visit after idle may take about a minute to wake.
 - **Do not trust it** with real partner chats (free endpoints may log prompts) or to execute anything: it is a decision aid whose every action is simulated.
 
 **Responsible-AI notes**

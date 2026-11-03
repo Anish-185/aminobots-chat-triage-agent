@@ -23,13 +23,13 @@ and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTE
 | README to set up and run from scratch | [README.md](../README.md#run-the-demo) | ✅ 3 commands |
 | ARTEFACT.md, sections a–i | [ARTEFACT.md](../ARTEFACT.md) | ⚠️ complete except team names in §i and the transcript location (TODO placeholders) |
 | Tagged prototypes | git tags `v0.1`, `v0.3`, `v1.0` | ⚠️ `v1.1` is tagged by the human after this PR merges |
-| Deployed system at a public URL | [build plan → deployment option](build-plan.md#deployment-option) | ⚠️ deliberate: local only; deployment option in build plan (team decision for this submission) |
+| Deployed system at a public URL | [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com) | ✅ deployed on Render |
 | Step-by-step inspection of any input | website drawer + Try your own ([screenshots](screenshots/)) | ✅ locally |
 | Prompt pack, versioned | [prompts/](../prompts/CHANGELOG.md) | ✅ extract v1–v4 + CHANGELOG |
 | Evaluation set | [data/dev/](../data/dev/README.md) (15 chats + gold); blind set in `data/test/` | ✅ 8-chat test set evaluated: [first run](../eval/results/v1.1-test/report.md) (10 original gold requests; phantom act exposed a missed t06 status query), [corrected-gold rerun](../eval/results/v1.1-test-r1/report.md) (11 requests; F1 1.00, phantom acts 0; cached responses only). t06 gold was corrected after the first run. |
 | Evaluation code | [eval/run_eval.py](../eval/run_eval.py), [scripts/validate_gold.py](../scripts/validate_gold.py) | ✅ |
 | Committed results per prototype | [v0.1-dev](../eval/results/v0.1-dev/report.md), [v0.1.1-dev](../eval/results/v0.1.1-dev/report.md), [v1.0-dev](../eval/results/v1.0-dev/report.md), [v1.0-challenge](../eval/results/v1.0-challenge/report.md), [v1.1-partA-dev](../eval/results/v1.1-partA-dev/report.md), [v1.1-dev](../eval/results/v1.1-dev/report.md), [v1.1-challenge](../eval/results/v1.1-challenge/report.md), bake-offs | ✅ |
-| Observability view (problem metrics + accuracy, latency, cost) | website Results section; [eval reports](../eval/results/v1.1-dev/report.md) | ⚠️ local metrics page only; Langfuse traces off (keys empty) |
+| Observability view (problem metrics + accuracy, latency, cost) | [Live site Results section](https://aminobots-chat-triage-agent.onrender.com/#results); [eval reports](../eval/results/v1.1-dev/report.md) | ✅ live Results view; Langfuse traces off (keys empty) |
 | Code or prompts that generated the data | [phase-03-data prompt](build-prompts/phase-03-data.md), [data/dev/README.md](../data/dev/README.md) | ✅ hand-written by Claude Code, no generator script |
 | Data provenance and licence | [data/LICENSE](../data/LICENSE), [ARTEFACT](../ARTEFACT.md#c-data-provenance) | ✅ CC BY 4.0, including the blind test set |
 | Coding-agent setup | [CLAUDE.md](../CLAUDE.md), [.claude/](../.claude/), [SPEC](SPEC.md), [build prompts](build-prompts/README.md) | ✅ |
