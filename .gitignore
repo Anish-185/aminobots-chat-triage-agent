@@ -26,3 +26,4 @@ htmlcov/
 
 # LLM response cache (diskcache, SPEC §3)
 .cache/
+.cadra/
