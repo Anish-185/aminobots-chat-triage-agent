@@ -13,7 +13,7 @@ a **grade**, the **numbered rule** that decided the grade, and the **message IDs
 ![Tests](https://img.shields.io/badge/tests-323%20passing-2ea44f)
 ![LLM cost](https://img.shields.io/badge/LLM%20spend-%240-success)
 ![Simulated](https://img.shields.io/badge/actions-simulated%20only-orange)
-![Local only](https://img.shields.io/badge/runs-localhost%20only-lightgrey)
+![Deployed on Render](https://img.shields.io/badge/demo-Render-blueviolet)
 ![License: MIT](https://img.shields.io/badge/code-MIT-blue)
 ![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-blue)
 
@@ -66,8 +66,8 @@ a **grade**, the **numbered rule** that decided the grade, and the **message IDs
 | 🔴 `refuse` | Refused, and security gets an alert | `runs/alerts.jsonl` |
 
 ### 4 · Prove it
-- 🖥️ **A local website** that walks through the system step by step, a request desk with a per-request drawer (chat → model output → roster check → every rule → log line), and approve / reject buttons.
-- 🧪 **Try your own chat:** paste an export and the local API runs the real pipeline.
+- 🖥️ **A deployed website** that walks through the system step by step, a request desk with a per-request drawer (chat → model output → roster check → every rule → log line), and approve / reject buttons.
+- 🧪 **Try your own chat:** paste an export and the deployed API runs the real pipeline.
 - 📊 **An evaluation harness** with hard gates, targets, a confusion grid, and results by script and by intent.
 - 🛡️ **A red-team suite** of 10 attack chats run through [promptfoo](https://www.promptfoo.dev/).
 - 🗂️ **An audit trail** of every simulated decision in [Datasette](https://datasette.io/), faceted by grade, rule, identity state and team.
@@ -186,6 +186,20 @@ message as the ask (1 of 4 cases).
 
 ---
 
+## Live demo
+
+Visit [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com). It runs on a free Render instance; the first visit may take about a minute to wake.
+
+## Deploy on Render
+
+Create a Render web service for this repository with these settings:
+
+- **Build Command:** `uv sync --frozen --no-dev`
+- **Start Command:** `uv run --no-sync uvicorn api.main:app --host 0.0.0.0 --port $PORT`
+- **Environment variable:** set `OPENROUTER_API_KEY` in the Render service environment. Never put the key in this repository.
+
+The free Render instance sleeps when idle; allow about a minute for it to wake on the first visit.
+
 ## Run the demo
 
 Needs [uv](https://docs.astral.sh/uv/) and Python 3.12.
@@ -204,7 +218,7 @@ they **need no key and make no LLM call**.
 
 `cp .env.example .env` and fill in `OPENROUTER_API_KEY` locally. Never commit it.
 
-**Try your own** sends a chat to the local API, which runs the real pipeline with the free model
+**Try your own** sends a chat to the deployed API, which runs the real pipeline with the free model
 in [config/models.yaml](config/models.yaml). It uses your `.env` key (capped at 10 new requests a
 day) or a key typed into the page, which is used once and never stored, logged or traced.
 Rebuild the site data from the cache with `uv run python scripts/build_site_data.py`.
@@ -291,7 +305,7 @@ docs/      SPEC, functional doc, ADRs, diagrams, screenshots, build prompts
 | [Build prompts](docs/build-prompts/README.md) · [CLAUDE.md](CLAUDE.md) | How it was built with Claude Code, phase by phase |
 
 **Status:** v1.1 plus the Phase 10 integrations (Datasette audit trail, promptfoo red team). This
-is a complete local demo. Tagged prototypes: v0.1, v0.3 and v1.0 (v1.1 is tagged by the human).
+is a complete deployed demo on Render. Tagged prototypes: v0.1, v0.3 and v1.0 (v1.1 is tagged by the human).
 The first attempt is kept in `main`'s history (its last commit is `3ca1d2e`).
 
 ---

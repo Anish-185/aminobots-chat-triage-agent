@@ -36,18 +36,7 @@ how much code-side grading beats a single prompt. Only the 2 challenge chats are
 
 ## Deployment option
 
-**Not done: the team decided to submit local only.** Kept here for later (CLAUDE.md invariant 12: local only until
-publishing is approved). The brief asks for a public URL. The code is ready for it: one process
-serves the site and API, paths are relative, the API URL is a `<meta>` tag and the host and CORS
-origins live in `config/server.yaml`. The smallest option is one container running
-`uv run python -m triage.serve` on a free container host, with:
-
-- `config/server.yaml` widened to the public origin (its local-only validator changed on purpose);
-- the demo key's daily cap made persistent (it is in memory today);
-- `OPENROUTER_API_KEY` set as a host secret, never in the repo.
-
-Which host, and whether its free tier still exists, must be checked against its current docs
-before choosing; nothing here is verified.
+**Done on Render:** the system is live at [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com). Render builds with `uv sync --frozen --no-dev` and starts `uv run --no-sync uvicorn api.main:app --host 0.0.0.0 --port $PORT`. `OPENROUTER_API_KEY` is configured as a Render environment variable and is never stored in the repository. The free instance sleeps when idle and may take about a minute to wake on the first visit.
 
 ## Top risks
 
@@ -57,4 +46,4 @@ before choosing; nothing here is verified.
 | Daily request cap (50/day) | Slow iteration; milestone evals take 1–2 days | Cache every response; small dev set; plan evals across days |
 | Telugu realism of synthetic chats; no held-out test set | Eval overstates real performance | Teammate reviews Telugu; humans write the 2 challenge chats; per-script slices; stated as a limitation |
 | chat-miner parsing gaps (system lines, formats) | Lost messages or wrong IDs | Verify in P3; ≤ 30-line pre-pass for system lines; parser tests on edge cases |
-| Deployment requirement deferred (brief asks for a public URL) | Submission gap | Site and API stay deploy-ready (relative paths, configurable API URL); publishing decided explicitly before P7 |
+| Deployment on Render | Public demo available | Live at https://aminobots-chat-triage-agent.onrender.com; free instance may sleep while idle |
