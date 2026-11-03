@@ -1,41 +1,39 @@
-# Submission checklist (v1.1 + Phase 10 integrations)
+# Submission checklist (v1.2 + Phase 10 integrations)
 
-Portal items from [PROJECT_CONTEXT §3](context/PROJECT_CONTEXT.md#3-submission-portal-items-known-so-far)
-and the repository requirements in the brief ([Appendix A](context/PROJECT_CONTEXT.md#appendix-a--original-brief-verbatim)).
-✅ done · ⚠️ needs attention (reason given).
+Portal items from [PROJECT_CONTEXT §3](context/PROJECT_CONTEXT.md#3-submission-portal-items-known-so-far) and repository requirements in the [brief](context/PROJECT_CONTEXT.md#appendix-a--original-brief-verbatim). Status: ✅ met; ⚠️ open or limited (reason stated); ❌ missing.
 
 ## Portal items
 
 | Portal item | File / link | Status |
 |---|---|---|
-| Functional document | [docs/functional.md](functional.md) | ✅ |
-| Approach document | [APPROACH.md](../APPROACH.md) | ✅ sections A–E, 1,482 words of prose (v1.0 count + 43 words of v1.1 edits), links both diagrams |
-| Architecture diagram | [docs/architecture.drawio.svg](architecture.drawio.svg) | ✅ editable `.drawio.svg`, regenerated in Phase 10 (audit trail, red team) |
-| Workflow diagram | [docs/workflow.drawio.svg](workflow.drawio.svg) | ✅ |
-| UX prototype (optional, not graded) | the local website (`uv run python -m triage.serve`), [design brief](design/brief.md), [design review](design/review.md), [screenshots](screenshots/) | ✅ |
-| Build plan | [docs/build-plan.md](build-plan.md) | ✅ includes the deployment option |
-| AI transcript (share link + file) | outside the repo | ⚠️ **human**: claude.ai share link of the planning chats, plus one file of Claude Code `/export`s |
+| Functional document | [docs/functional.md](functional.md) | ✅ present |
+| Approach document | [APPROACH.md](../APPROACH.md) | ✅ sections A–E, links architecture and workflow diagrams; concise, under four pages |
+| Architecture diagram | [docs/architecture.drawio.svg](architecture.drawio.svg) | ✅ editable `.drawio.svg` |
+| Workflow diagram | [docs/workflow.drawio.svg](workflow.drawio.svg) | ✅ present |
+| UX prototype (optional) | [Design brief](design/brief.md), [review](design/review.md), [screenshots](screenshots/) | ✅ present |
+| Build plan | [docs/build-plan.md](build-plan.md) | ✅ present |
+| AI transcript (share link + file) | outside the repo | ⚠️ team must provide the planning-chat share link and Claude Code exports; location is still a TODO in ARTEFACT.md |
 
-## Repository requirements (brief)
+## Repository requirements
 
 | Requirement | File / link | Status |
 |---|---|---|
-| README to set up and run from scratch | [README.md](../README.md#run-the-demo) | ✅ 3 commands |
-| ARTEFACT.md, sections a–i | [ARTEFACT.md](../ARTEFACT.md) | ⚠️ complete except team names in §i and the transcript location (TODO placeholders) |
-| Tagged prototypes | git tags `v0.1`, `v0.3`, `v1.0` | ⚠️ `v1.1` is tagged by the human after this PR merges |
-| Deployed system at a public URL | [https://aminobots-chat-triage-agent.onrender.com](https://aminobots-chat-triage-agent.onrender.com) | ✅ deployed on Render |
-| Step-by-step inspection of any input | website drawer + Try your own ([screenshots](screenshots/)) | ✅ locally |
-| Prompt pack, versioned | [prompts/](../prompts/CHANGELOG.md) | ✅ extract v1–v4 + CHANGELOG |
-| Evaluation set | [data/dev/](../data/dev/README.md) (15 chats + gold); blind set in `data/test/` | ✅ 8-chat test set evaluated: [first run](../eval/results/v1.1-test/report.md) (10 original gold requests; phantom act exposed a missed t06 status query), [corrected-gold rerun](../eval/results/v1.1-test-r1/report.md) (11 requests; F1 1.00, phantom acts 0; cached responses only). t06 gold was corrected after the first run. |
-| Evaluation code | [eval/run_eval.py](../eval/run_eval.py), [scripts/validate_gold.py](../scripts/validate_gold.py) | ✅ |
-| Committed results per prototype | [v0.1-dev](../eval/results/v0.1-dev/report.md), [v0.1.1-dev](../eval/results/v0.1.1-dev/report.md), [v1.0-dev](../eval/results/v1.0-dev/report.md), [v1.0-challenge](../eval/results/v1.0-challenge/report.md), [v1.1-partA-dev](../eval/results/v1.1-partA-dev/report.md), [v1.1-dev](../eval/results/v1.1-dev/report.md), [v1.1-challenge](../eval/results/v1.1-challenge/report.md), bake-offs | ✅ |
-| Observability view (problem metrics + accuracy, latency, cost) | [Live site Results section](https://aminobots-chat-triage-agent.onrender.com/#results); [eval reports](../eval/results/v1.1-dev/report.md) | ✅ live Results view; Langfuse traces off (keys empty) |
-| Code or prompts that generated the data | [phase-03-data prompt](build-prompts/phase-03-data.md), [data/dev/README.md](../data/dev/README.md) | ✅ hand-written by Claude Code, no generator script |
-| Data provenance and licence | [data/LICENSE](../data/LICENSE), [ARTEFACT](../ARTEFACT.md#c-data-provenance) | ✅ CC BY 4.0, including the blind test set |
-| Coding-agent setup | [CLAUDE.md](../CLAUDE.md), [.claude/](../.claude/), [SPEC](SPEC.md), [build prompts](build-prompts/README.md) | ✅ |
-| No secrets in the repo | [.env.example](../.env.example), gitleaks pre-commit hook | ✅ |
-| Hard gate: mandated scenarios pass exactly | [v1.1-challenge](../eval/results/v1.1-challenge/report.md) | ✅ both pass exactly in v1.1 (v1.0: scenario 1 failed). ⚠️ the fixes were built on dev only, but the challenge was re-run once, so it is no longer blind ([ARTEFACT §e](../ARTEFACT.md#e-evaluation-results)) |
-| Hard gate: phantom acts = 0 (added in v1.1) | [v1.1-dev](../eval/results/v1.1-dev/report.md), [v1.1-challenge](../eval/results/v1.1-challenge/report.md) | ✅ 0 on both (v1.0-challenge had 1) |
-| Audit trail (Phase 10) | [README → Audit trail](../README.md#audit-trail-datasette), [screenshot](screenshots/1440-audit-trail.jpg) | ✅ Datasette over `runs/*.jsonl`, facets on grade, rule_id, identity_state, team; local only |
-| Red team (Phase 10) | [eval/redteam/](../eval/redteam/README.md), [results](../eval/results/redteam-v1/), [ARTEFACT](../ARTEFACT.md#open-source-integrations-phase-10) | ⚠️ 7/10 chats pass every check: nothing graded act and no grade in model output (10/10), but `injection_attempt` flagged in 1 of 4 injection chats |
-| Telugu reviewed by a native speaker | blind test set; `telugu_reviewed_by` in each gold file | ⚠️ blind test set reviewed by Ch Pranav; dev (15 chats) and challenge (2 chats) remain unreviewed |
+| README setup and run from scratch | [README run instructions](../README.md#run-the-demo) | ✅ Git, Python 3.12, uv, clone, sync and run instructions; live URL near top |
+| ARTEFACT sections a–i | [ARTEFACT.md](../ARTEFACT.md) | ⚠️ sections are present; team ownership names/split and transcript location remain unconfirmed/TODO |
+| Tagged prototypes | tags `v0.1`, `v0.3`, `v1.0`, `v1.2` | ✅ all four tags exist; v1.2 records held-out results and deployment/Windows work |
+| Public deployed system | [Live Render demo](https://aminobots-chat-triage-agent.onrender.com) | ✅ deployed; free instance may sleep |
+| Step-by-step inspection | Live website, request drawer and Try your own | ✅ available on deployed site; API-backed chat processing requires a key |
+| Versioned prompt pack | [prompts/CHANGELOG.md](../prompts/CHANGELOG.md) | ✅ extraction prompts v1–v4 and history |
+| Evaluation set and results | [data/dev](../data/dev/README.md), [test runs](../eval/results/v1.1-test/report.md), [r1](../eval/results/v1.1-test-r1/report.md) | ✅ 8 held-out chats / corrected 11 requests evaluated; initial run found missed t06 query, then gold corrected. r1: F1 1.00, grade 1.00, rule 0.91, no phantom acts; cached responses |
+| Evaluation code | [eval/run_eval.py](../eval/run_eval.py), [scripts/validate_gold.py](../scripts/validate_gold.py) | ✅ present |
+| Committed prototype results | [eval/results/](../eval/results/) | ✅ results for available prototype runs and held-out runs are committed; v1.2 test runs are named v1.1-test and v1.1-test-r1 |
+| Observability view | [Live Results section](https://aminobots-chat-triage-agent.onrender.com/#results) | ✅ live evaluation and latency/cost view; Langfuse traces are off |
+| Data-generation evidence | [Phase 3 prompt](build-prompts/phase-03-data.md), [data notes](../data/dev/README.md) | ✅ prompts/notes document synthetic data creation; no generator script |
+| Data provenance and licence | [data/LICENSE](../data/LICENSE), [ARTEFACT §c](../ARTEFACT.md#c-data-provenance) | ✅ CC BY 4.0 and provenance recorded |
+| Coding-agent setup | [CLAUDE.md](../CLAUDE.md), [.claude](../.claude/), [SPEC](SPEC.md), [build prompts](build-prompts/README.md) | ✅ present |
+| No secrets in repository | [.env.example](../.env.example), gitleaks hook | ✅ example configuration and secret scanning; no API key committed |
+| Mandated scenarios pass exactly | [v1.1 challenge report](../eval/results/v1.1-challenge/report.md) | ✅ both pass in v1.1; ⚠️ challenge chats were generated by the builder and have been seen, so this is not an independent test |
+| Phantom acts gate | [v1.1 dev](../eval/results/v1.1-dev/report.md), [challenge](../eval/results/v1.1-challenge/report.md), [test r1](../eval/results/v1.1-test-r1/report.md) | ✅ zero phantom acts in those runs; initial held-out run had one against the original gold |
+| Audit trail | [README audit trail](../README.md#audit-trail-datasette), [screenshot](screenshots/1440-audit-trail.jpg) | ✅ Datasette over local `runs/*.jsonl`; local only |
+| Red team | [suite](../eval/redteam/README.md), [results](../eval/results/redteam-v1/), [ARTEFACT](../ARTEFACT.md#open-source-integrations-phase-10) | ⚠️ 7/10 chats pass every check; injection flag was detected in 1/4 injection chats |
+| Telugu review | blind test set; `telugu_reviewed_by` in gold | ⚠️ test set reviewed by Ch Pranav; dev (15 chats) and challenge (2 chats) remain unreviewed |
