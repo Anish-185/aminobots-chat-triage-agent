@@ -16,9 +16,9 @@ def cfg(tmp_path: Path) -> Path:
 
 
 def _edit(path: Path, fn) -> None:
-    data = yaml.safe_load(path.read_text())
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
     fn(data)
-    path.write_text(yaml.safe_dump(data))
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
 
 
 @pytest.mark.parametrize("field", ["model", "fallbacks"])
@@ -95,7 +95,11 @@ def test_server_config_is_local_only(tmp_path):
         f = tmp_path / bad[:4] / "server.yaml"
         key = bad.split(":")[0]
         f.write_text(
-            "\n".join(bad if ln.startswith(key) else ln for ln in f.read_text().splitlines())
+            "\n".join(
+                bad if ln.startswith(key) else ln
+                for ln in f.read_text(encoding="utf-8").splitlines()
+            ),
+            encoding="utf-8",
         )
         with pytest.raises(ValueError, match="loopback|localhost"):
             load_server(tmp_path / bad[:4])

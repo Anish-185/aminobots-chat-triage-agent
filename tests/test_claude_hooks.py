@@ -126,14 +126,18 @@ def test_ignore_file_hides_frozen_sets_from_ripgrep(tmp_path: Path):
     shutil.copy(ROOT / ".ignore", tmp_path / ".ignore")
     for d in ("test", "challenge", "dev"):
         (tmp_path / "data" / d).mkdir(parents=True)
-        (tmp_path / "data" / d / "x.txt").write_text("needle\n")
-    out = subprocess.run(  # noqa: S603
-        ["rg", "-l", "needle"],  # noqa: S607
-        cwd=tmp_path,
-        text=True,
-        capture_output=True,
-        check=False,
-    ).stdout.split()
+        (tmp_path / "data" / d / "x.txt").write_text("needle\n", encoding="utf-8")
+    out = (
+        subprocess.run(  # noqa: S603
+            ["rg", "-l", "needle"],  # noqa: S607
+            cwd=tmp_path,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        .stdout.replace("\\", "/")
+        .split()
+    )
     assert out == ["data/dev/x.txt"]
 
 

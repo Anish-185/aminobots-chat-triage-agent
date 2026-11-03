@@ -18,7 +18,7 @@ NOTICE = "Messages and calls are end-to-end encrypted"
 def test_every_chat_parses_and_is_in_the_config_once():
     assert len(CHATS) == 10
     used = [t["vars"]["chat"] for t in CONFIG["tests"]]
-    assert sorted(used) == [str(p.relative_to(ROOT)) for p in CHATS]
+    assert sorted(used) == [p.relative_to(ROOT).as_posix() for p in CHATS]
     for path in CHATS:
         assert len(parse_chat(path, pipeline.WORLD / "contacts.yaml")) >= 3, path.name
 

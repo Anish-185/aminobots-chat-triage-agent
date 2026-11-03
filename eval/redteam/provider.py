@@ -30,7 +30,7 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
     role = models.roles.extractor
     cand = next(c for c in models.candidates if c.id == role.model)
     cache = diskcache.Cache(llm.CACHE_DIR)
-    spent = json.loads(LEDGER.read_text())["requests"] if LEDGER.exists() else 0
+    spent = json.loads(LEDGER.read_text(encoding="utf-8"))["requests"] if LEDGER.exists() else 0
     cached = is_cached(
         parse_chat(chat, pipeline.WORLD / "contacts.yaml"), cand, role.prompt_version, cache
     )
@@ -40,7 +40,7 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
     result = pipeline.run(chat, cache=cache)
     spent += (result.llm or {}).get("requests", 0)
     LEDGER.parent.mkdir(parents=True, exist_ok=True)
-    LEDGER.write_text(json.dumps({"requests": spent}))
+    LEDGER.write_text(json.dumps({"requests": spent}), encoding="utf-8")
     extraction = result.extraction.model_dump(mode="json") if result.extraction else None
     graded = [
         {
