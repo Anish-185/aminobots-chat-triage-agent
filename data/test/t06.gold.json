@@ -30,8 +30,30 @@
       },
       "grade": "refuse",
       "rule_id": "R2"
+    },
+    {
+      "id": "r2",
+      "intent": "status_query",
+      "gloss": "Padma Accounts asks whether the payout will be credited today; Divya confirms it will be credited in the evening",
+      "primary_msg_id": "m003",
+      "evidence_msg_ids": [
+        "m003",
+        "m004"
+      ],
+      "requester_phone": "+915555010004",
+      "identity_state": "CONFIRMED",
+      "status": "handled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": null
+      },
+      "grade": "act",
+      "rule_id": "R8"
     }
   ],
   "internal_requests": [],
-  "notes": ""
+  "notes": "r2 added after the first eval run: labelling gap found by the phantom-act check"
 }
