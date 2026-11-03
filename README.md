@@ -17,7 +17,7 @@ a **grade**, the **numbered rule** that decided the grade, and the **message IDs
 ![License: MIT](https://img.shields.io/badge/code-MIT-blue)
 ![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-blue)
 
-[**Run the demo**](#run-the-demo) · [**What it does**](#-what-it-does) · [**How it works**](#-how-it-works) · [**Results**](#-results) · [**Docs**](#-documentation)
+[**Live demo**](https://aminobots-chat-triage-agent.onrender.com) · [**Run locally**](#run-the-demo) · [**What it does**](#-what-it-does) · [**How it works**](#-how-it-works) · [**Results**](#-results) · [**Docs**](#-documentation)
 
 ![Scenario 1 stamped by rule R6](docs/screenshots/1440-story-d01-6.jpg)
 
@@ -304,8 +304,7 @@ docs/      SPEC, functional doc, ADRs, diagrams, screenshots, build prompts
 | [Project context](docs/context/PROJECT_CONTEXT.md) | Decisions and the original brief |
 | [Build prompts](docs/build-prompts/README.md) · [CLAUDE.md](CLAUDE.md) | How it was built with Claude Code, phase by phase |
 
-**Status:** v1.1 plus the Phase 10 integrations (Datasette audit trail, promptfoo red team). This
-is a complete deployed demo on Render. Tagged prototypes: v0.1, v0.3 and v1.0 (v1.1 is tagged by the human).
+**Status:** v1.2, including the held-out evaluation, deployed Render demo and Windows compatibility, plus the Phase 10 integrations (Datasette audit trail, promptfoo red team). Tagged prototypes: v0.1, v0.3, v1.0 and v1.2.
 The first attempt is kept in `main`'s history (its last commit is `3ca1d2e`).
 
 ---
