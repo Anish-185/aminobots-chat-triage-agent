@@ -1,0 +1,37 @@
+{
+  "chat_id": "t07",
+  "partner": "P2",
+  "source": {
+    "author": "Ch Pranav",
+    "method": "drafted with Claude (not the build agent), reviewed and edited by Ch Pranav",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": "Ch Pranav"
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "payout_details_change",
+      "gloss": "Change future payouts to the new HDFC account",
+      "primary_msg_id": "m004",
+      "evidence_msg_ids": [
+        "m003",
+        "m004",
+        "m005"
+      ],
+      "requester_phone": "+915555010010",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R1"
+    }
+  ],
+  "internal_requests": [],
+  "notes": ""
+}

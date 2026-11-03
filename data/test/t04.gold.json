@@ -1,0 +1,36 @@
+{
+  "chat_id": "t04",
+  "partner": "P2",
+  "source": {
+    "author": "Ch Pranav",
+    "method": "drafted with Claude (not the build agent), reviewed and edited by Ch Pranav",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": "Ch Pranav"
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "order_change",
+      "gloss": "Add two packets of idli batter and reduce vada mix by one for tomorrow's order",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m004",
+        "m005"
+      ],
+      "requester_phone": "+915555010008",
+      "identity_state": "AMBIGUOUS",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": false,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R4"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Shared counter phone is used by Anil Yadav and Mahesh Naidu."
+}

@@ -1,0 +1,36 @@
+{
+  "chat_id": "t05",
+  "partner": "P3",
+  "source": {
+    "author": "Ch Pranav",
+    "method": "drafted with Claude (not the build agent), reviewed and edited by Ch Pranav",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": "Ch Pranav"
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "order_change",
+      "gloss": "Increase Friday's salad bowl order from 20 to 30 on Vani's behalf",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m004",
+        "m005"
+      ],
+      "requester_phone": "+915555010012",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": true,
+        "on_behalf_verified": true,
+        "slot_datetime": null
+      },
+      "grade": "seek_approval",
+      "rule_id": "R7"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Answer key expects seek_approval/R5; Ramesh is a listed delegate for Vani."
+}

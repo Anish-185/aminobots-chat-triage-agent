@@ -26,7 +26,11 @@ from triage.policy import load_policy
 from triage.schemas import GoldChat, GradedRequest, Message
 
 ROOT = Path(__file__).resolve().parent.parent
-SPLITS = {"dev": ROOT / "data" / "dev", "challenge": ROOT / "data" / "challenge"}
+SPLITS = {
+    "dev": ROOT / "data" / "dev",
+    "test": ROOT / "data" / "test",
+    "challenge": ROOT / "data" / "challenge",
+}
 WORLD = ROOT / "data" / "world"
 TELUGU = re.compile(r"[ఀ-౿]")
 # Common romanised-Telugu words; a heuristic for slicing only (SPEC §12), not for decisions.

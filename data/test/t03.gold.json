@@ -1,0 +1,57 @@
+{
+  "chat_id": "t03",
+  "partner": "P2",
+  "source": {
+    "author": "Ch Pranav",
+    "method": "drafted with Claude (not the build agent), reviewed and edited by Ch Pranav",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": "Ch Pranav"
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "delivery_slot_change",
+      "gloss": "Move the Dilsukhnagar delivery tomorrow from 7 am to 9 am",
+      "primary_msg_id": "m004",
+      "evidence_msg_ids": [
+        "m004"
+      ],
+      "requester_phone": "+915555010007",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": "2026-11-07T07:00:00"
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Make the same slot change for Kondapur",
+      "primary_msg_id": "m008",
+      "evidence_msg_ids": [
+        "m004",
+        "m008"
+      ],
+      "requester_phone": "+915555010006",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": "2026-11-07T07:00:00"
+      },
+      "grade": "act",
+      "rule_id": "R9"
+    }
+  ],
+  "internal_requests": [],
+  "notes": "Answer key expects seek_approval; referent in r2 is taken as resolved from the immediately preceding request."
+}
