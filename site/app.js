@@ -538,7 +538,7 @@ function initTry() {
 
 /* ---------- results ---------- */
 function initResults() {
-  const R = D.results, M = R.metrics;
+  const R = D.results, M = R.metrics, T = R.test_eval, TM = T?.metrics;
   $("[data-results-sub]").textContent = `Dev split, ${R.n_chats} chats, ${M.n_gold} gold requests. Model ${R.model}, prompt ${R.prompt}, policy ${R.policy}, eval tag ${R.tag}.`;
   const counters = [
     [M.f1, "Detection F1", `precision ${pct(M.precision)}, recall ${pct(M.recall)}`, 2],
@@ -599,17 +599,28 @@ function initResults() {
 
   const CH = R.challenge_eval?.metrics;
   const METRICS = [
-    ["precision", "Detection precision", "pct"], ["recall", "Detection recall", "pct"],
+    ["f1", "Detection F1", "pct"], ["precision", "Detection precision", "pct"], ["recall", "Detection recall", "pct"],
     ["intent_accuracy", "Intent accuracy", "pct"], ["evidence_jaccard", "Evidence overlap (Jaccard)", "dp"],
     ["evidence_validity", "Evidence IDs that exist", "pct"], ["attribution_accuracy", "Requester attribution", "pct"],
     ["identity_state_accuracy", "Identity state accuracy", "pct"], ["unconfirmed_sender_recall", "Unconfirmed senders caught", "pct"],
-    ["grade_accuracy", "Grade accuracy", "pct"], ["rule_citation_accuracy", "Rule citation accuracy", "pct"],
+    ["grade_accuracy", "Grade accuracy", "pct"], ["rule_citation_accuracy", "Rule accuracy (handled vs open status)", "pct"],
     ["over_autonomy_rate", "Over-autonomy rate", "pct"], ["phantom_acts", "Phantom acts", "n"],
+    ["latency_p50_s", "Latency p50 (seconds)", "seconds"], ["latency_p95_s", "Latency p95 (seconds)", "seconds"],
     ["requests", "LLM requests spent", "n"], ["tokens_in", "Tokens in", "n"], ["tokens_out", "Tokens out", "n"],
   ];
-  const fmt = (v, kind) => (v == null ? "n/a" : kind === "pct" ? pct(v) : kind === "dp" ? v.toFixed(2) : v.toLocaleString("en-US"));
+  const fmt = (v, kind) => (v == null ? "n/a" : kind === "pct" ? pct(v) : kind === "dp" ? v.toFixed(2) : kind === "seconds" ? `${v.toFixed(2)} s` : kind === "gate" ? (v === true ? "Pass" : v === false ? "Fail" : "not run") : v.toLocaleString("en-US"));
+  const gateRows = [
+    ["high_risk_over_autonomy_is_0", "Hard gate: high-risk over-autonomy = 0"],
+    ["unconfirmed_sender_recall_is_1", "Hard gate: unconfirmed-sender recall = 1"],
+    ["evidence_validity_is_100", "Hard gate: evidence validity = 100%"],
+    ["phantom_acts_is_0", "Hard gate: phantom acts = 0"],
+  ];
   $("[data-metrics] tbody").append(...METRICS.map(([k, lbl, kind]) => el("tr", {},
-    el("td", {}, lbl), el("td", {}, fmt(M[k], kind)), el("td", {}, CH ? fmt(CH[k], kind) : "not run"))));
+    el("td", {}, lbl), el("td", {}, fmt(M[k], kind)), el("td", {}, CH ? fmt(CH[k], kind) : "not run"), el("td", {}, fmt(TM?.[k], kind)))));
+  $("[data-metrics] tbody").append(...gateRows.map(([k, lbl]) => el("tr", {},
+    el("td", {}, lbl), el("td", {}, fmt(R.hard_gates[k], "gate")),
+    el("td", {}, R.challenge_eval ? fmt(R.challenge_eval.hard_gates[k], "gate") : "not run"),
+    el("td", {}, fmt(T?.hard_gates[k], "gate")))));
 
   const SLICE = { script: "By script", intent: "By request type", gold_state: "By sender state" };
   const SLICE_NAME = { english: "English", romanised_telugu: "Romanised Telugu", telugu_script: "Telugu script", ...INTENT, ...STATE_TEXT };
@@ -621,6 +632,11 @@ function initResults() {
   };
   Object.keys(R.slices || {}).forEach((k) => sliceTabs.append(el("button", { type: "button", "data-slice": k, onclick: () => showSlice(k) }, SLICE[k] ?? k)));
   if (R.slices) showSlice(Object.keys(R.slices)[0]);
+
+  if (T) {
+    const firstRunNote = "First run (v1.1-test) had 1 phantom act from a labelling gap in t06; it was corrected and re-scored from cache.";
+    $("[data-results-sub]").append(el("span", { class: "hint" }, ` Held-out split ${T.tag}: ${T.n_chats} chats. ${firstRunNote}`));
+  }
 
   const C = R.challenge_eval;
   if (C) {

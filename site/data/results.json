@@ -170,6 +170,80 @@
   }
  },
  "n_chats": 15,
+ "test_eval": {
+  "tag": "v1.1-test-r1",
+  "n_chats": 8,
+  "metrics": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "tp": 11,
+   "n_pred": 11,
+   "n_gold": 11,
+   "intent_accuracy": 1.0,
+   "evidence_jaccard": 0.7727272727272727,
+   "attribution_accuracy": 1.0,
+   "identity_state_accuracy": 1.0,
+   "unconfirmed_sender_recall": 1.0,
+   "grade_accuracy": 1.0,
+   "confusion_matrix": {
+    "labels": [
+     "act",
+     "seek_approval",
+     "hand_off",
+     "refuse"
+    ],
+    "rows_gold_cols_pred": [
+     [
+      6,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      2,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      2,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      1
+     ]
+    ]
+   },
+   "over_autonomy_rate": 0.0,
+   "over_autonomy_high_risk": 0,
+   "phantom_acts": 0,
+   "rule_citation_accuracy": 0.9090909090909091,
+   "evidence_validity": 1.0,
+   "approval_load": 0.0,
+   "latency_p50_s": 23.67,
+   "latency_p95_s": 35.59649999999999,
+   "tokens_in": 18299,
+   "tokens_out": 28812,
+   "notional_cost_usd": 0.01715085,
+   "requests": 0
+  },
+  "hard_gates": {
+   "high_risk_over_autonomy_is_0": true,
+   "unconfirmed_sender_recall_is_1": true,
+   "evidence_validity_is_100": true,
+   "phantom_acts_is_0": true,
+   "mandated_scenarios_pass_exactly": [
+    null,
+    null
+   ]
+  }
+ },
  "challenge_eval": {
   "tag": "v1.1-challenge",
   "hard_gates": {
