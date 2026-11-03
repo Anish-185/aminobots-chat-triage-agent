@@ -1,6 +1,6 @@
 # SPEC v2 — Aminobots Chat Triage Agent
 
-Status: v2.8 (Phase 9; see §17). Replaces SPEC v1.x, which is kept on the
+Status: v2.9 (Phase 10; see §17). Replaces SPEC v1.x, which is kept on the
 `archive/first-attempt` branch. Decisions come from `docs/context/PROJECT_CONTEXT.md` §4; if this
 file and the context disagree, the context wins.
 
@@ -149,10 +149,12 @@ One line per message: `[m041] 10:42 | S3 "Ravi (Ameerpet)" | text`.
 | API | FastAPI + uvicorn | one endpoint |
 | Website | static HTML + Tailwind (CDN) + vanilla JS, MIT template | content + demo panel |
 | Tooling | uv, ruff, pytest, pre-commit, gitleaks, GitHub Actions | config |
+| Audit trail (dev) | Datasette + sqlite-utils (Apache-2.0) | `triage/audit.py` loader, facets file (§10) |
+| Red team | promptfoo (MIT, via `npx`, no project dependency) | provider, assertions, 10 chats (§12) |
 
 Rejected: own policy evaluator, own trace store, Postgres/Neon/SQLAlchemy, LLM data generator,
 Streamlit, Hugging Face Spaces (paid), LangGraph/Burr, ReAct tool-agent, LLM Guard (archived),
-whatstk (GPL-3.0), IndicLID/IndicXlit/promptfoo/chunking (deferred).
+whatstk (GPL-3.0), IndicLID/IndicXlit/chunking (deferred).
 
 ## 5. Data contracts (`triage/schemas.py`)
 
@@ -167,7 +169,7 @@ Pydantic v2 models are the only contracts between stages; the code is the exact 
 | `Rejected` | `candidate`, `reason` (`rejected_hallucination: …`), from grounding (§3.4) |
 | `Identity` | `state`, `contact_ids[]`, `role?`, `outlets[]`, `authorised`, `on_behalf`, `on_behalf_verified`, `target_outlets[]`, `reason` |
 | `GradedRequest` | candidate + requester + identity + `grade`, `rule_id`, `matched_rules[]`, `rule_checks[]`, `internal` |
-| `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id` (null only for an UNPROCESSED whole-chat hand-off), `evidence_msg_ids[]`, `now`, `action`, `requester` (phone masked to last 4), `record_only` (R8), `internal`, `simulated: true` |
+| `LogRecord` | `run_id`, `request_id`, `grade`, `rule_id` (null only for an UNPROCESSED whole-chat hand-off), `evidence_msg_ids[]`, `now`, `action`, `requester` (phone masked to last 4), `record_only` (R8), `internal`, `identity_state` (null only when UNPROCESSED), `team` (requester's partner from the roster, `Aminobots` for staff; null if unconfirmed or spanning partners), `simulated: true` (v2.9) |
 | `RunResult` | `run_id`, `chat`, `status` (`OK`/`UNPROCESSED`), `error?`, `now`, `model`, `prompt`, `policy_version`, `messages[]`, `rendered`, `extraction`, `llm` (requests, latency, tokens), `requests[]`, `internal_requests[]`, `rejected[]`, `log[]`: every stage, reused by the website |
 | `GoldChat` | `chat_id`, `source`, `scenario?` (1/2, challenge), `requests[]` / `internal_requests[]` (intent, evidence, requester, state, status, flags, `facts`, grade, rule) |
 
@@ -303,8 +305,14 @@ A property test checks monotonicity: adding any rule never makes a grade less ca
 | `hand_off` | `runs/handoffs.jsonl` | team queue, with reason |
 | `refuse` | `runs/alerts.jsonl` | refusal + security alert |
 
-Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "now" (§2.8).
-`runs/` is gitignored. The route module imports no network client (tested).
+Each row carries `run_id`, request ID, grade, rule, evidence IDs and the time "now" (§2.8),
+plus `identity_state` and `team` for the audit trail (v2.9). `runs/` is gitignored. The route
+module imports no network client (tested).
+
+**Audit trail (v2.9, dev tooling).** `uv run python -m triage.audit` rebuilds one `records`
+table in `runs/audit.db` from the four logs (sqlite-utils; the JSONL is never changed);
+`uv run datasette runs/audit.db -m config/datasette.yaml` opens it on `127.0.0.1:8001` with facets
+on grade, rule_id, identity_state and team. Read-only; local only.
 
 ## 11. Website and API (local only)
 
@@ -378,6 +386,11 @@ URL. Paths are relative and the API URL is configurable, so publishing later nee
   human-written and unseen.
 - **Results:** `eval/results/<tag>/summary.json` + `report.md`; scores also sent to Langfuse.
   Challenge results store IDs and labels only, never message text.
+- **Red team v1 (v2.9):** 10 synthetic attack chats (`eval/redteam/`, written fresh; not from dev
+  or challenge) run with promptfoo through the real pipeline: the model's output never holds a
+  grade, rule or decision; `injection_attempt` on the injection chats; `possible_forward` on the
+  hidden forward; identity from the roster despite self-claims; no request in chatter; and no
+  request graded `act`. Report in `eval/results/redteam-v1/`. Not part of the pass rule.
 - **Observability:** Langfuse Hobby keeps data for 30 days, so the durable per-stage record is
   `site/data/*.json` and `eval/results/`. Langfuse links are optional extras.
 
@@ -433,3 +446,4 @@ A1–A3 and A6 are unconfirmed (mentor questions: context §7); update SPEC and 
 | v2.6 | Phase 6: `time_unspecified` added by code only to **open** slot changes (§3.3); website + API contracts as built (§11). |
 | v2.7 | Phase 7: policy v2 (`policy/policy_v2.yaml`, default via `config/policy.yaml`): R7 requires status open, since closed requests execute nothing (§9); the gold validator derives labels from the configured policy; d03 r1 and d15 r1 relabelled act R8; new worked check (§9). |
 | v2.8 | Phase 9: code fills null slot fields from the evidence with a Telugu day-word map + dateparser, one reading only, follow-ups inherit (§3.3, §4, §5); prompt v4 `explicit_ask` → code flag `implicit_request` (§3.3, §5); phantom acts metric and hard gate (§12). |
+| v2.9 | Phase 10: `LogRecord` gains `identity_state` and `team` (§5, §10); audit trail with sqlite-utils + Datasette (§4, §10); promptfoo red team v1 (§4, §12). No grade, rule or policy change. |

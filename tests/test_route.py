@@ -65,3 +65,10 @@ def test_logs_are_append_only(tmp_path: Path):
 def test_unprocessed_is_one_whole_chat_hand_off():
     rec = route.unprocessed("x", None, "boom")
     assert rec.grade == "hand_off" and rec.rule_id is None and "UNPROCESSED" in rec.action
+
+
+def test_record_carries_identity_state_and_team_for_the_audit():
+    rec = route.record("x", _graded("act", "R9"), NOW, team="Sunrise Foods")
+    assert rec.identity_state == "CONFIRMED" and rec.team == "Sunrise Foods"
+    failed = route.unprocessed("x", NOW, "boom")
+    assert failed.identity_state is None and failed.team is None

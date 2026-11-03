@@ -723,6 +723,8 @@
    "requester": "••••0013",
    "record_only": false,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Green Bowl Cafe",
    "simulated": true
   },
   {
@@ -738,6 +740,8 @@
    "requester": "••••0013",
    "record_only": false,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Green Bowl Cafe",
    "simulated": true
   },
   {
@@ -753,6 +757,8 @@
    "requester": "••••0011",
    "record_only": false,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Green Bowl Cafe",
    "simulated": true
   }
  ]

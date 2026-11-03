@@ -16,7 +16,7 @@ from triage import llm
 from triage.config import Candidate, load_models, load_thresholds
 from triage.extract import ExtractionFailed, extract, load_prompt
 from triage.ground import ground
-from triage.identity import identify
+from triage.identity import identify, team
 from triage.parse import parse_chat
 from triage.policy import context, decide, load_policy
 from triage.render import render
@@ -101,7 +101,7 @@ def run(
         )
         (result.internal_requests if internal else result.requests).append(graded)
     graded_all = result.requests + result.internal_requests
-    result.log = [record(run_id, r, result.now) for r in graded_all]
+    result.log = [record(run_id, r, result.now, team(r.identity, roster)) for r in graded_all]
     if runs_dir:
         write(result.log, runs_dir)
     return result
