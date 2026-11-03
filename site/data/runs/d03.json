@@ -853,6 +853,8 @@
    "requester": "••••0003",
    "record_only": true,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Sunrise Foods",
    "simulated": true
   },
   {
@@ -869,6 +871,8 @@
    "requester": "••••0001",
    "record_only": false,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Sunrise Foods",
    "simulated": true
   },
   {
@@ -884,6 +888,8 @@
    "requester": "••••0002",
    "record_only": false,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Sunrise Foods",
    "simulated": true
   },
   {
@@ -901,6 +907,8 @@
    "requester": "••••0003",
    "record_only": true,
    "internal": false,
+   "identity_state": "CONFIRMED",
+   "team": "Sunrise Foods",
    "simulated": true
   }
  ]

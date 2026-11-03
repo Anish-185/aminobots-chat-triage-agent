@@ -96,7 +96,8 @@ def test_only_run_eval_mentions_the_challenge_folder():
         p.relative_to(ROOT).as_posix()
         for d in ("triage", "eval", "scripts", "api", "site")
         for p in (ROOT / d).rglob("*.py")
-        if '"challenge"' in p.read_text(encoding="utf-8") or "data/challenge" in p.read_text(encoding="utf-8")
+        if '"challenge"' in p.read_text(encoding="utf-8")
+        or "data/challenge" in p.read_text(encoding="utf-8")
     ]
     assert set(hits) <= {"eval/run_eval.py", "scripts/guard_eval_data.py"}, hits
 

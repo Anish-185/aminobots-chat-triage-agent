@@ -1,0 +1,16 @@
+# Datasette metadata for the audit trail (Phase 10). Datasette 0.65 reads facets only from a
+# metadata file, hence `-m`:  uv run datasette runs/audit.db -m config/datasette.yaml
+title: Aminobots triage — audit trail
+description: >-
+  Every simulated decision from runs/*.jsonl, one row per log line. Nothing here was executed.
+  Built by `uv run python -m triage.audit`.
+license: MIT
+databases:
+  audit:
+    tables:
+      records:
+        description: >-
+          log = which JSONL file (actions, approvals, handoffs, alerts); requester is masked to
+          the last 4 digits; team is the requester's partner from the roster (null if unknown).
+        facets: [grade, rule_id, identity_state, team]
+        sort_desc: now

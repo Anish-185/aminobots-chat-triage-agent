@@ -37,7 +37,9 @@ def run_model(
         cand = cand.model_copy(update={"reasoning_effort": reasoning})
     meta, _ = load_prompt(models.roles.extractor.prompt_version)
     version = f"{meta['id']}/v{meta['version']}"
-    roster = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text(encoding="utf-8")))
+    roster = Roster.model_validate(
+        yaml.safe_load((WORLD / "roster.yaml").read_text(encoding="utf-8"))
+    )
     staff = {to_e164(c.phone) for c in roster.contacts if c.role == "aminobots_staff"}
     min_j = load_thresholds().evidence_jaccard
     cache = diskcache.Cache(llm.CACHE_DIR)
@@ -148,7 +150,9 @@ def slot_accuracy(r: dict) -> tuple[int, int]:
     for row in r["chats"]:
         if "predictions" not in row:
             continue
-        gold = GoldChat.model_validate_json((DEV / f"{row['chat']}.gold.json").read_text(encoding="utf-8"))
+        gold = GoldChat.model_validate_json(
+            (DEV / f"{row['chat']}.gold.json").read_text(encoding="utf-8")
+        )
         preds = [SimpleNamespace(**p) for p in row["predictions"]]
         for i, j, _ in match(preds, gold.requests, min_j):
             if (want := gold.requests[j].facts.slot_datetime) is not None:

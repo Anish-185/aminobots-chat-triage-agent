@@ -52,7 +52,11 @@ def _run(tmp_path, cache, *responses, chat=D01):
 
 def _rows(tmp_path, name):
     path = tmp_path / "runs" / name
-    return [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines()] if path.exists() else []
+    return (
+        [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines()]
+        if path.exists()
+        else []
+    )
 
 
 def test_d01_end_to_end(tmp_path, cache):

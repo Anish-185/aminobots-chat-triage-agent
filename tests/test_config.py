@@ -96,7 +96,8 @@ def test_server_config_is_local_only(tmp_path):
         key = bad.split(":")[0]
         f.write_text(
             "\n".join(
-                bad if ln.startswith(key) else ln for ln in f.read_text(encoding="utf-8").splitlines()
+                bad if ln.startswith(key) else ln
+                for ln in f.read_text(encoding="utf-8").splitlines()
             ),
             encoding="utf-8",
         )

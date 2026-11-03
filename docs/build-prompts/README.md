@@ -19,3 +19,4 @@ Each phase prompt given to Claude Code is saved here verbatim as `phase-NN-<shor
 | 7 | [phase-07-final.md](phase-07-final.md) | Policy v2, final eval, ARTEFACT, final docs, submission checklist → **v1.0** |
 | 8 | [phase-08-challenge.md](phase-08-challenge.md) | Generate the 2 challenge chats (staged; moved and committed by the human), run the challenge eval → PR #9 |
 | 9 | [phase-09-fixes.md](phase-09-fixes.md) | Fix the two scenario-1 failures: slot fallback (dateparser), prompt v4 `explicit_ask`, phantom-acts gate → **v1.1** |
+| 10 | [phase-10-integrations.md](phase-10-integrations.md) | Open-source integrations: Datasette audit trail, promptfoo red team (10 attack chats), docs |
