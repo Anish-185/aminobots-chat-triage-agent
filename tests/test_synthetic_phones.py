@@ -1,4 +1,5 @@
-"""Invariant 9: every phone in the synthetic world, dev chats, gold and fixtures is INVALID."""
+"""Invariant 9: every phone in the synthetic world, dev and red-team chats, gold and fixtures is
+INVALID."""
 
 import json
 import re
@@ -16,6 +17,7 @@ FILES = [
     *sorted((ROOT / "data" / "dev").glob("*.txt")),
     *sorted((ROOT / "data" / "dev").glob("*.gold.json")),
     *sorted((ROOT / "tests" / "fixtures").glob("*.txt")),
+    *sorted((ROOT / "eval" / "redteam" / "chats").glob("*.txt")),
 ]
 
 
@@ -27,7 +29,7 @@ def test_every_phone_is_invalid(path: Path):
 
 
 def test_world_has_phones_and_they_follow_the_rule():
-    roster = yaml.safe_load((ROOT / "data/world/roster.yaml").read_text())
+    roster = yaml.safe_load((ROOT / "data/world/roster.yaml").read_text(encoding="utf-8"))
     for c in roster["contacts"]:
         digits = c["phone"].replace(" ", "")
         assert re.fullmatch(r"\+91[0-5]\d{9}", digits), c

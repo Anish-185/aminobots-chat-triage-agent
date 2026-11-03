@@ -103,7 +103,9 @@ def check_request(
 
 def validate(dev: Path = DEV, world: Path = WORLD) -> list[str]:
     errs: list[str] = []
-    roster = Roster.model_validate(yaml.safe_load((world / "roster.yaml").read_text()))
+    roster = Roster.model_validate(
+        yaml.safe_load((world / "roster.yaml").read_text(encoding="utf-8"))
+    )
     contacts = world / "contacts.yaml"
     staff = {to_e164(c.phone) for c in roster.contacts if c.role == "aminobots_staff"}
     for f in (world / "roster.yaml", contacts):

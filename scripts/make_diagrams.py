@@ -291,6 +291,8 @@ ARCHITECTURE = Diagram(
             kind="io",
         ),
         Box("eval", "eval/run_eval.py\nmetrics → eval/results/<tag>/", 1100, 160, 220),
+        Box("redteam", "promptfoo red team (npx)\n10 attack chats → redteam-v1/", 1100, 20, 220),
+        Box("audit", "audit trail (dev): sqlite-utils\n→ Datasette :8001, facets", 600, 600, 200),
         Box(
             "data",
             "data/ dev (15 chats) + gold\n· challenge (frozen, human-written)",
@@ -327,6 +329,8 @@ ARCHITECTURE = Diagram(
         Edge("api", "parse", "runs pipeline"),
         Edge("data", "eval"),
         Edge("eval", "ground"),
+        Edge("redteam", "ground", "full pipeline"),
+        Edge("runs", "audit", points=[(360, 540), (700, 540)]),
         Edge("runs", "person", "queues", points=[(360, 540), (920, 540)]),
     ],
 )

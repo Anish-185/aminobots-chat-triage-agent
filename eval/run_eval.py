@@ -26,7 +26,11 @@ from triage.policy import load_policy
 from triage.schemas import GoldChat, GradedRequest, Message
 
 ROOT = Path(__file__).resolve().parent.parent
-SPLITS = {"dev": ROOT / "data" / "dev", "challenge": ROOT / "data" / "challenge"}
+SPLITS = {
+    "dev": ROOT / "data" / "dev",
+    "test": ROOT / "data" / "test",
+    "challenge": ROOT / "data" / "challenge",
+}
 WORLD = ROOT / "data" / "world"
 TELUGU = re.compile(r"[ఀ-౿]")
 # Common romanised-Telugu words; a heuristic for slicing only (SPEC §12), not for decisions.
@@ -255,7 +259,9 @@ def main() -> None:
     min_j, cache = load_thresholds().evidence_jaccard, diskcache.Cache(llm.CACHE_DIR)
     budget, stop, out = args.max_requests, None, []
     for txt in chats:
-        gold = GoldChat.model_validate_json(txt.with_suffix(".gold.json").read_text())
+        gold = GoldChat.model_validate_json(
+            txt.with_suffix(".gold.json").read_text(encoding="utf-8")
+        )
         msgs = {m.id: m for m in parse_chat(txt, WORLD / "contacts.yaml")}
         res = None
         if stop is None and not is_cached(list(msgs.values()), cand, role.prompt_version, cache):
@@ -276,8 +282,10 @@ def main() -> None:
     }  # fmt: skip
     dest = ROOT / "eval" / "results" / args.tag
     dest.mkdir(parents=True, exist_ok=True)
-    (dest / "summary.json").write_text(json.dumps(summary, indent=2, default=str) + "\n")
-    (dest / "report.md").write_text(report(args.tag, args.split, summary))
+    (dest / "summary.json").write_text(
+        json.dumps(summary, indent=2, default=str) + "\n", encoding="utf-8"
+    )
+    (dest / "report.md").write_text(report(args.tag, args.split, summary), encoding="utf-8")
     print(report(args.tag, args.split, summary))
     if stop:
         print(f"STOPPED: {stop}")

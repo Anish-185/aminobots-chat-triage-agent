@@ -79,7 +79,10 @@ def test_nothing_matched_is_default_r10():
 
 def test_policy_rejects_out_of_order_rules(tmp_path):
     bad = tmp_path / "p.yaml"
-    bad.write_text(POLICY_FILE.read_text().replace("id: R1\n", "id: R9\n", 1))
+    bad.write_text(
+        POLICY_FILE.read_text(encoding="utf-8").replace("id: R1\n", "id: R9\n", 1),
+        encoding="utf-8",
+    )
     with pytest.raises(ValueError, match="ID order"):
         load_policy(bad)
 

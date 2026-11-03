@@ -40,7 +40,7 @@ def test_staged_paths_reads_index(tmp_path, monkeypatch):
 
     git("init", "-q")
     (tmp_path / "data/test").mkdir(parents=True)
-    (tmp_path / "data/test/a.json").write_text("{}")
+    (tmp_path / "data/test/a.json").write_text("{}", encoding="utf-8")
     git("add", ".")
     monkeypatch.chdir(tmp_path)
     assert guard.staged_paths() == ["data/test/a.json"]

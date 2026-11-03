@@ -33,7 +33,7 @@ def _action(r: GradedRequest) -> str:
     }[r.grade]
 
 
-def record(run_id: str, r: GradedRequest, now: datetime) -> LogRecord:
+def record(run_id: str, r: GradedRequest, now: datetime, team: str | None = None) -> LogRecord:
     return LogRecord(
         run_id=run_id,
         request_id=r.request_id,
@@ -45,6 +45,8 @@ def record(run_id: str, r: GradedRequest, now: datetime) -> LogRecord:
         requester=mask(r.requester_phone),
         record_only=r.rule_id == "R8",
         internal=r.internal,
+        identity_state=r.identity.state,
+        team=team,
     )
 
 

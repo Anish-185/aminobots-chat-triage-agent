@@ -66,5 +66,7 @@ def test_validator_catches_valid_phone(copy: Path):
         phonenumbers.example_number("IN"), phonenumbers.PhoneNumberFormat.INTERNATIONAL
     )
     roster = copy / "world" / "roster.yaml"
-    roster.write_text(roster.read_text().replace("+91 55550 10001", example))
+    roster.write_text(
+        roster.read_text(encoding="utf-8").replace("+91 55550 10001", example), encoding="utf-8"
+    )
     assert any("VALID number" in e for e in vg.validate(copy / "dev", copy / "world"))

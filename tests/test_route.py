@@ -12,7 +12,7 @@ NOW = datetime(2026, 3, 2, 18, 0)
 
 
 def test_route_imports_no_network_client():
-    tree = ast.parse(Path(route.__file__).read_text())
+    tree = ast.parse(Path(route.__file__).read_text(encoding="utf-8"))
     names = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
     names |= {n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module}
     assert not {n.split(".")[0] for n in names} & NETWORK, names
@@ -43,7 +43,8 @@ def test_each_grade_goes_to_its_log_simulated_and_masked(tmp_path: Path):
     route.write([route.record("x", _graded(g, r), NOW) for g, r in cases], tmp_path)
     for grade, rule in cases:
         rows = [
-            json.loads(line) for line in (tmp_path / route.LOGS[grade]).read_text().splitlines()
+            json.loads(line)
+            for line in (tmp_path / route.LOGS[grade]).read_text(encoding="utf-8").splitlines()
         ]
         assert len(rows) == 1 and rows[0]["simulated"] is True and rows[0]["rule_id"] == rule
         assert rows[0]["requester"] == "••••0003"
@@ -59,9 +60,16 @@ def test_logs_are_append_only(tmp_path: Path):
     rec = route.record("x", _graded("act", "R9"), NOW)
     route.write([rec], tmp_path)
     route.write([rec], tmp_path)
-    assert len((tmp_path / "actions.jsonl").read_text().splitlines()) == 2
+    assert len((tmp_path / "actions.jsonl").read_text(encoding="utf-8").splitlines()) == 2
 
 
 def test_unprocessed_is_one_whole_chat_hand_off():
     rec = route.unprocessed("x", None, "boom")
     assert rec.grade == "hand_off" and rec.rule_id is None and "UNPROCESSED" in rec.action
+
+
+def test_record_carries_identity_state_and_team_for_the_audit():
+    rec = route.record("x", _graded("act", "R9"), NOW, team="Sunrise Foods")
+    assert rec.identity_state == "CONFIRMED" and rec.team == "Sunrise Foods"
+    failed = route.unprocessed("x", NOW, "boom")
+    assert failed.identity_state is None and failed.team is None

@@ -16,11 +16,13 @@ rules file, roster and thin glue (SPEC §4). Licences read from PyPI; versions f
 | API / server | fastapi · uvicorn | MIT · BSD-3 | 0.162.0 · 0.54.0 |
 | CLI | typer | MIT | 0.27.3 |
 | Slot day fallback (Phase 9) | dateparser | BSD-3-Clause | 1.4.3 |
+| Audit trail, dev group (Phase 10) | datasette · sqlite-utils | Apache-2.0 · Apache-2.0 | 0.65.5 (latest stable; 1.0 still alpha) · 4.2.1; +13 MB in `.venv` |
+| Red team (Phase 10) | promptfoo, via `npx`, no project dependency | MIT | 0.125.1; 704 MB in the npx cache, outside the repo |
 
 **Rejected:** own policy evaluator (rule-engine) · own trace store (Langfuse) · Postgres/Neon/
 SQLAlchemy (JSONL is enough) · LLM data generator (hand-written chats) · Streamlit (website wanted)
 · Hugging Face Spaces (paid) · LangGraph/Burr (not an agent loop) · ReAct tool-agent (unauditable,
-injection risk) · LLM Guard (archived) · whatstk (GPL-3.0) · IndicLID/IndicXlit/promptfoo/chunking
+injection risk) · LLM Guard (archived) · whatstk (GPL-3.0) · IndicLID/IndicXlit/chunking
 (deferred).
 
 **Cost:** chat-miner adds matplotlib/polars/pyarrow/wordcloud (≈ 800 MB, no GPL); accepted for a local demo.
