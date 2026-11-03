@@ -23,6 +23,7 @@ from triage.policy import POLICY
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "site" / "data"
 EVAL_TAG = "v1.1-dev"
+TEST_TAG = "v1.1-test-r1"
 CHALLENGE_TAG = "v1.1-challenge"  # IDs and labels only, never message text
 REDTEAM = ROOT / "eval" / "results" / "redteam-v1" / "results.json"  # promptfoo output
 REDTEAM_CHECKS = {  # promptfoo metric → label on the site
@@ -83,29 +84,31 @@ def redteam_summary(path: Path = REDTEAM) -> dict:
 
 
 def main() -> None:
-    models = load_models()
-    role = models.roles.extractor
-    cand = next(c for c in models.candidates if c.id == role.model)
-    cache = diskcache.Cache(llm.CACHE_DIR)
-    (OUT / "runs").mkdir(parents=True, exist_ok=True)
-    for chat_id in CHATS:
-        path = ROOT / "data" / "dev" / f"{chat_id}.txt"
-        msgs = parse_chat(path, pipeline.WORLD / "contacts.yaml")
-        if not is_cached(msgs, cand, role.prompt_version, cache):
-            sys.exit(f"{chat_id}: not in the LLM cache; refusing to spend a request")
-        result = pipeline.run(path, cache=cache)
-        (OUT / "runs" / f"{chat_id}.json").write_text(
-            result.model_dump_json(indent=1) + "\n", encoding="utf-8"
+    # --results-only refreshes evaluation metadata without requiring the local LLM response cache.
+    if "--results-only" not in sys.argv:
+        models = load_models()
+        role = models.roles.extractor
+        cand = next(c for c in models.candidates if c.id == role.model)
+        cache = diskcache.Cache(llm.CACHE_DIR)
+        (OUT / "runs").mkdir(parents=True, exist_ok=True)
+        for chat_id in CHATS:
+            path = ROOT / "data" / "dev" / f"{chat_id}.txt"
+            msgs = parse_chat(path, pipeline.WORLD / "contacts.yaml")
+            if not is_cached(msgs, cand, role.prompt_version, cache):
+                sys.exit(f"{chat_id}: not in the LLM cache; refusing to spend a request")
+            result = pipeline.run(path, cache=cache)
+            (OUT / "runs" / f"{chat_id}.json").write_text(
+                result.model_dump_json(indent=1) + "\n", encoding="utf-8"
+            )
+            print(f"{chat_id}: {result.status}, {len(result.requests)} requests")
+        manifest = [{"id": k, "title": v, "file": f"runs/{k}.json"} for k, v in CHATS.items()]
+        (OUT / "manifest.json").write_text(
+            json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
         )
-        print(f"{chat_id}: {result.status}, {len(result.requests)} requests")
-    manifest = [{"id": k, "title": v, "file": f"runs/{k}.json"} for k, v in CHATS.items()]
-    (OUT / "manifest.json").write_text(
-        json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-    policy = yaml.safe_load(POLICY.read_text(encoding="utf-8"))  # the configured policy
-    (OUT / "policy.json").write_text(
-        json.dumps(policy, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+        policy = yaml.safe_load(POLICY.read_text(encoding="utf-8"))  # the configured policy
+        (OUT / "policy.json").write_text(
+            json.dumps(policy, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
     summary = json.loads(
         (ROOT / "eval" / "results" / EVAL_TAG / "summary.json").read_text(encoding="utf-8")
     )
@@ -122,6 +125,15 @@ def main() -> None:
     )
     results = {k: summary[k] for k in keep}
     results["n_chats"] = len(summary["chats"])
+    test_summary = json.loads(
+        (ROOT / "eval" / "results" / TEST_TAG / "summary.json").read_text(encoding="utf-8")
+    )
+    results["test_eval"] = {
+        "tag": test_summary["tag"],
+        "n_chats": len(test_summary["chats"]),
+        "metrics": test_summary["metrics"],
+        "hard_gates": test_summary["hard_gates"],
+    }
     challenge = ROOT / "eval" / "results" / CHALLENGE_TAG / "summary.json"
     if challenge.exists():
         ch = json.loads(challenge.read_text(encoding="utf-8"))
@@ -134,7 +146,7 @@ def main() -> None:
     if REDTEAM.exists():
         results["redteam"] = redteam_summary()
     (OUT / "results.json").write_text(
-        json.dumps(results, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(results, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
     )
     shutil.copy(ROOT / "data" / "dev" / "d01.txt", OUT / "sample.txt")
     assets = ROOT / "site" / "assets"
