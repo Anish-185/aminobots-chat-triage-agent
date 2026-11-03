@@ -37,14 +37,14 @@ def run_model(
         cand = cand.model_copy(update={"reasoning_effort": reasoning})
     meta, _ = load_prompt(models.roles.extractor.prompt_version)
     version = f"{meta['id']}/v{meta['version']}"
-    roster = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text()))
+    roster = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text(encoding="utf-8")))
     staff = {to_e164(c.phone) for c in roster.contacts if c.role == "aminobots_staff"}
     min_j = load_thresholds().evidence_jaccard
     cache = diskcache.Cache(llm.CACHE_DIR)
     rows, pairs, stopped, spent = [], [], None, 0
     for chat in chats:
         msgs = parse_chat(DEV / f"{chat}.txt", WORLD / "contacts.yaml")
-        gold = GoldChat.model_validate_json((DEV / f"{chat}.gold.json").read_text())
+        gold = GoldChat.model_validate_json((DEV / f"{chat}.gold.json").read_text(encoding="utf-8"))
         cached = is_cached(msgs, cand, models.roles.extractor.prompt_version, cache)
         if not cached and budget[0] < 2:  # one call can take 2 requests (repair retry)
             stopped = f"request budget exhausted before {chat}"
@@ -135,9 +135,9 @@ def main() -> None:
     budget = [args.max_requests]
     results = [run_model(m, args.chats, budget, args.reasoning) for m in args.models]
     args.out.mkdir(parents=True, exist_ok=True)
-    (args.out / "summary.json").write_text(json.dumps(results, indent=2) + "\n")
+    (args.out / "summary.json").write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     report = write_report(results)
-    (args.out / "report.md").write_text(report)
+    (args.out / "report.md").write_text(report, encoding="utf-8")
     print(report)
 
 
@@ -148,7 +148,7 @@ def slot_accuracy(r: dict) -> tuple[int, int]:
     for row in r["chats"]:
         if "predictions" not in row:
             continue
-        gold = GoldChat.model_validate_json((DEV / f"{row['chat']}.gold.json").read_text())
+        gold = GoldChat.model_validate_json((DEV / f"{row['chat']}.gold.json").read_text(encoding="utf-8"))
         preds = [SimpleNamespace(**p) for p in row["predictions"]]
         for i, j, _ in match(preds, gold.requests, min_j):
             if (want := gold.requests[j].facts.slot_datetime) is not None:

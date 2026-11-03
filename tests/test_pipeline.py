@@ -52,7 +52,7 @@ def _run(tmp_path, cache, *responses, chat=D01):
 
 def _rows(tmp_path, name):
     path = tmp_path / "runs" / name
-    return [json.loads(x) for x in path.read_text().splitlines()] if path.exists() else []
+    return [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines()] if path.exists() else []
 
 
 def test_d01_end_to_end(tmp_path, cache):
@@ -98,7 +98,7 @@ def test_failures_are_unprocessed_with_one_whole_chat_hand_off(tmp_path, cache, 
 
 def test_unparsable_chat_is_unprocessed(tmp_path, cache):
     bad = tmp_path / "bad.txt"
-    bad.write_text("not a whatsapp export\n")
+    bad.write_text("not a whatsapp export\n", encoding="utf-8")
     res = _run(tmp_path, cache, chat=bad)
     assert res.status == "UNPROCESSED" and "parse error" in res.error
     assert len(_rows(tmp_path, "handoffs.jsonl")) == 1
@@ -108,7 +108,7 @@ def test_cli_shows_unprocessed_not_empty(tmp_path, monkeypatch):
     from triage import cli
 
     bad = tmp_path / "bad.txt"
-    bad.write_text("garbage\n")
+    bad.write_text("garbage\n", encoding="utf-8")
     monkeypatch.setattr(route, "RUNS", tmp_path / "runs")
     out = CliRunner().invoke(cli.app, ["run", str(bad)])
     assert out.exit_code == 1 and "UNPROCESSED" in out.output

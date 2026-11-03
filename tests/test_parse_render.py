@@ -44,7 +44,7 @@ def test_security_code_subject_resolves_to_sender(messages):
 
 def test_contacts_yaml_resolves_saved_names(tmp_path):
     contacts = tmp_path / "contacts.yaml"
-    contacts.write_text('"Ravi Kumar": "+91 55550 10098"\n')
+    contacts.write_text('"Ravi Kumar": "+91 55550 10098"\n', encoding="utf-8")
     ravi = parse_chat(FIXTURE, contacts)[3]
     assert ravi.phone == "+915555010098" and ravi.display_name == "Ravi Kumar"
 

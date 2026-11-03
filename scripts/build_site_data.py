@@ -45,13 +45,13 @@ def main() -> None:
         if not is_cached(msgs, cand, role.prompt_version, cache):
             sys.exit(f"{chat_id}: not in the LLM cache; refusing to spend a request")
         result = pipeline.run(path, cache=cache)
-        (OUT / "runs" / f"{chat_id}.json").write_text(result.model_dump_json(indent=1) + "\n")
+        (OUT / "runs" / f"{chat_id}.json").write_text(result.model_dump_json(indent=1) + "\n", encoding="utf-8")
         print(f"{chat_id}: {result.status}, {len(result.requests)} requests")
     manifest = [{"id": k, "title": v, "file": f"runs/{k}.json"} for k, v in CHATS.items()]
-    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False) + "\n")
+    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     policy = yaml.safe_load(POLICY.read_text(encoding="utf-8"))  # the configured policy
-    (OUT / "policy.json").write_text(json.dumps(policy, indent=1, ensure_ascii=False) + "\n")
-    summary = json.loads((ROOT / "eval" / "results" / EVAL_TAG / "summary.json").read_text())
+    (OUT / "policy.json").write_text(json.dumps(policy, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    summary = json.loads((ROOT / "eval" / "results" / EVAL_TAG / "summary.json").read_text(encoding="utf-8"))
     keep = (
         "tag",
         "split",
@@ -67,14 +67,14 @@ def main() -> None:
     results["n_chats"] = len(summary["chats"])
     challenge = ROOT / "eval" / "results" / CHALLENGE_TAG / "summary.json"
     if challenge.exists():
-        ch = json.loads(challenge.read_text())
+        ch = json.loads(challenge.read_text(encoding="utf-8"))
         results["challenge_eval"] = {
             "tag": ch["tag"],
             "hard_gates": ch["hard_gates"],
             "metrics": ch["metrics"],
             "chats": [{k: c[k] for k in ("chat", "scenario", "exact")} for c in ch["chats"]],
         }
-    (OUT / "results.json").write_text(json.dumps(results, indent=1) + "\n")
+    (OUT / "results.json").write_text(json.dumps(results, indent=1) + "\n", encoding="utf-8")
     shutil.copy(ROOT / "data" / "dev" / "d01.txt", OUT / "sample.txt")
     assets = ROOT / "site" / "assets"
     shutil.copy(ROOT / "docs" / "architecture.drawio.svg", assets / "architecture.svg")

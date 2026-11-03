@@ -14,7 +14,7 @@ from triage.schemas import Candidate, GoldChat, Role, Roster
 
 ROOT = Path(__file__).resolve().parent.parent
 DEV, WORLD = ROOT / "data" / "dev", ROOT / "data" / "world"
-ROSTER = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text()))
+ROSTER = Roster.model_validate(yaml.safe_load((WORLD / "roster.yaml").read_text(encoding="utf-8")))
 POLICY, TH = load_policy(), load_thresholds()
 
 
@@ -39,7 +39,7 @@ def _identify(chat: str, primary: str, intent: str = "delivery_slot_change", **e
 GOLD = [
     (g.chat_id, r, internal)
     for p in sorted(DEV.glob("*.gold.json"))
-    for g in [GoldChat.model_validate_json(p.read_text())]
+    for g in [GoldChat.model_validate_json(p.read_text(encoding="utf-8"))]
     for internal, reqs in ((False, g.requests), (True, g.internal_requests))
     for r in reqs
 ]

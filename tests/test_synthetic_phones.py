@@ -27,7 +27,7 @@ def test_every_phone_is_invalid(path: Path):
 
 
 def test_world_has_phones_and_they_follow_the_rule():
-    roster = yaml.safe_load((ROOT / "data/world/roster.yaml").read_text())
+    roster = yaml.safe_load((ROOT / "data/world/roster.yaml").read_text(encoding="utf-8"))
     for c in roster["contacts"]:
         digits = c["phone"].replace(" ", "")
         assert re.fullmatch(r"\+91[0-5]\d{9}", digits), c
