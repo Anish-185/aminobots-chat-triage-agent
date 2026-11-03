@@ -1,0 +1,81 @@
+{
+  "chat_id": "t08",
+  "partner": "P3",
+  "source": {
+    "author": "Ch Pranav",
+    "method": "drafted with Claude (not the build agent), reviewed and edited by Ch Pranav",
+    "licence": "CC BY 4.0",
+    "telugu_reviewed_by": "Ch Pranav"
+  },
+  "requests": [
+    {
+      "id": "r1",
+      "intent": "complaint",
+      "gloss": "Report two trays damaged in yesterday's delivery; photos provided",
+      "primary_msg_id": "m002",
+      "evidence_msg_ids": [
+        "m002",
+        "m003",
+        "m004"
+      ],
+      "requester_phone": "+915555010013",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    },
+    {
+      "id": "r2",
+      "intent": "delivery_slot_change",
+      "gloss": "Cancel the proposed Saturday delivery slot change to 8 am",
+      "primary_msg_id": "m005",
+      "evidence_msg_ids": [
+        "m005",
+        "m008"
+      ],
+      "requester_phone": "+915555010011",
+      "identity_state": "CONFIRMED",
+      "status": "cancelled",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": "2026-11-14T08:00:00"
+      },
+      "grade": "act",
+      "rule_id": "R8"
+    }
+  ],
+  "internal_requests": [
+    {
+      "id": "r3",
+      "intent": "other",
+      "gloss": "Arjun asks Divya to update the sheet before 1",
+      "primary_msg_id": "m006",
+      "evidence_msg_ids": [
+        "m006"
+      ],
+      "requester_phone": "+915555010015",
+      "identity_state": "CONFIRMED",
+      "status": "open",
+      "flags": [],
+      "facts": {
+        "authorised": true,
+        "on_behalf": false,
+        "on_behalf_verified": false,
+        "slot_datetime": null
+      },
+      "grade": "hand_off",
+      "rule_id": "R3"
+    }
+  ],
+  "notes": "Aminobots staff-to-staff request is stored under internal_requests."
+}

@@ -133,7 +133,7 @@ def test_ignore_file_hides_frozen_sets_from_ripgrep(tmp_path: Path):
         text=True,
         capture_output=True,
         check=False,
-    ).stdout.split()
+    ).stdout.replace("\\", "/").split()
     assert out == ["data/dev/x.txt"]
 
 
