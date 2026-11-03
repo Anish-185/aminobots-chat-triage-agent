@@ -275,13 +275,17 @@ function renderRun(run, host) {
     host.append(el("p", { class: "empty" }, "The model found no requests in this chat. Every message was read; the run itself succeeded."));
     return;
   }
+  const counts = Object.keys(GRADE).map((g) => [g, run.requests.filter((r) => r.grade === g).length]);
+  host.append(el("div", { class: "grade-sum", "aria-label": "Requests per stamp" },
+    counts.map(([g, n]) => el("span", { class: n ? "" : "zero" }, el("b", {}, n), stamp(g, null, "sm")))));
   const rows = run.requests.map((r) => {
     D.byRequest.set(r.request_id, { r, run });
     const rule = ruleById(r.rule_id);
     const open = () => openDrawer(r.request_id);
     return el("tr", { "data-rules": r.matched_rules.join(" "), "data-request": r.request_id, onclick: (e) => { if (!e.target.closest("button, .rule-id")) open(); } },
       el("td", { class: "gloss" }, el("button", { class: "open-btn", type: "button", onclick: open, "aria-haspopup": "dialog" }, r.candidate.gloss),
-        el("small", {}, `${INTENT[r.candidate.intent]}${r.candidate.status !== "open" ? `, ${r.candidate.status}` : ""}`)),
+        el("small", {}, `${INTENT[r.candidate.intent]}${r.candidate.status !== "open" ? `, ${r.candidate.status}` : ""}`),
+        r.candidate.flags.length ? el("span", { class: "flags" }, r.candidate.flags.map((f) => el("span", { class: "tag flag", "data-flag": f, title: f }, FLAG_TEXT[f] ?? f))) : null),
       el("td", {}, el("div", {}, r.requester_name || `Unknown ${last4(r.requester_phone)}`), badge(r.identity.state)),
       el("td", {}, stamp(r.grade, null, "sm")),
       el("td", {}, el("span", { class: "rule-id", tabindex: "0", "aria-describedby": `tip-${r.request_id}` }, r.rule_id,
@@ -293,6 +297,15 @@ function renderRun(run, host) {
     el("caption", { class: "vh" }, "Requests found in this chat"),
     el("thead", {}, el("tr", {}, ["Request", "Sender", "Stamp", "Rule", "Evidence", "Decision"].map((h) => el("th", { scope: "col" }, h)))),
     el("tbody", {}, rows))));
+  // internal (staff-to-staff) requests and dropped candidates: logged, so shown, but not listed above
+  const extra = [
+    [run.internal_requests, "internal requests (staff asking staff), logged and not listed",
+      (r) => `${r.candidate.gloss} (${GRADE[r.grade].stamp}, ${r.rule_id})`],
+    [run.rejected, "candidates dropped because their message IDs are not in the chat",
+      (x) => `${x.candidate.gloss} (${x.reason})`],
+  ].filter(([list]) => list?.length);
+  extra.forEach(([list, label, line]) => host.append(el("details", { class: "more" },
+    el("summary", {}, `${list.length} ${label}`), el("ul", {}, list.map((x) => el("li", {}, line(x)))))));
 }
 
 /* approve / reject: client-side only, sessionStorage */
@@ -323,7 +336,7 @@ function renderDecisions() {
     : [el("li", {}, "None yet. Requests stamped “Ask approval” have Approve and Reject buttons.")]));
 }
 
-function openDrawer(requestId) {
+function openDrawer(requestId, focusStep) {
   const { r, run } = D.byRequest.get(requestId);
   const c = r.candidate;
   const ev = new Set(c.evidence_msg_ids);
@@ -333,31 +346,47 @@ function openDrawer(requestId) {
   const kv = (pairs) => el("dl", { class: "kv" }, pairs.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, v)]));
   const log = run.log.find((l) => l.request_id === r.request_id);
   const chat = el("div", { class: "mini-chat" }, run.messages.map((m, i) => bubble(m, i, ev)));
+  const llm = run.llm || {};
   $("[data-drawer-body]").replaceChildren(el("ol", { class: "dsteps" },
     el("li", {}, el("h3", {}, "The chat, evidence highlighted"), chat),
-    el("li", {}, el("h3", {}, "What the model described"), kv([
+    el("li", { "data-step": "seen" }, el("h3", {}, "What the model saw"),
+      el("p", {}, "Senders are renamed S1, S2…, and every phone number is removed or masked before the text leaves this machine. The roster is never sent."),
+      run.rendered ? el("pre", { class: "json seen" }, run.rendered) : el("p", { class: "hint" }, "Not recorded for this run.")),
+    el("li", { "data-step": "described" }, el("h3", {}, "What the model described"), kv([
       ["Intent", INTENT[c.intent]], ["Gloss", c.gloss], ["Primary message", c.primary_msg_id], ["Evidence", c.evidence_msg_ids.join(", ")],
       ["Refers to", c.refers_to_msg_id || "nothing earlier"], ["Status", c.status], ["Uncertainty flags", flagText(c.flags)],
       ...ents.map(([k, v]) => [k.replace(/_/g, " "), String(v)]),
       ...(c.explicit_ask != null ? [["Explicit ask", c.explicit_ask ? "yes" : "no"]] : []),
       ...(c.slot_note ? [["Slot filled by code", c.slot_note]] : []),
-    ])),
-    el("li", {}, el("h3", {}, "Who sent it (code)"), kv([
+    ]), el("details", { class: "more" }, el("summary", {}, "Raw model output for this request"),
+      el("pre", { class: "json" }, JSON.stringify(c, null, 1)),
+      el("p", { class: "hint" }, "No grade, rule or identity: the model is not asked for them and they are not in its schema."))),
+    el("li", { "data-step": "who" }, el("h3", {}, "Who sent it (code)"), kv([
       ["State", badge(r.identity.state)], ["Phone", last4(r.requester_phone)], ["Role", r.identity.role || "not in roster"],
       ["Outlets", r.identity.outlets.join(", ") || "none"], ["Authorised", r.identity.authorised ? "yes" : "no"],
       ["On behalf", r.identity.on_behalf ? (r.identity.on_behalf_verified ? "yes, verified" : "yes, not verified") : "no"],
       ["Reason", r.identity.reason],
     ])),
-    el("li", {}, el("h3", {}, "Every rule checked (code)"), el("ul", { class: "check-list" }, D.rules.map((rule) => {
+    el("li", { "data-step": "rules" }, el("h3", {}, "Every rule checked (code)"), el("ul", { class: "check-list" }, D.rules.map((rule) => {
       const m = r.matched_rules.includes(rule.id);
       return el("li", { class: `${m ? "matched" : ""}${rule.id === r.rule_id ? " decider" : ""}`, "data-grade": rule.grade },
         el("b", {}, rule.id), el("span", {}, rule.text), el("span", {}, rule.id === r.rule_id ? "decides" : m ? "matches" : "no"));
     })), el("p", { class: "hint" }, "The most cautious matching grade wins; the lowest-numbered rule with that grade is cited.")),
-    el("li", {}, el("h3", {}, "Routed and logged (simulated)"), el("p", {}, `Appended to ${GRADE[r.grade].file}. Nothing is executed.`),
+    el("li", { "data-step": "log" }, el("h3", {}, "Routed and logged (simulated)"), el("p", {}, `Appended to ${GRADE[r.grade].file}. Nothing is executed.`),
       log ? el("pre", { class: "json" }, JSON.stringify(log, null, 1)) : null),
-    el("li", {}, el("h3", {}, "Trace"), el("p", {}, "No trace recorded for this run: Langfuse is off in the demo (its keys are empty, and the website process never traces)."))));
+    el("li", { "data-step": "trace" }, el("h3", {}, "Model call and trace"), kv([
+      ["Model", run.model], ["Prompt", run.prompt ?? "unknown"], ["Policy", `v${run.policy_version}`],
+      ["Requests spent", llm.cached ? "0 (cached answer)" : String(llm.requests ?? "unknown")],
+      ["Latency", llm.latency_s ? `${Math.round(llm.latency_s)} s (first run)` : "unknown"],
+      ["Tokens", llm.prompt_tokens != null ? `${llm.prompt_tokens} in, ${llm.completion_tokens} out` : "unknown"],
+      ["Schema failures", String(llm.schema_failures ?? 0)],
+    ]), el("p", { class: "hint" }, "Langfuse tracing is off in the demo: its keys are empty, and the website process never traces."))));
   dlg.showModal();
-  requestAnimationFrame(() => $(".mini-chat .ev", dlg)?.scrollIntoView({ block: "center" }));
+  requestAnimationFrame(() => {
+    const step = focusStep && $(`[data-step="${focusStep}"]`, dlg);
+    if (step) { step.scrollIntoView({ block: "start" }); spotlight(step); }
+    else $(".mini-chat .ev", dlg)?.scrollIntoView({ block: "center" });
+  });
 }
 
 /* ---------- demo desk ---------- */
@@ -371,6 +400,7 @@ function initDemo() {
     panel.setAttribute("aria-labelledby", `tab-${id}`);
     renderRun(D.runs[id], panel);
   };
+  D.selectChat = select;
   D.manifest.forEach((m) => tabs.append(el("button", {
     type: "button", role: "tab", id: `tab-${m.id}`, "aria-controls": "demo-panel", "data-chat": m.id, onclick: () => select(m.id),
   }, el("span", {}, m.id), m.title)));
@@ -407,6 +437,43 @@ function initRules() {
       el("td", {}, r.id), el("td", {}, r.text, r.id === D.policy.default.id ? " (default)" : ""), el("td", {}, stamp(r.grade, null, "sm")));
     tbody.append(tr);
   });
+
+  const MEANS = {
+    act: "Safe and authorised: the action is logged, simulated.",
+    seek_approval: "Probably fine, but a person approves first.",
+    hand_off: "A person takes over: too risky, unclear or out of scope.",
+    refuse: "Nobody acts, and a security alert is raised.",
+  };
+  $("[data-stamp-legend]").append(...D.policy.grades.map((g) => el("li", {}, stamp(g, null),
+    el("p", {}, MEANS[g]), el("code", {}, GRADE[g].file))));
+
+  $("[data-intent-table] tbody").append(...Object.entries(D.policy.intents).map(([k, v]) => el("tr", {},
+    el("td", {}, INTENT[k] ?? k),
+    el("td", {}, v.risk ? el("span", { class: "risk", "data-risk": v.risk }, v.risk) : "always handed off (R3)"),
+    el("td", {}, v.roles ? v.roles.join(", ") : "anyone"),
+    el("td", {}, v.discloses ? "yes" : "no"))));
+}
+
+/* ---------- features: "Show me" scrolls to the spot, picks the right chat and lights it up ---------- */
+function spotlight(node) {
+  node.classList.remove("spotlight");
+  void node.offsetWidth; // restart the animation
+  node.classList.add("spotlight");
+  setTimeout(() => node.classList.remove("spotlight"), 2600);
+}
+function initFeatures() {
+  document.querySelectorAll("a[data-spot]").forEach((a) => a.addEventListener("click", () => {
+    const { chat, open } = a.dataset;
+    if (chat && D.runs[chat]) D.selectChat(chat);
+    const target = chat ? $("[data-demo-run]") : $(a.getAttribute("href"));
+    if (!target) return;
+    if (open) {
+      const first = D.runs[chat]?.requests[0];
+      if (first) setTimeout(() => openDrawer(first.request_id, open), 900);
+      return;
+    }
+    setTimeout(() => spotlight(target), 700); // after the smooth scroll lands
+  }));
 }
 
 /* ---------- try your own ---------- */
@@ -420,6 +487,7 @@ const CLERK = [
 function initTry() {
   const form = $("[data-try-form]"), status = $("[data-try-status]"), out = $("[data-try-run]"), err = $("[data-form-error]");
   const text = $("#chat-text"), key = $("#api-key");
+  $("[data-api-docs]").href = `${API}/api/docs`;
   $("#chat-file").addEventListener("change", async (e) => {
     const f = e.target.files[0];
     if (f) text.value = await f.text();
@@ -529,6 +597,42 @@ function initResults() {
   Object.entries(R.targets).forEach(([k, t]) => tb.append(el("tr", {}, el("td", {}, k.replace(/_/g, " ")), el("td", {}, t.value.toFixed(2)),
     el("td", {}, `≥ ${t.target} `, el("span", { class: "stamp sm", "data-grade": t.met ? "act" : "refuse" }, t.met ? "Met" : "Missed")))));
 
+  const CH = R.challenge_eval?.metrics;
+  const METRICS = [
+    ["precision", "Detection precision", "pct"], ["recall", "Detection recall", "pct"],
+    ["intent_accuracy", "Intent accuracy", "pct"], ["evidence_jaccard", "Evidence overlap (Jaccard)", "dp"],
+    ["evidence_validity", "Evidence IDs that exist", "pct"], ["attribution_accuracy", "Requester attribution", "pct"],
+    ["identity_state_accuracy", "Identity state accuracy", "pct"], ["unconfirmed_sender_recall", "Unconfirmed senders caught", "pct"],
+    ["grade_accuracy", "Grade accuracy", "pct"], ["rule_citation_accuracy", "Rule citation accuracy", "pct"],
+    ["over_autonomy_rate", "Over-autonomy rate", "pct"], ["phantom_acts", "Phantom acts", "n"],
+    ["requests", "LLM requests spent", "n"], ["tokens_in", "Tokens in", "n"], ["tokens_out", "Tokens out", "n"],
+  ];
+  const fmt = (v, kind) => (v == null ? "n/a" : kind === "pct" ? pct(v) : kind === "dp" ? v.toFixed(2) : v.toLocaleString("en-US"));
+  $("[data-metrics] tbody").append(...METRICS.map(([k, lbl, kind]) => el("tr", {},
+    el("td", {}, lbl), el("td", {}, fmt(M[k], kind)), el("td", {}, CH ? fmt(CH[k], kind) : "not run"))));
+
+  const SLICE = { script: "By script", intent: "By request type", gold_state: "By sender state" };
+  const SLICE_NAME = { english: "English", romanised_telugu: "Romanised Telugu", telugu_script: "Telugu script", ...INTENT, ...STATE_TEXT };
+  const sliceBody = $("[data-slices] tbody"), sliceTabs = $("[data-slice-tabs]");
+  const showSlice = (key) => {
+    [...sliceTabs.children].forEach((b) => b.setAttribute("aria-pressed", b.dataset.slice === key));
+    sliceBody.replaceChildren(...Object.entries(R.slices[key]).map(([k, s]) => el("tr", {},
+      el("td", {}, SLICE_NAME[k] ?? k), el("td", {}, s.n_gold), el("td", {}, pct(s.recall)), el("td", {}, pct(s.grade_accuracy)))));
+  };
+  Object.keys(R.slices || {}).forEach((k) => sliceTabs.append(el("button", { type: "button", "data-slice": k, onclick: () => showSlice(k) }, SLICE[k] ?? k)));
+  if (R.slices) showSlice(Object.keys(R.slices)[0]);
+
+  const C = R.challenge_eval;
+  if (C) {
+    $("[data-scenarios-sub]").textContent = `Challenge split (${C.tag}), ${C.chats.length} chats, ${C.metrics.n_gold} gold requests. Written by the builder, so not an independent test.`;
+    const SCEN = { 1: "Scenario 1: slot change, then “same time for my shop”", 2: "Scenario 2: unknown number changes the bank account" };
+    $("[data-scenarios]").append(...C.chats.map((ch) => el("li", {},
+      el("span", {}, SCEN[ch.scenario] ?? ch.chat, el("small", { class: "hint" }, el("br"), `chat ${ch.chat}: every request, sender, stamp and rule must match exactly`)),
+      el("span", { class: "stamp sm", "data-grade": ch.exact ? "act" : "refuse" }, ch.exact ? "Pass" : "Fail"))));
+  } else {
+    $("[data-scenarios-sub]").textContent = "Not run yet.";
+  }
+
   const RT = R.redteam; // promptfoo red team v1 (Phase 10), summarised by build_site_data.py
   if (RT) {
     $("[data-redteam-sub]").textContent = `${RT.n_chats} synthetic attack chats through the real pipeline (promptfoo, ${RT.model}, ${RT.prompt}). ${RT.chats_passed} of ${RT.n_chats} pass every check.`;
@@ -538,8 +642,13 @@ function initResults() {
       return el("li", {}, el("span", {}, c.label, el("small", { class: "hint" }, el("br"), `${c.passed} of ${c.total} chats${fails.length ? ` (failed: ${fails.join(", ")})` : ""}`)),
         el("span", { class: "stamp sm", "data-grade": ok ? "act" : "refuse" }, ok ? "Pass" : "Fail"));
     }));
+    $("[data-redteam-chats]").append(...RT.chats.map((ch) => el("li", {},
+      el("span", {}, ch.description.replace(/^rt\d+\s*/, ""), el("small", { class: "hint" }, el("br"),
+        `${ch.id}. Stamped: ${ch.graded.length ? ch.graded.join(", ") : "no request found"}${ch.failed.length ? `. Missed: ${ch.failed.join(", ")}` : ""}`)),
+      el("span", { class: "stamp sm", "data-grade": ch.pass ? "act" : "refuse" }, ch.pass ? "Pass" : "Fail"))));
   } else {
     $("[data-redteam-sub]").textContent = "Not run yet.";
+    $("[data-redteam-chats-wrap]").hidden = true;
   }
 
   const section = $("#results");
@@ -608,6 +717,7 @@ async function main() {
   renderHero();
   initRules();
   initDemo();
+  initFeatures();
   initTry();
   initResults();
   initStory();

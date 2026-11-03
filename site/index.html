@@ -28,6 +28,7 @@
     <span class="brand-mark" aria-hidden="true">TD</span><span>Triage Desk</span>
   </a>
   <nav aria-label="Sections">
+    <a href="#features">Features</a>
     <a href="#story">Watch it work</a>
     <a href="#how">How it works</a>
     <a href="#desk">The desk</a>
@@ -47,7 +48,7 @@
       <p class="lede strong">The Triage Desk pulls out each request, checks the sender against the roster and stamps what may happen next. It executes nothing.</p>
       <div class="hero-actions">
         <a class="btn btn-ink magnetic" href="#story">Watch it work</a>
-        <a class="btn btn-line magnetic" href="#desk">Open the desk</a>
+        <a class="btn btn-line magnetic" href="#features">See every feature</a>
       </div>
     </div>
     <figure class="hero-chat" aria-labelledby="hero-chat-cap">
@@ -56,13 +57,75 @@
     </figure>
   </section>
 
+  <section class="paper-section features" id="features" aria-labelledby="features-title">
+    <div class="section-head">
+      <h2 id="features-title">Everything it does</h2>
+      <p>Twenty-one features, all working on this page. Each “Show me” takes you to the spot where it happens and lights it up.</p>
+    </div>
+    <div class="feature-groups">
+      <section class="feature-group" data-tone="carbon" aria-labelledby="fg-read">
+        <h3 id="fg-read"><span>1</span>Read the chat</h3>
+        <ul>
+          <li class="feature"><b>01</b><h4>Finds every real request</h4><p>Telugu script, romanised Telugu and English. Greetings and banter fade.</p><a href="#scene-d01" data-spot>Show me</a></li>
+          <li class="feature"><b>02</b><h4>Follows a follow-up</h4><p>“alaage” (same as before) is tied to the earlier message it means.</p><a href="#scene-d01" data-spot>Show me</a></li>
+          <li class="feature"><b>03</b><h4>Cites its evidence</h4><p>Every request lists its message IDs. An ID that isn’t in the chat is dropped and logged.</p><a href="#desk" data-spot data-chat="d01">Show me</a></li>
+          <li class="feature"><b>04</b><h4>Flags what it is unsure of</h4><p>Injection attempts, forwards, unclear outlets and asks that nobody actually made.</p><a href="#desk" data-spot data-chat="d10">Show me</a></li>
+          <li class="feature"><b>05</b><h4>Never sees a phone number</h4><p>Senders become S1, S2…, and numbers in the text are masked before the model reads it.</p><a href="#desk" data-spot data-chat="d07" data-open="seen">Show me</a></li>
+        </ul>
+      </section>
+      <section class="feature-group" data-tone="ask" aria-labelledby="fg-decide">
+        <h3 id="fg-decide"><span>2</span>Decide in code</h3>
+        <ul>
+          <li class="feature"><b>06</b><h4>Checks who sent it</h4><p>The phone is looked up in the roster: confirmed, ambiguous or unconfirmed. Claims never count.</p><a href="#desk" data-spot data-chat="d05">Show me</a></li>
+          <li class="feature"><b>07</b><h4>Ten written rules</h4><p>Every rule is checked and the most cautious match wins. No match means hand-off.</p><a href="#rules" data-spot>Show me</a></li>
+          <li class="feature"><b>08</b><h4>Four stamps</h4><p>Act, ask approval, hand off or refuse, each with its own log file.</p><a href="#stamps" data-spot>Show me</a></li>
+          <li class="feature"><b>09</b><h4>Risk per request type</h4><p>Who may ask for what, and what counts as high risk or as disclosing data.</p><a href="#intents" data-spot>Show me</a></li>
+          <li class="feature"><b>10</b><h4>Knows what’s cancelled</h4><p>A request withdrawn later in the chat is still tracked but needs no action.</p><a href="#desk" data-spot data-chat="d03">Show me</a></li>
+        </ul>
+      </section>
+      <section class="feature-group" data-tone="hand" aria-labelledby="fg-act">
+        <h3 id="fg-act"><span>3</span>Act, simulated</h3>
+        <ul>
+          <li class="feature"><b>11</b><h4>Logs, never executes</h4><p>Each stamp adds one line to <code>runs/*.jsonl</code>, marked simulated.</p><a href="#scene-d01" data-spot>Show me</a></li>
+          <li class="feature"><b>12</b><h4>Raises a fraud alert</h4><p>A stranger asking to change bank details is refused, and security is told.</p><a href="#scene-d07" data-spot>Show me</a></li>
+          <li class="feature"><b>13</b><h4>You approve or reject</h4><p>“Ask approval” requests get buttons, and your decisions are kept in this tab.</p><a href="#desk" data-spot data-chat="d01">Show me</a></li>
+          <li class="feature"><b>14</b><h4>Every step, per request</h4><p>Click any request to see the chat, the model’s output, the roster check, each rule and the log line.</p><a href="#desk" data-spot data-chat="d07" data-open="rules">Show me</a></li>
+          <li class="feature"><b>15</b><h4>Fails closed</h4><p>If a run fails, the whole chat goes to a person. A failure is never shown as “no requests”.</p><a href="#try" data-spot>Show me</a></li>
+        </ul>
+      </section>
+      <section class="feature-group" data-tone="act" aria-labelledby="fg-prove">
+        <h3 id="fg-prove"><span>4</span>Prove it</h3>
+        <ul>
+          <li class="feature"><b>16</b><h4>Try your own chat</h4><p>Paste an export, and the local API runs the real pipeline. Your own key is optional.</p><a href="#try" data-spot>Show me</a></li>
+          <li class="feature"><b>17</b><h4>Measured on 15 dev chats</h4><p>Hard gates, every metric, a confusion grid and results by script and by intent.</p><a href="#results" data-spot>Show me</a></li>
+          <li class="feature"><b>18</b><h4>Mandated scenarios pass</h4><p>Both challenge scenarios match the expected answer exactly.</p><a href="#scenarios" data-spot>Show me</a></li>
+          <li class="feature"><b>19</b><h4>Red-teamed</h4><p>Ten attack chats (injection, fake authority, spoofing), and nothing was stamped act.</p><a href="#redteam" data-spot>Show me</a></li>
+          <li class="feature"><b>20</b><h4>Audit trail</h4><p>Every simulated decision goes into one table you can filter, in Datasette.</p><a href="#audit" data-spot>Show me</a></li>
+          <li class="feature"><b>21</b><h4>Open API</h4><p><code>POST /api/triage</code> with interactive OpenAPI docs, on localhost.</p><a href="#try-api" data-spot>Show me</a></li>
+        </ul>
+      </section>
+    </div>
+    <div class="guarantees" aria-labelledby="guarantees-title">
+      <h3 id="guarantees-title">Guarantees, held in code</h3>
+      <ul>
+        <li><span class="stamp sm" data-grade="act">Held</span>The model describes; code decides</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>Autonomy only goes down</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>Fails closed to a person</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>No evidence, no request</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>Simulated, never executed</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>Free model, $0 billed</li>
+        <li><span class="stamp sm" data-grade="act">Held</span>Synthetic data only</li>
+      </ul>
+    </div>
+  </section>
+
   <section class="desk story" id="story" aria-labelledby="story-title">
     <div class="section-head on-desk">
       <h2 id="story-title">Watch it work</h2>
       <p>Two chats from the dev set, run through the real pipeline. Scroll, and each stage happens on the desk.</p>
     </div>
-    <div data-scene="d01" data-title="Scenario 1: a slot change, then “same time for my shop”"></div>
-    <div data-scene="d07" data-title="Scenario 2: a new number asks to change the bank account"></div>
+    <div id="scene-d01" data-scene="d01" data-title="Scenario 1: a slot change, then “same time for my shop”"></div>
+    <div id="scene-d07" data-scene="d07" data-title="Scenario 2: a new number asks to change the bank account"></div>
   </section>
 
   <section class="paper-section" id="how" aria-labelledby="how-title">
@@ -81,7 +144,11 @@
         <figcaption>Architecture, from <code>docs/architecture.drawio.svg</code>.</figcaption>
       </figure>
     </div>
-    <div class="rules-wrap">
+    <div class="stamp-legend" id="stamps">
+      <h3>Four stamps</h3>
+      <ul data-stamp-legend></ul>
+    </div>
+    <div class="rules-wrap" id="rules">
       <h3>The rules (policy v<span data-policy-version></span>)</h3>
       <p class="hint">Hover or focus a rule to see where it matched in the desk below.</p>
       <table class="rules-table" data-rules-table>
@@ -89,6 +156,14 @@
         <tbody></tbody>
       </table>
       <p class="rule-hit-note" aria-live="polite" data-rule-note></p>
+    </div>
+    <div class="rules-wrap" id="intents">
+      <h3>Risk per request type</h3>
+      <p class="hint">From the policy file. The rules read these columns; the model never sees them.</p>
+      <table class="rules-table intent-table" data-intent-table>
+        <thead><tr><th scope="col">Request type</th><th scope="col">Risk</th><th scope="col">Who may ask</th><th scope="col">Discloses data</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
   </section>
 
@@ -99,7 +174,7 @@
     </div>
     <div class="tabs" role="tablist" aria-label="Choose a chat" data-chat-tabs></div>
     <div class="run-view" data-demo-run role="tabpanel"></div>
-    <aside class="decisions" aria-labelledby="decisions-title">
+    <aside class="decisions" id="decisions" aria-labelledby="decisions-title">
       <h3 id="decisions-title">Your decisions this session</h3>
       <p class="hint">Simulated. Kept only in this browser tab (sessionStorage); nothing is sent anywhere.</p>
       <ol data-decisions></ol>
@@ -133,6 +208,20 @@
     </form>
     <div class="try-status" aria-live="polite" data-try-status></div>
     <div class="run-view" data-try-run></div>
+    <div class="try-notes">
+      <div class="panel">
+        <h3>If anything goes wrong</h3>
+        <p>A timeout, a model error or an unreadable chat marks the run <strong>UNPROCESSED</strong>, and the whole chat is handed to a person. You will see a red hand-off docket, never an empty list.</p>
+      </div>
+      <div class="panel" id="try-api">
+        <h3>Open API</h3>
+        <p>The form calls the same endpoint you can call yourself. It runs on localhost only.</p>
+        <pre class="cmd"><code>curl -s localhost:8000/api/triage \
+  -H 'Content-Type: application/json' \
+  -d '{"chat": "23/10/26, 7:50 am - …"}'</code></pre>
+        <p><a class="btn btn-line magnetic" data-api-docs href="/api/docs" target="_blank" rel="noopener">Interactive API docs</a></p>
+      </div>
+    </div>
   </section>
 
   <section class="paper-section" id="results" aria-labelledby="results-title">
@@ -158,12 +247,30 @@
         <h3>Targets</h3>
         <table class="targets" data-targets><thead><tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Target</th></tr></thead><tbody></tbody></table>
       </div>
+      <div class="panel">
+        <h3>Every metric</h3>
+        <table class="targets" data-metrics><thead><tr><th scope="col">Metric</th><th scope="col">Dev</th><th scope="col">Challenge</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="panel">
+        <h3>By slice</h3>
+        <div class="seg" role="group" aria-label="Slice by" data-slice-tabs></div>
+        <table class="targets" data-slices><thead><tr><th scope="col">Slice</th><th scope="col">Gold</th><th scope="col">Recall</th><th scope="col">Grade accuracy</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="panel" id="scenarios">
+        <h3>Mandated scenarios</h3>
+        <p class="hint" data-scenarios-sub></p>
+        <ul class="gates" data-scenarios></ul>
+      </div>
       <div class="panel" id="redteam">
         <h3>Red-team</h3>
         <p class="hint" data-redteam-sub></p>
         <ul class="gates" data-redteam></ul>
+        <details class="more" data-redteam-chats-wrap>
+          <summary>All attack chats</summary>
+          <ul class="gates" data-redteam-chats></ul>
+        </details>
       </div>
-      <div class="panel" id="audit">
+      <div class="panel wide" id="audit">
         <h3>Audit trail</h3>
         <p class="hint">Every simulated decision from <code>runs/*.jsonl</code>, in one table you can filter by grade, rule, identity state and team (Datasette, local only).</p>
         <pre class="cmd"><code>uv run python -m triage.audit
